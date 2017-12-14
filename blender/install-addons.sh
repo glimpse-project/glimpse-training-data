@@ -28,8 +28,8 @@
 
 blender_version=`blender --version|head -1|cut -d' ' -f2`
 
-if test $blender_version != "2.79"; then
-    echo "Only support Blender 2.79"
+if test $blender_version != "2.79" -a $blender_version != "2.78"; then
+    echo "Only support Blender 2.78 or 2.79"
     exit 1
 fi
 
