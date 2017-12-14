@@ -36,8 +36,3 @@ which requires browser interaction these files have since been republished
 under http://codewelt.com/cmumocap where it's now possible to download these
 files non-interactively with wget
 
-
-# Face landmarks model
-
-We are using Dlib for face landmark detection and download a pre-trained model
-from https://github.com/davisking/dlib-models under a CC0 license.

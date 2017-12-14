@@ -21,40 +21,8 @@
 # SOFTWARE.
 #
 #
-# Downloads any third-party training data that we depend on, including CMU
-# mocap recordings and Dlib's pre-trained face landmark model.
+# Downloads any third-party training data that we depend on.
 #
-
-
-# This mocap data originally comes from CMU at http://mocap.cs.cmu.edu/
-#
-# With the following permissive licensing terms:
-#
-#   This data is free for use in research projects.
-#   You may include this data in commercially-sold products,
-#   but you may not resell this data directly, even in converted form.
-#   If you publish results obtained using this data, we would appreciate it
-#   if you would send the citation to your published paper to jkh+mocap@cs.cmu.edu,
-#   and also would add this text to your acknowledgments section:
-#
-#    "The data used in this project was obtained from mocap.cs.cmu.edu.
-#    The database was created with funding from NSF EIA-0196217."
-# 
-# and this in their FAQ:
-#
-#   Q. How can I use this data?
-#   A. The motion capture data may be copied, modified, or redistributed without
-#      permission. 
-#
-# The files we're downloading contain a conversion of the original data to
-# BVH format, and originally published at cgspeed.com and now archived here:
-# https://sites.google.com/a/cgspeed.com/cgspeed/motion-capture/cmu-bvh-conversion
-#
-# Since the files from cgspeed.com were originally hosted on mediaflare.com
-# which requires browser interaction these files have since been republished
-# under http://codewelt.com/cmumocap where it's now possible to download these
-# files non-interactively with wget:
-
 
 for i in 01-09 10-14 102-111 113-128 131-135 136-140 141-144 15-19 20-29 30-34 35-39 40-45 46-56 60-75 76-80 81-85 86-94
 do
@@ -69,5 +37,3 @@ do
     fi
 done
 
-
-git clone --depth 1 https://github.com/davisking/dlib-models
