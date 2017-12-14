@@ -12,6 +12,42 @@ conjunction with a glimpse_data_generator addon that helps us import the
 CMU mocap animations and render our training images.
 
 
+## Setup Blender automatically
+
+After cloning this repository, then assuming you have Blender (2.79) installed
+you can install and enable all of the required addons like so:
+
+```
+cd blender/
+./install-addons.py
+```
+
+This will download and install the Makehuman BlenderTools addons (MakeTarget,
+MakeWalk and MakeClothes) and update your Blender user preferences to add
+glimpse-training-data/blender as a scripts directory so that Blender can find
+the glimpse_data_generator addon.
+
+
+## Setup Blender manually
+
+Firstly, follow the instructions here to install the Makehuman BlenderTools addons:
+http://www.makehumancommunity.org/wiki/Documentation:Getting_and_installing_BlenderTools
+
+Within Blender's User Preferences -> File tab:
+
+Point the 'Scripts:' entry to the glimpse-training-data/blender/ directory
+
+Press 'Save User Settings' and quit and reopen Blender
+
+Under User Preferences -> Addons now enable these Addons:
+
+* Make Walk
+* Make Clothes
+* Make Target
+* Glimpse Rig Paint
+* Glimpse Training Data Generor
+
+
 # CMU Motion captures
 
 This mocap data originally comes from CMU at http://mocap.cs.cmu.edu/
