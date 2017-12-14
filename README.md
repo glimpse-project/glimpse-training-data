@@ -1,5 +1,16 @@
 Large resources used for training the Glimpse motion capture system
 
+After cloning this repository (we recommend passing --depth=1 while cloning
+considering the ~80MB size of our .blend file) you also need to run ./fetch.sh
+to download the CMU mocap data that we use.
+
+
+# Blender-based rendering pipeline
+
+The blender/ directory includes a glimpse-training.blend file for use in
+conjunction with a glimpse_data_generator addon that helps us import the
+CMU mocap animations and render our training images.
+
 
 # CMU Motion captures
 
