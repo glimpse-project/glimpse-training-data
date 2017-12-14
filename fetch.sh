@@ -27,10 +27,10 @@
 for i in 01-09 10-14 102-111 113-128 131-135 136-140 141-144 15-19 20-29 30-34 35-39 40-45 46-56 60-75 76-80 81-85 86-94
 do
     file="mocap/cmuconvert-mb2-$i.zip"
-    if ! test -f mocap/$file; then
-        wget http://codewelt.com/dl/cmuconvert/$file -o mocap/$file
+    if ! test -f $file; then
+        wget http://codewelt.com/dl/cmuconvert/$file -o $file
     fi
-    dir=mocap/cmuconvert-mb2-$i
+    dir="mocap/cmuconvert-mb2-$i"
     if ! test -d $dir; then
         mkdir -p $dir
         unzip -d $dir $file
