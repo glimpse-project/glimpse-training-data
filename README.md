@@ -74,12 +74,15 @@ and this in their FAQ:
      permission. 
 ```
 
-The files we're downloading contain a conversion of the original data to
-BVH format, which were published at cgspeed.com and now archived here:
+The files we're using contain a conversion of the original data to BVH format,
+which were published at cgspeed.com and now archived here:
 https://sites.google.com/a/cgspeed.com/cgspeed/motion-capture/cmu-bvh-conversion
 
-Since the files from cgspeed.com were originally hosted on mediaflare.com
-which requires browser interaction these files have since been republished
-under http://codewelt.com/cmumocap where it's now possible to download these
-files non-interactively with wget
+Considering that the cgspeed files are hosted on mediaflare.com which requires
+interaction with a browser to download, we commit the files to our repository
+for convenience.
 
+For reference, we also found that these files have been republished under
+http://codewelt.com/cmumocap where it's also possible to download these files
+non-interactively, but for downloading to Travis for CI (cached) we have better
+bandwidth cloning from github.
