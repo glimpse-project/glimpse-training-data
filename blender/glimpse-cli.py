@@ -93,7 +93,7 @@ if as_blender_addon:
 else:
     cli_args = parser.parse_args()
     ret = run_cmd(['blender', '-b',
-                   os.path.join(cli_args.training_data, 'glimpse-training.blend'),
+                   os.path.join(cli_args.training_data, 'blender', 'glimpse-training.blend'),
                    '-P',
                    sys.argv[0],
                    '--'] +
