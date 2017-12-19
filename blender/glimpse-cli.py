@@ -19,10 +19,11 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-
-# Run like:
-# $ blender.exe -b /path/to/glimpse-training.blend -P glimpse-cli.py -- --help-glimpse
-
+#
+# A command-line front end for the glimpse_data_generator addon
+#
+# The script can be run directly and it will handle the trickery necessary to
+# run itself with the same arguments via Blender.
 
 
 import os
@@ -30,17 +31,13 @@ import sys
 import argparse
 import subprocess
 
+# Detect whether the script is running under Blender or not...
 try:
     import bpy
     import addon_utils
     as_blender_addon = True
 except:
     as_blender_addon = False
-
-if as_blender_addon:
-    add_help_glimpse_opt = False
-else:
-    add_help_opt = True
 
 if as_blender_addon:
     parser = argparse.ArgumentParser(prog="glimpse-generator", add_help=False)
@@ -57,20 +54,6 @@ parser.add_argument('--end', default=0, type=int, help='Index of last MoCap to r
 parser.add_argument('--dest', default=os.getcwd(), help='Directory to write files too')
 parser.add_argument('--name', default=os.getcwd(), help='Unique name for this render run')
 parser.add_argument('training_data', help='Directory with all training data')
-
-
-
-#def run_cmd(args):
-#    if cli_args.debug:
-#        print("# " + " ".join(map(str, args)), file=sys.stderr)
-#    try:
-#        output = subprocess.check_output(args).decode("utf-8").strip()
-#    except:
-#        output = ""
-#    if cli_args.debug:
-#        print("# > " + "\n# > ".join(output.splitlines()))
-#
-#    return output
 
 
 def run_cmd(args):
@@ -99,6 +82,10 @@ else:
                    '--'] +
                    sys.argv[1:])
     sys.exit(ret)
+
+#
+# XXX: from here on, we know we are running within Blender...
+#
 
 
 addon_dependencies = [
