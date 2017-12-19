@@ -38,7 +38,6 @@ Pre-load mocap data:
     --start 20 \
     --end 25 \
     --preload \
-    --name "test-render" \
     .
 ```
 Render training data:
@@ -46,7 +45,7 @@ Render training data:
 ./blender/glimpse-cli.py \
     --start 20 \
     --end 25 \
-    --dest /path/to/render \
+    --dest ./render \
     --name "test-render" \
     .
 ```
@@ -161,7 +160,6 @@ A small number of motion capture files can be pre-loaded as follows:
     --start 20 \
     --end 25 \
     --preload \
-    --name "test-render" \
     .
 ```
 
@@ -180,7 +178,7 @@ A small number of images can be rendered as follows:
 ./blender/glimpse-cli.py \
     --start 20 \
     --end 25 \
-    --dest /path/to/render \
+    --dest ./render \
     --name "test-render" \
     .
 ```
