@@ -22,6 +22,16 @@ animations into glimpse-training.blend.
 *Note: We don't store a .blend file with preloaded animations in this repository
 because the file size can balloon from to around 2GB.*
 
+# TL;DR
+
+```
+git clone --depth=1 https://github.com/glimpse-project/glimpse-training-data
+cd glimpse-training-data
+./unpack.sh
+cd blender
+./install-addons.sh
+```
+
 # About the CMU Motion captures
 
 This mocap data originally comes from CMU at http://mocap.cs.cmu.edu/
