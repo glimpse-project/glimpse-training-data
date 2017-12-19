@@ -4,7 +4,7 @@ Large resources used for training the Glimpse motion capture system
 of our .blend file and the large CMU mocap archives*
 
 After cloning this repository you also need to run `./unpack.sh` to decompress
-the CMU mocap archives.
+the CMU mocap archives and setup Blender as described below:
 
 
 # Blender-based rendering pipeline
