@@ -3,54 +3,26 @@ Large resources used for training the Glimpse motion capture system
 *Note: we recommend passing --depth=1 while cloning considering the ~80MB size
 of our .blend file and the large CMU mocap archives*
 
-After cloning this repository you also need to run `./unpack.sh` to decompress
-the CMU mocap archives and setup Blender as described below:
+The `mocap/` directory  includes compressed archives of the CMU motion capture
+data we use for rendering our training images.
 
-
-# Blender-based rendering pipeline
+After cloning this repository you need to run `./unpack.sh` to decompress the
+CMU mocap archives.
 
 The `blender/` directory includes a glimpse-training.blend file for use in
-conjunction with `addon/glimpse_data_generator` that helps us import the
+conjunction with `blender/addon/glimpse_data_generator` that helps us import the
 CMU mocap animations into Blender and render our training images.
 
+After cloning this repository you need to follow the instructions below to
+install and enable all the required Blender addons.
 
-## Setup Blender automatically
+Before trying to render anything you also will need to pre-load some mocap
+animations into glimpse-training.blend.
 
-After cloning this repository, then assuming you have Blender (2.79) installed
-you can install and enable all of the required addons like so:
+*Note: We don't store a .blend file with preloaded animations in this repository
+because the file size can balloon from to around 2GB.*
 
-```
-cd blender/
-./install-addons.py
-```
-
-This will download and install the Makehuman BlenderTools addons (MakeTarget,
-MakeWalk and MakeClothes) and update your Blender user preferences to add
-glimpse-training-data/blender as a scripts directory so that Blender can find
-the glimpse_data_generator addon.
-
-
-## Setup Blender manually
-
-Firstly, follow the instructions here to install the Makehuman BlenderTools addons:
-http://www.makehumancommunity.org/wiki/Documentation:Getting_and_installing_BlenderTools
-
-Within Blender's User Preferences -> File tab:
-
-Point the 'Scripts:' entry to the glimpse-training-data/blender/ directory
-
-Press 'Save User Settings' and quit and reopen Blender
-
-Under User Preferences -> Addons now enable these Addons:
-
-* Make Walk
-* Make Clothes
-* Make Target
-* Glimpse Rig Paint
-* Glimpse Training Data Generor
-
-
-# CMU Motion captures
+# About the CMU Motion captures
 
 This mocap data originally comes from CMU at http://mocap.cs.cmu.edu/
 
@@ -73,7 +45,7 @@ and this in their FAQ:
 ```
   Q. How can I use this data?
   A. The motion capture data may be copied, modified, or redistributed without
-     permission. 
+     permission.
 ```
 
 The files we're using contain a conversion of the original data to BVH format,
@@ -88,3 +60,99 @@ For reference, we also found that these files have been republished under
 http://codewelt.com/cmumocap where it's also possible to download these files
 non-interactively, but for downloading to Travis for CI (cached) we have better
 bandwidth cloning from github.
+
+
+# Setting up Blender automatically
+
+After cloning this repository, then assuming you have Blender (2.79) installed
+you can install and enable all of the required addons like so:
+
+```
+cd blender/
+./install-addons.py
+```
+
+This will download and install the Makehuman BlenderTools addons (MakeTarget,
+MakeWalk and MakeClothes) and update your Blender user preferences to add
+glimpse-training-data/blender as a scripts directory so that Blender can find
+the glimpse_data_generator addon.
+
+
+# Setting up Blender manually
+
+Firstly, follow the instructions here to install the Makehuman BlenderTools addons:
+http://www.makehumancommunity.org/wiki/Documentation:Getting_and_installing_BlenderTools
+
+Within Blender's User Preferences -> File tab:
+
+Point the 'Scripts:' entry to the glimpse-training-data/blender/ directory
+
+Press 'Save User Settings' and quit and reopen Blender
+
+Under User Preferences -> Addons now enable these Addons:
+
+* Make Walk
+* Make Clothes
+* Make Target
+* Glimpse Rig Paint
+* Glimpse Training Data Generator
+
+
+# Pre-load CMU mocap animations in glimpse-training.blend
+
+First, you need to have unpacked the mocap data via `./unpack.sh` and installed the
+required Blender addons as described above.
+
+You can get some help with running glimpse-cli.py by running like:
+
+```
+./blender/glimpse-cli.py --help
+```
+
+Here it's good to understand that `mocap/index.json` is an index of all the
+different `.bvh` mocap files under the `mocap/` directory. The file lets us
+blacklist certain files or specify overrides for how they should be handled when
+rendering.
+
+Before the `glimpse_data_generator` addon can be used to render, it requires
+there to be some number of pre-loaded motion capture animations. We pre-load
+these because it's quite a slow process to retarget them to the animation rigs
+within glimpse-training-data.blend and we don't want to be repeating this
+work for each run of rendering.
+
+The units used for specifying what to pre-load are the sequential indices for
+mocap files tracked within `mocap/index.json`, whereby it's possible to
+pre-load a subset of the data by specifying a `--start` and `--end` index.
+*(Blacklisted files within the given range will be automatically skipped over)*
+
+A small number of motion capture files can be pre-loaded as follows:
+
+```
+./blender/glimpse-cli.py \
+    --start 20 \
+    --end 25 \
+    --preload \
+    --name "test-render" \
+    .
+```
+
+# Render Training Images
+
+*Note: before rendering you must pre-load some motion capture data as described
+above*
+
+The units used for specifying what to render are the sequential indices for
+mocap files tracked within `mocap/index.json`, the same as used for pre-loading
+data.
+
+A small number of images can be rendered as follows:
+
+```
+./blender/glimpse-cli.py \
+    --start 20 \
+    --end 25 \
+    --dest /path/to/render \
+    --name "test-render" \
+    .
+```
+
