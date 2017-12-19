@@ -98,7 +98,7 @@ you can install and enable all of the required addons like so:
 
 ```
 cd blender/
-./install-addons.py
+./install-addons.sh
 ```
 
 This will download and install the Makehuman BlenderTools addons (MakeTarget,
