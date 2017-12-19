@@ -24,12 +24,31 @@ because the file size can balloon from to around 2GB.*
 
 # TL;DR
 
+Fetch and setup:
 ```
 git clone --depth=1 https://github.com/glimpse-project/glimpse-training-data
 cd glimpse-training-data
 ./unpack.sh
 cd blender
 ./install-addons.sh
+```
+Pre-load mocap data:
+```
+./blender/glimpse-cli.py \
+    --start 20 \
+    --end 25 \
+    --preload \
+    --name "test-render" \
+    .
+```
+Render training data:
+```
+./blender/glimpse-cli.py \
+    --start 20 \
+    --end 25 \
+    --dest /path/to/render \
+    --name "test-render" \
+    .
 ```
 
 # About the CMU Motion captures
