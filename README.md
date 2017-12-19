@@ -1,4 +1,4 @@
-Large resources used for training the Glimpse motion capture system
+# Glimpse Training Data
 
 *Note: we recommend passing --depth=1 while cloning considering the ~80MB size
 of our .blend file and the large CMU mocap archives*
