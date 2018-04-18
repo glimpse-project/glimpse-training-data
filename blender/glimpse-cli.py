@@ -30,6 +30,7 @@ import os
 import sys
 import argparse
 import subprocess
+import datetime
 
 # Detect whether the script is running under Blender or not...
 try:
@@ -45,16 +46,26 @@ if as_blender_addon:
 else:
     parser = argparse.ArgumentParser(prog="glimpse-generator")
 
+dt = datetime.datetime.today()
+date_str = "%04u-%02u-%02u-%02u-%02u-%02u" % (dt.year,
+        dt.month, dt.day, dt.hour, dt.minute, dt.second)
+
 parser.add_argument('--debug', action='store_true', help=argparse.SUPPRESS)
 parser.add_argument('--info', help='Load the mocap index and print summary information', action='store_true')
 parser.add_argument('--preload', help='Preload mocap files as actions before rendering', action='store_true')
 parser.add_argument('--purge', help='Purge mocap actions', action='store_true')
-parser.add_argument('--start', type=int, default=0, help='Index of first MoCap to render')
-parser.add_argument('--end', default=0, type=int, help='Index of last MoCap to render')
+parser.add_argument('--link', help='Link mocap actions', action='store_true')
+parser.add_argument('--start', type=int, default=20, help='Index of first MoCap to render')
+parser.add_argument('--end', default=25, type=int, help='Index of last MoCap to render')
+parser.add_argument('--max-angle', default=60, type=int, help='Max viewing angle (+/- left or right, measured from face-on direction, default=60)')
 parser.add_argument('--dest', default=os.getcwd(), help='Directory to write files too')
-parser.add_argument('--name', default=os.getcwd(), help='Unique name for this render run')
-parser.add_argument('training_data', help='Directory with all training data')
+parser.add_argument('--name', default=date_str, help='Unique name for this render run')
+parser.add_argument('--mocap-library', default="//glimpse-training-mocap-library.blend", help='.blend file library with preloaded mocap actions (default //glimpse-training-mocap-library.blend)')
+parser.add_argument('--dry-run', help='Just print information without rendering', action='store_true')
+parser.add_argument('--skip-percentage', type=int, default=0, help='(random) percentage of frames to skip (default 0)')
+parser.add_argument('--clothing-step', type=int, default=5, help='randomize the clothing items every N frames (default 5)')
 
+parser.add_argument('training_data', help='Directory with all training data')
 
 def run_cmd(args):
     if cli_args.debug:
@@ -83,10 +94,19 @@ else:
                    sys.argv[1:])
     sys.exit(ret)
 
+if cli_args.skip_percentage < 0 or cli_args.skip_percentage > 100:
+    sys.exit("Skip perctange out of range [0,100]")
+
+if cli_args.clothing_step <= 0 or cli_args.clothing_step > 1000:
+    sys.exit("Clothing step out of range [1,1000]")
+
+if cli_args.max_angle < 0 or cli_args.max_angle > 180:
+    sys.exit("Max viewing angle out of range [0,180]]")
+
+
 #
 # XXX: from here on, we know we are running within Blender...
 #
-
 
 addon_dependencies = [
     'glimpse_data_generator',
@@ -112,6 +132,14 @@ if dep_error != "":
     print("\n")
     sys.exit(1)
 
+bpy.context.scene.GlimpseMaxViewingAngle = cli_args.max_angle
+bpy.context.scene.GlimpseMocapLibrary = cli_args.mocap_library
+bpy.context.scene.GlimpseBvhGenFrom = cli_args.start
+bpy.context.scene.GlimpseBvhGenTo = cli_args.end
+bpy.context.scene.GlimpseDryRun = cli_args.dry_run
+bpy.context.scene.GlimpseSkipPercentage = cli_args.skip_percentage
+bpy.context.scene.GlimpseClothingStep = cli_args.clothing_step
+
 mocaps_dir = os.path.join(cli_args.training_data, 'mocap')
 if not os.path.isdir(mocaps_dir):
     print("Non-existent mocaps directory %s" % mocaps_dir)
@@ -120,12 +148,6 @@ if not os.path.isdir(mocaps_dir):
 bpy.context.scene.GlimpseBvhRoot = mocaps_dir
 
 bpy.ops.glimpse.open_bvh_index()
-
-if cli_args.start:
-    bpy.context.scene.GlimpseBvhGenFrom = cli_args.start
-
-if cli_args.end:
-    bpy.context.scene.GlimpseBvhGenTo = cli_args.end
 
 if cli_args.info:
     bpy.ops.glimpse.generator_info()
@@ -136,9 +158,14 @@ if cli_args.preload:
     print("Saving to %s" % bpy.context.blend_data.filepath)
     bpy.ops.wm.save_as_mainfile(filepath=bpy.context.blend_data.filepath)
     bpy.ops.wm.quit_blender()
-    
-if cli_args.purge:
+elif cli_args.link:
+    bpy.ops.glimpse.generator_link()
+    print("Saving to %s" % bpy.context.blend_data.filepath)
+    bpy.ops.wm.save_as_mainfile(filepath=bpy.context.blend_data.filepath)
+    bpy.ops.wm.quit_blender()
+elif cli_args.purge:
     bpy.ops.glimpse.purge_mocap_actions()
+    print("Saving to %s" % bpy.context.blend_data.filepath)
     bpy.ops.wm.save_as_mainfile(filepath=bpy.context.blend_data.filepath)
     bpy.ops.wm.quit_blender()
 
@@ -158,13 +185,13 @@ if cli_args.name == "":
 bpy.context.scene.GlimpseGenDir = cli_args.name
 
 
+print("Rendering Info:")
+print("Name: " + cli_args.name)
+print("Dest: " + bpy.context.scene.GlimpseDataRoot)
+
 import cProfile
 cProfile.run("bpy.ops.glimpse.generate_data()", "glimpse-" + cli_args.name + ".prof")
  
 import pstats
 p = pstats.Stats("glimpse-" + cli_args.name + ".prof")
 p.sort_stats("cumulative").print_stats(20)
-
-
-print(str(bpy.ops.glimpse.generate_data))
-print(bpy.context.scene.GlimpseBvhRoot)
