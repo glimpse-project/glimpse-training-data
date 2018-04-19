@@ -1,0 +1,37 @@
+# Material definition for Jeans
+
+name Jeans
+description Jeans material
+ambientColor 1.0 1.0 1.0
+diffuseColor 0.588235294118 0.596078431373 0.639215686275
+specularColor 0.0980392156863 0.0980392156863 0.0980392156863
+shininess 0.05
+emissiveColor 0.0 0.0 0.0
+opacity 1.0
+translucency 0.0
+
+shadeless False
+wireframe False
+transparent False
+alphaToCoverage True
+backfaceCull False
+depthless False
+
+castShadows True
+
+receiveShadows True
+
+diffuseTexture Jeans_diffuse.png
+
+uvMap jeans.obj
+
+shader shaders/glsl/phong
+
+shaderConfig ambientOcclusion True
+shaderConfig normal False
+shaderConfig bump False
+shaderConfig displacement False
+shaderConfig vertexColors False
+shaderConfig spec False
+shaderConfig transparency True
+shaderConfig diffuse True
