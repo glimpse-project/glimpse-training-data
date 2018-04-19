@@ -37,3 +37,9 @@ do
     fi
 done
 
+if test -f blender/glimpse-training.blend; then
+    echo "Not overwriting blender/glimpse-training.blend, so please unzip glimpse-training.zip manually"
+else
+    cd blender
+    unzip glimpse-training.zip
+fi

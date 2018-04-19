@@ -1,17 +1,18 @@
 # Glimpse Training Data
 
-*Note: we recommend passing --depth=1 while cloning considering the ~80MB size
-of our .blend file and the large CMU mocap archives*
+*Note: we recommend passing --depth=1 while cloning considering the size of the
+tracked files*
 
 The `mocap/` directory  includes compressed archives of the CMU motion capture
 data we use for rendering our training images.
 
-After cloning this repository you need to run `./unpack.sh` to decompress the
-CMU mocap archives.
+The `blender/` directory includes a glimpse-training.zip file containing a
+glimpse-training.blend file for use in conjunction with
+`blender/addon/glimpse_data_generator` and `glimpse/glimpse-cli.py` that helps
+us import the CMU mocap animations into Blender and render our training images.
 
-The `blender/` directory includes a glimpse-training.blend file for use in
-conjunction with `blender/addon/glimpse_data_generator` that helps us import the
-CMU mocap animations into Blender and render our training images.
+After cloning this repository you need to run `./unpack.sh` to decompress the
+CMU mocap archives and `blender/glimpse-training.blend`
 
 After cloning this repository you need to follow the instructions below to
 install and enable all the required Blender addons.
