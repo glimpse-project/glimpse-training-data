@@ -73,8 +73,11 @@ hat_probabilities = [ 0.4, 0.2, 0.2, 0.2 ]
 glasses_choices = [ 'none', 'glasses' ]
 glasses_probabilities = [ 0.7, 0.3 ]
 
-top_choices = [ 'none', 'hooded_cardigan', 'star_fleet_uniform_female_gold_reference' ]
-top_probabilities = [ 0.6, 0.2, 0.2 ]
+# XXX: start fleet uniform black listed for now because hands may intersect it too much
+# resulting in labelling the hips as hands/wrists.
+#top_choices = [ 'none', 'hooded_cardigan', 'star_fleet_uniform_female_gold_reference' ]
+top_choices = [ 'none', 'hooded_cardigan' ]
+top_probabilities = [ 0.8, 0.2 ]
 
 trouser_choices = [ 'none', 'm_trousers_01' ]
 trouser_probabilities = [ 0.5, 0.5 ]
