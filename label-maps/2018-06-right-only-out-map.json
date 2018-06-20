@@ -1,0 +1,78 @@
+[
+    {
+        "name": "background",
+        "inputs": [ 0 ]
+    },
+    {
+        "name": "left",
+        "inputs": [ 1, 3, 6, 8, 9, 12, 13, 16, 17, 20, 21, 24, 25, 28, 29, 32 ]
+    },
+    {
+        "name": "head right",
+        "inputs": [ 2 ]
+    },
+    {
+        "name": "head top right",
+        "inputs": [ 4 ]
+    },
+    {
+        "name": "neck",
+        "inputs": [ 5 ]
+    },
+    {
+        "name": "clavicle right",
+        "inputs": [ 7 ]
+    },
+    {
+        "name": "shoulder right",
+        "inputs": [ 10 ]
+    },
+    {
+        "name": "upper-arm right",
+        "inputs": [ 11 ]
+    },
+    {
+        "name": "elbow right",
+        "inputs": [ 14 ]
+    },
+    {
+        "name": "forearm right",
+        "inputs": [ 15 ]
+    },
+    {
+        "name": "right wrist",
+        "inputs": [ 18 ]
+    },
+    {
+        "name": "right hand",
+        "inputs": [ 19 ]
+    },
+    {
+        "name": "right hip",
+        "inputs": [ 22 ]
+    },
+    {
+        "name": "right thigh",
+        "inputs": [ 23 ]
+    },
+    {
+        "name": "right knee",
+        "inputs": [ 26 ]
+    },
+    {
+        "name": "right shin",
+        "inputs": [ 27 ]
+    },
+    {
+        "name": "right ankle",
+        "inputs": [ 30 ]
+    },
+    {
+        "name": "right toes",
+        "inputs": [ 31 ]
+    },
+    {
+        "name": "right waist",
+        "inputs": [ 33 ]
+    }
+]

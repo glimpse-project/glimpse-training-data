@@ -1,0 +1,175 @@
+[
+    {
+        "name": "background",
+        "inputs": [ 0 ]
+    },
+
+
+    {
+        "name": "head left",
+        "inputs": [ 1 ],
+        "opposite": "head right"
+    },
+    {
+        "name": "head top left",
+        "inputs": [ 3 ],
+        "opposite": "head top right"
+    },
+    {
+        "name": "clavicle left",
+        "inputs": [ 6 ],
+        "opposite": "clavicle right"
+    },
+    {
+        "name": "shoulder left",
+        "inputs": [ 8 ],
+        "opposite": "shoulder right"
+    },
+    {
+        "name": "upper-arm left",
+        "inputs": [ 9 ],
+        "opposite": "upper-arm right"
+    },
+    {
+        "name": "elbow left",
+        "inputs": [ 12 ],
+        "opposite": "elbow right"
+    },
+    {
+        "name": "forearm left",
+        "inputs": [ 13 ],
+        "opposite": "forearm right"
+    },
+    {
+        "name": "left wrist",
+        "inputs": [ 16 ],
+        "opposite": "right wrist"
+    },
+    {
+        "name": "left hand",
+        "inputs": [ 17 ],
+        "opposite": "right hand"
+    },
+    {
+        "name": "left hip",
+        "inputs": [ 20 ],
+        "opposite": "right hip"
+    },
+    {
+        "name": "left thigh",
+        "inputs": [ 21 ],
+        "opposite": "right thigh"
+    },
+    {
+        "name": "left knee",
+        "inputs": [ 24 ],
+        "opposite": "right knee"
+    },
+    {
+        "name": "left shin",
+        "inputs": [ 25 ],
+        "opposite": "right shin"
+    },
+    {
+        "name": "left ankle",
+        "inputs": [ 28 ],
+        "opposite": "right ankle"
+    },
+    {
+        "name": "left toes",
+        "inputs": [ 29 ],
+        "opposite": "right toes"
+    },
+    {
+        "name": "left waist",
+        "inputs": [ 32 ],
+        "opposite": "right waist"
+    },
+
+
+    {
+        "name": "neck",
+        "inputs": [ 5 ]
+    },
+
+    {
+        "name": "right waist",
+        "inputs": [ 33 ],
+        "opposite": "left waist"
+    },
+    {
+        "name": "right toes",
+        "inputs": [ 31 ],
+        "opposite": "left toes"
+    },
+    {
+        "name": "right ankle",
+        "inputs": [ 30 ],
+        "opposite": "left ankle"
+    },
+    {
+        "name": "right shin",
+        "inputs": [ 27 ],
+        "opposite": "left shin"
+    },
+    {
+        "name": "right knee",
+        "inputs": [ 26 ],
+        "opposite": "left knee"
+    },
+    {
+        "name": "right thigh",
+        "inputs": [ 23 ],
+        "opposite": "left thigh"
+    },
+    {
+        "name": "right hip",
+        "inputs": [ 22 ],
+        "opposite": "left hip"
+    },
+    {
+        "name": "right hand",
+        "inputs": [ 19 ],
+        "opposite": "left hand"
+    },
+    {
+        "name": "right wrist",
+        "inputs": [ 18 ],
+        "opposite": "left wrist"
+    },
+    {
+        "name": "forearm right",
+        "inputs": [ 15 ],
+        "opposite": "forearm left"
+    },
+    {
+        "name": "elbow right",
+        "inputs": [ 14 ],
+        "opposite": "elbow left"
+    },
+    {
+        "name": "upper-arm right",
+        "inputs": [ 11 ],
+        "opposite": "upper-arm left"
+    },
+    {
+        "name": "shoulder right",
+        "inputs": [ 10 ],
+        "opposite": "shoulder left"
+    },
+    {
+        "name": "clavicle right",
+        "inputs": [ 7 ],
+        "opposite": "clavicle left"
+    },
+    {
+        "name": "head top right",
+        "inputs": [ 4 ],
+        "opposite": "head top left"
+    },
+    {
+        "name": "head right",
+        "inputs": [ 2 ],
+        "opposite": "head left"
+    }
+]
