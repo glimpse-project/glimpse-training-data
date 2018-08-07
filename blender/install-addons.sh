@@ -62,8 +62,8 @@ mkdir -p $BLENDER_USER_CONFIG/addons
 
 for addon in makeclothes maketarget makewalk
 do
-    if test -d $BLENDER_USER_CONFIG/addons/$addon; then
-        echo "WARNING: Not overwritting pre-installed $addon addon"
+    if test -d "$BLENDER_USER_CONFIG/addons/$addon"; then
+        echo "WARNING: Not overwriting pre-installed $addon addon"
         echo "(delete $BLENDER_USER_CONFIG/addons/$addon and re run script if necessary)"
     else
         echo "Installing (copying) $addon addon to $BLENDER_USER_CONFIG/addons/$addon"
