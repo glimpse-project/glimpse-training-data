@@ -57,7 +57,17 @@ parser.add_argument('--purge', help='Purge mocap actions', action='store_true')
 parser.add_argument('--link', help='Link mocap actions', action='store_true')
 parser.add_argument('--start', type=int, default=20, help='Index of first MoCap to render')
 parser.add_argument('--end', default=25, type=int, help='Index of last MoCap to render')
-parser.add_argument('--max-angle', default=60, type=int, help='Max viewing angle (+/- left or right, measured from face-on direction, default=60)')
+
+parser.add_argument('--width', default=172, type=int, help='Width, in pixels, of rendered frames (default 172)')
+parser.add_argument('--height', default=224, type=int, help='Height, in pixels, of rendered frames (default 224)')
+parser.add_argument('--vertical-fov', default=54.5, type=float, help='Vertical field of view of camera (degrees, default = 54.5)')
+parser.add_argument('--min-camera-distance', default=2, type=float, help='Minimum distance of camera from person (meters, default 2m)')
+parser.add_argument('--max-camera-distance', default=2.5, type=float, help='Maximum distance of camera from person (meters, default 2.5m)')
+parser.add_argument('--min-camera-height', default=1.1, type=float, help='Minimum height of camera (meters, default 1.1m)')
+parser.add_argument('--max-camera-height', default=1.4, type=float, help='Maximum height of camera (meters, default 1.4m)')
+parser.add_argument('--max-angle-left', default=30, type=int, help='Max viewing angle deviation to the left (measured from face-on direction, default=30)')
+parser.add_argument('--max-angle-right', default=0, type=int, help='Max viewing angle deviation to the right (measured from face-on direction, default=0)')
+
 parser.add_argument('--dest', default=os.getcwd(), help='Directory to write files too')
 parser.add_argument('--name', default=date_str, help='Unique name for this render run')
 parser.add_argument('--mocap-library', default="//glimpse-training-mocap-library.blend", help='.blend file library with preloaded mocap actions (default //glimpse-training-mocap-library.blend)')
@@ -100,9 +110,16 @@ if cli_args.skip_percentage < 0 or cli_args.skip_percentage > 100:
 if cli_args.clothing_step <= 0 or cli_args.clothing_step > 1000:
     sys.exit("Clothing step out of range [1,1000]")
 
-if cli_args.max_angle < 0 or cli_args.max_angle > 180:
-    sys.exit("Max viewing angle out of range [0,180]]")
+if cli_args.max_angle_left < 0 or cli_args.max_angle_left > 90:
+    sys.exit("Max viewing angle out of range [0,90]]")
+if cli_args.max_angle_right < 0 or cli_args.max_angle_right > 90:
+    sys.exit("Max viewing angle out of range [0,90]]")
 
+if cli_args.max_camera_distance <= cli_args.min_camera_distance:
+    sys.exit("Maximum camera distance must be >= minimum camera distance")
+
+if cli_args.max_camera_height <= cli_args.min_camera_height:
+    sys.exit("Maximum camera height must be >= minimum camera height")
 
 #
 # XXX: from here on, we know we are running within Blender...
@@ -132,7 +149,16 @@ if dep_error != "":
     print("\n")
     sys.exit(1)
 
-bpy.context.scene.GlimpseMaxViewingAngle = cli_args.max_angle
+bpy.context.scene.GlimpseRenderWidth = cli_args.width
+bpy.context.scene.GlimpseRenderHeight = cli_args.height
+bpy.context.scene.GlimpseVerticalFOV = cli_args.vertical_fov
+
+bpy.context.scene.GlimpseMinCameraDistanceMM = int(cli_args.min_camera_distance * 1000)
+bpy.context.scene.GlimpseMaxCameraDistanceMM = int(cli_args.max_camera_distance * 1000)
+bpy.context.scene.GlimpseMinCameraHeightMM = int(cli_args.min_camera_height * 1000)
+bpy.context.scene.GlimpseMaxCameraHeightMM = int(cli_args.max_camera_height * 1000)
+bpy.context.scene.GlimpseMaxViewingAngleLeft = cli_args.max_angle_left
+bpy.context.scene.GlimpseMaxViewingAngleRight = cli_args.max_angle_right
 bpy.context.scene.GlimpseMocapLibrary = cli_args.mocap_library
 bpy.context.scene.GlimpseBvhGenFrom = cli_args.start
 bpy.context.scene.GlimpseBvhGenTo = cli_args.end
@@ -172,11 +198,8 @@ elif cli_args.purge:
 if cli_args.dest == "":
     print("--dest argument required in this case to find files to preload")
     bpy.ops.wm.quit_blender()
-if not os.path.isdir(cli_args.dest):
-    print("Non-existent dest directory %s" % cli_args.dest)
-    bpy.ops.wm.quit_blender()
-bpy.context.scene.GlimpseDataRoot = cli_args.dest
 
+bpy.context.scene.GlimpseDataRoot = cli_args.dest
 print("DataRoot: " + cli_args.dest)
 
 if cli_args.name == "":

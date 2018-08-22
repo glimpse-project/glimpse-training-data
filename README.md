@@ -46,7 +46,16 @@ Render training data:
 ./blender/glimpse-cli.py \
     --start 20 \
     --end 25 \
-    --dest ./render \
+    --width 320 \
+    --height 240  \
+    --vertical-fov 43.921572 \
+    --min-camera-height 1.1 \
+    --max-camera-height 1.4 \
+    --min-camera-distance 2 \
+    --max-camera-distance 2.5 \
+    --max-angle-left 30 \
+    --max-angle-right 0 \
+    --dest ./renders \
     --name "test-render" \
     .
 ```
@@ -179,7 +188,16 @@ A small number of images can be rendered as follows:
 ./blender/glimpse-cli.py \
     --start 20 \
     --end 25 \
-    --dest ./render \
+    --width 320 \
+    --height 240  \
+    --vertical-fov 43.921572 \
+    --min-camera-height 1.1 \
+    --max-camera-height 1.4 \
+    --min-camera-distance 2 \
+    --max-camera-distance 2.5 \
+    --max-angle-left 30 \
+    --max-angle-right 0 \
+    --dest ./renders \
     --name "test-render" \
     .
 ```

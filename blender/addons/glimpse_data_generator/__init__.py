@@ -30,7 +30,7 @@ bl_info = {
     "wiki_url": "",
     "category": "Mesh"}
 
-# Copyright (C) 2017: Robert Bragg <robert@impossible.com>
+# Copyright (C) 2017-2018: Glimp IP Ltd <robert@impossible.com>
 
 import math
 import mathutils
@@ -419,6 +419,10 @@ class GeneratorOperator(bpy.types.Operator):
 
         z_forward = mathutils.Vector((0, 0, 1))
 
+        bpy.context.scene.render.resolution_x = bpy.context.scene.GlimpseRenderWidth
+        bpy.context.scene.render.resolution_y = bpy.context.scene.GlimpseRenderHeight
+        bpy.data.cameras['Camera'].angle = math.radians(bpy.context.scene.GlimpseVerticalFOV)
+
         camera_meta = {}
         camera_meta['width'] = bpy.context.scene.render.resolution_x
         camera_meta['height'] = bpy.context.scene.render.resolution_y
@@ -428,8 +432,20 @@ class GeneratorOperator(bpy.types.Operator):
         top_meta['camera'] = camera_meta
         top_meta['n_labels'] = 34
 
-        max_viewing_angle = bpy.context.scene.GlimpseMaxViewingAngle
-        top_meta['max_viewing_angle'] = max_viewing_angle
+        max_viewing_angle_left = bpy.context.scene.GlimpseMaxViewingAngleLeft
+        max_viewing_angle_right = bpy.context.scene.GlimpseMaxViewingAngleRight
+        top_meta['max_viewing_angle_left'] = max_viewing_angle_left
+        top_meta['max_viewing_angle_right'] = max_viewing_angle_right
+
+        min_distance_mm = bpy.context.scene.GlimpseMinCameraDistanceMM
+        max_distance_mm = bpy.context.scene.GlimpseMaxCameraDistanceMM
+        top_meta['min_camera_distance'] = min_distance_mm
+        top_meta['max_camera_distance'] = max_distance_mm
+
+        min_height_mm = bpy.context.scene.GlimpseMinCameraHeightMM
+        max_height_mm = bpy.context.scene.GlimpseMaxCameraHeightMM
+        top_meta['min_camera_height'] = min_height_mm
+        top_meta['max_camera_height'] = max_height_mm
 
         top_meta_filename = os.path.join(abs_gen_dir, 'meta.json')
 
@@ -578,17 +594,17 @@ class GeneratorOperator(bpy.types.Operator):
                     # Vector.rotate doesn't work for 2D vectors...
                     person_forward = mathutils.Vector((person_forward_2d.x, person_forward_2d.y, 0))
 
-                    view_angle = random.randrange(-max_viewing_angle, max_viewing_angle)
+                    view_angle = random.randrange(-max_viewing_angle_left, max_viewing_angle_right)
                     view_rot = mathutils.Quaternion((0, 0, 1), math.radians(view_angle));
                     person_forward.rotate(view_rot)
                     person_forward_2d = person_forward.xy
 
-                    dist_mm = random.randrange(2000, 2500)
+                    dist_mm = random.randrange(min_distance_mm, max_distance_mm)
                     dist_m = dist_mm / 1000
 
                     camera.location.xy = spine.head.xy + dist_m * person_forward_2d
 
-                    height_mm = random.randrange(1100, 1400)
+                    height_mm = random.randrange(min_height_mm, max_height_mm)
                     camera.location.z = height_mm / 1000
 
                     meta['camera']['distance'] = dist_m
@@ -1113,12 +1129,68 @@ def register():
             default=0,
             min=0)
 
-    bpy.types.Scene.GlimpseMaxViewingAngle = IntProperty(
-            name="MaxView",
-            description="Maximum viewing angle for rendered training images",
+    bpy.types.Scene.GlimpseRenderWidth = IntProperty(
+            name="RenderWidth",
+            description="Width, in pixels, of rendered frames",
+            default=0,
+            min=10,
+            max=4096)
+
+    bpy.types.Scene.GlimpseRenderHeight = IntProperty(
+            name="RenderHeight",
+            description="Height, in pixels, of rendered frames",
+            default=0,
+            min=10,
+            max=4096)
+
+    bpy.types.Scene.GlimpseVerticalFOV = FloatProperty(
+            name="VerticalFOV",
+            description="Vertical field of view of camera",
+            default=54.5,
+            min=1,
+            max=180)
+
+    bpy.types.Scene.GlimpseMinCameraDistanceMM = IntProperty(
+            name="MinCameraDistanceMM",
+            description="Minimum distance of camera",
+            default=2000,
+            min=1500,
+            max=10000)
+
+    bpy.types.Scene.GlimpseMaxCameraDistanceMM = IntProperty(
+            name="MaxCameraDistanceMM",
+            description="Maximum distance of camera",
+            default=2500,
+            min=1500,
+            max=10000)
+
+    bpy.types.Scene.GlimpseMinCameraHeightMM = IntProperty(
+            name="MinCameraHeightMM",
+            description="Minimum height of camera",
+            default=1100,
+            min=0,
+            max=5000)
+
+    bpy.types.Scene.GlimpseMaxCameraHeightMM = IntProperty(
+            name="MaxCameraHeightMM",
+            description="Maximum height of camera",
+            default=1400,
+            min=0,
+            max=5000)
+
+    bpy.types.Scene.GlimpseMaxViewingAngleLeft = IntProperty(
+            name="MaxViewLeft",
+            description="Maximum viewing angle, to left of center, for rendered training images",
+            default=30,
+            min=0,
+            max=90)
+
+    bpy.types.Scene.GlimpseMaxViewingAngleRight = IntProperty(
+            name="MaxViewRight",
+            description="Maximum viewing angle, to right of center, for rendered training images",
             default=0,
             min=0,
-            max=180)
+            max=90)
 
     bpy.types.Scene.GlimpseDryRun = BoolProperty(
             name="DryRun",
