@@ -375,6 +375,7 @@ class GeneratorOperator(bpy.types.Operator):
 
         top_meta = {}
         meta = {}
+        frame_count = 0
 
         dt = datetime.datetime.today()
         date_str = "%04u-%02u-%02u-%02u-%02u-%02u" % (dt.year,
@@ -518,6 +519,9 @@ class GeneratorOperator(bpy.types.Operator):
                     if random.randrange(0, 100) < bpy.context.scene.GlimpseSkipPercentage:
                         print("> Skipping (randomized)" + bvh_name + " frame " + str(frame))
                         continue
+
+                    nonlocal frame_count
+                    frame_count += 1
 
                     if bpy.context.scene.GlimpseDryRun:
                         print("> DRY RUN: Rendering " + bvh_name +
@@ -676,6 +680,9 @@ class GeneratorOperator(bpy.types.Operator):
         print("Rendering MoCap indices from " + str(context.scene.GlimpseBvhGenFrom) + " to " + str(context.scene.GlimpseBvhGenTo))
         for idx in range(bpy.context.scene.GlimpseBvhGenFrom, bpy.context.scene.GlimpseBvhGenTo):
             render_bvh_index(idx)
+
+        if bpy.context.scene.GlimpseDryRun:
+            print("> DRY RUN FRAME COUNT:%d" % frame_count)
 
         return {'FINISHED'}
 
