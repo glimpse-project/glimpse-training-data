@@ -68,7 +68,7 @@ parser.add_argument('--max-camera-height', default=1.4, type=float, help='Maximu
 parser.add_argument('--max-angle-left', default=30, type=int, help='Max viewing angle deviation to the left (measured from face-on direction, default=30)')
 parser.add_argument('--max-angle-right', default=0, type=int, help='Max viewing angle deviation to the right (measured from face-on direction, default=0)')
 
-parser.add_argument('--dest', default=os.getcwd(), help='Directory to write files too')
+parser.add_argument('--dest', default=os.path.join(os.getcwd(), 'renders'), help='Directory to write files too')
 parser.add_argument('--name', default=date_str, help='Unique name for this render run')
 parser.add_argument('--mocap-library', default="//glimpse-training-mocap-library.blend", help='.blend file library with preloaded mocap actions (default //glimpse-training-mocap-library.blend)')
 parser.add_argument('--dry-run', help='Just print information without rendering', action='store_true')
