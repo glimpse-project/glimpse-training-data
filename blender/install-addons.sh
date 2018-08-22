@@ -58,7 +58,7 @@ if test -z "$BLENDER_USER_CONFIG"; then
     exit 1
 fi
 
-mkdir -p $BLENDER_USER_CONFIG/addons
+mkdir -p "$BLENDER_USER_CONFIG/addons"
 
 for addon in makeclothes maketarget makewalk
 do
@@ -66,8 +66,8 @@ do
         echo "WARNING: Not overwriting pre-installed $addon addon"
         echo "(delete $BLENDER_USER_CONFIG/addons/$addon and re run script if necessary)"
     else
-        echo "Installing (copying) $addon addon to $BLENDER_USER_CONFIG/addons/$addon"
-        cp -a blendertools/$addon $BLENDER_USER_CONFIG/addons
+        echo "Installing (copying) $addon addon to \"$BLENDER_USER_CONFIG/addons/$addon\""
+        cp -a blendertools/$addon "$BLENDER_USER_CONFIG/addons"
     fi
 done
 
