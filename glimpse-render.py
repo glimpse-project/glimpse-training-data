@@ -27,6 +27,8 @@ import argparse
 import subprocess
 import datetime
 
+print("All arguments: %s" % " ".join(sys.argv))
+
 # Argparse doesn't provide a decent way of handling '--' for us so we manually
 # pull out arguments for glimpse-cli.py first...
 for i in range(len(sys.argv)):
