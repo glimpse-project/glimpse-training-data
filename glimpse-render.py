@@ -27,6 +27,14 @@ import argparse
 import subprocess
 import datetime
 
+# Argparse doesn't provide a decent way of handling '--' for us so we manually
+# pull out arguments for glimpse-cli.py first...
+for i in range(len(sys.argv)):
+    if sys.argv[i] == '--':
+        generator_args = sys.argv[i + 1:]
+        sys.argv = sys.argv[:i]
+        break;
+
 dt = datetime.datetime.today()
 date_str = "%04u-%02u-%02u-%02u-%02u-%02u" % (dt.year,
         dt.month, dt.day, dt.hour, dt.minute, dt.second)
@@ -37,7 +45,7 @@ A helper script for scheduling multiple instances of Blender to render a set
 of Glimpse training data.
 """,
                                   epilog="""\
-Note: any arguments that aren't recognised will be automatically passed through
+Note: any arguments that follow a stand-alone '--' argument will be passed through
 to glimpse-cli.py.
 """)
 parser.add_argument('--debug', action='store_true', help=argparse.SUPPRESS)
@@ -49,7 +57,7 @@ parser.add_argument('--dest', default=os.path.join(os.getcwd(), 'renders'), help
 parser.add_argument('--name', default=date_str, help='Unique name for this render run (subdirectories created under --dest)')
 parser.add_argument('training_data', nargs=1, help='Path to top of training data')
 
-(cli_args, generator_args) = parser.parse_known_args()
+cli_args = parser.parse_args()
 
 
 def run_cmd(args):
@@ -72,7 +80,9 @@ step = int(n_mocaps / cli_args.num_instances)
 
 print("Rendering %d motion capture sequences with %d instance[s] of Blender" % (n_mocaps, cli_args.num_instances))
 print("Each instance is rendering %d sequences" % step)
-print("Destination is %s" % dest)
+print("Path to training data is '%s'" % training_data)
+print("Destination is '%s'" % dest)
+print("Pass-through arguments for glimpse-cli.py: %s" % " ".join(generator_args))
 print("")
 
 if step * cli_args.num_instances != n_mocaps:
@@ -131,4 +141,5 @@ else:
         if p.wait() != 0:
             status = 1
 
-    sys.exit(status)
+    if status:
+        sys.exit("There were some errors; check log files under destination directory for details")
