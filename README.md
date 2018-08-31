@@ -14,8 +14,8 @@ us import the CMU mocap animations into Blender and render our training images.
 After cloning this repository you need to run `./unpack.sh` to decompress the
 CMU mocap archives and `blender/glimpse-training.blend`
 
-After cloning this repository you need to follow the instructions below to
-install and enable all the required Blender addons.
+After cloning this repository you need to follow the one-time instructions below
+to install and enable all the required Blender addons.
 
 Before trying to render anything you also will need to pre-load some mocap
 animations into glimpse-training.blend.
@@ -23,7 +23,9 @@ animations into glimpse-training.blend.
 *Note: We don't store a .blend file with preloaded animations in this repository
 because the file size can balloon from to around 2GB.*
 
-# TL;DR
+The full Glimpse rendering and training process is documented below...
+
+# Glimpse Training TL;DR
 
 Fetch and setup:
 ```
@@ -84,6 +86,11 @@ glimpse-data-indexer.py \
     -i tree1 300000 \
     -i tree2 300000 \
     /path/to/glimpse-training-data/pre-processed/test-render
+```
+
+Create an index for joint parameter training:
+```
+glimpse-data-indexer.py -i joint-param-training 10000 /path/to/glimpse-training-data/pre-processed/test-render
 ```
 
 Train each decision tree:
@@ -311,21 +318,27 @@ glimpse-data-indexer.py \
     -i tree2 100000 \
     /path/to/glimpse-training-data/pre-processed/test-render
 ```
-*Note: there may be overlapping frames listed in tree0, tree1 and tree1 but
+*Note: there may be overlapping frames listed in tree0, tree1 and tree2 but
 none of them will contain test-set frames. See --help for details.*
 
+Finally create an index for joint parameter training:
+```
+glimpse-data-indexer.py -i joint-param-training 10000 /path/to/glimpse-training-data/pre-processed/test-render
+```
 
-# Training a decision tree
+# Training decision trees
 
 Run the tool `train_rdt` to train a tree. Running it with no parameters, or
 with the `-h/--help` parameter will print usage details, with details about the
 default parameters.
 
-For example, if you have an index.tree0 file at the top of your training data
-you can train a decision tree like:
+For example, if you have index.tree0, index.tree1 and index.tree2 files at the
+top of your training data you can train three decision tree like:
 
 ```
 train_rdt /path/to/glimpse-training-data/pre-processed/test-render tree0 tree0.json
+train_rdt /path/to/glimpse-training-data/pre-processed/test-render tree1 tree1.json
+train_rdt /path/to/glimpse-training-data/pre-processed/test-render tree2 tree2.json
 ```
 
 
