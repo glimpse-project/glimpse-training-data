@@ -97,7 +97,7 @@ Train joint inference parameters:
 ```
 train_joint_params /path/to/glimpse-training-data/pre-processed/test-render \
                    joint-param-training \
-                   /path/to/glimpse/src/joint-map.json \
+                   /path/to/glimpse-training-data/joint-maps/2018-06-joint-map.json \
                    output.jip -- tree0.json tree1.json tree2.json
 ```
 
@@ -361,8 +361,7 @@ the bone. For example:
 ]
 ```
 
-By default the revision controlled `/path/to/glimpse/src/joint-map.json` file
-should be used
+Typically the latest `joint-maps/YEAR-MONTH-joint-map.json` file should be used.
 
 
 # Training joint inference parameters
@@ -382,9 +381,13 @@ joint parameters from a decision forest of three trees named `tree0.json`,
 ```
 train_joint_params /path/to/glimpse-training-data/pre-processed/test-render \
                    joint-param-training \
-                   /path/to/glimpse/src/joint-map.json \
+                   /path/to/glimpse-training-data/joint-maps/2018-06-joint-map.json \
                    output.jip -- tree0.json tree1.json tree2.json
 ```
+
+_Note: the YEAR-MONTH prefix for the chosen joint-map should typically match
+the -to-YEAR-MONTH-rdt-map.json suffix of the label map used when running
+the pre-processor._
 
 
 # Convert .json trees to .rdt for runtime usage
