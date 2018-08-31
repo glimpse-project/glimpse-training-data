@@ -71,14 +71,14 @@ image-pre-processor \
 
 Create index file for a test set
 ```
-indexer.py \
+glimpse-data-indexer.py \
     -i test 20000 \
     /path/to/glimpse-training-data/pre-processed/test-render
 ```
 
 Create index file for each tree to train (excluding test set images)
 ```
-indexer.py \
+glimpse-data-indexer.py \
     -e test \
     -i tree0 300000 \
     -i tree1 300000 \
@@ -288,7 +288,7 @@ image-pre-processor \
 # Index frames to train with
 
 For specifying which frames to train with, an index should be created with the
-`/path/to/glimpse/src/indexer.py` script.
+`glimpse-data-indexer.py` script.
 
 This script builds an index of all available rendered frames in a given
 directory and can then split that into multiple sub sets with no overlap. For
@@ -297,14 +297,14 @@ million images for training three separate decision trees.
 
 For example to create a 'test' index of 10000 images you could run:
 ```
-indexer.py -i test 10000 /path/to/glimpse-training-data/pre-processed/test-render
+glimpse-data-indexer.py -i test 10000 /path/to/glimpse-training-data/pre-processed/test-render
 ```
 (*Note: this will also automatically create an `index.full` file*)
 
 and then create three tree index files (sampled with replacement, but excluding
 the test set images):
 ```
-indexer.py \
+glimpse-data-indexer.py \
     -e test \
     -i tree0 100000 \
     -i tree1 100000 \
