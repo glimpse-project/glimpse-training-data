@@ -1,0 +1,14 @@
+{
+    "noise": [
+        {
+            "type": "gaussian",
+            "fwtm_range_map_m": 0.02
+        },
+        {
+            "type": "perlin",
+            "freq": 0.1,
+            "amplitude_m": 0.15,
+            "octaves": 4
+        }
+    ]
+}

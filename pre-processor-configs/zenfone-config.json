@@ -1,0 +1,8 @@
+{
+    "noise": [
+        {
+            "type": "gaussian",
+            "fwtm_range_map_m": 0.02
+        }
+    ]
+}
