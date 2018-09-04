@@ -26,6 +26,13 @@
 # TODO: rewrite this script in Python to run on Windows too
 #
 
+if ! which blender &>/dev/null; then
+    echo "You should make sure blender is in your PATH"
+    echo "E.g. on OSX do something like:"
+    echo "export PATH=/Applications/Blender/blender.app/Contents/MacOS/:$PATH"
+    exit 1
+fi
+
 blender_version=`blender --version|head -1|cut -d' ' -f2`
 
 if test $blender_version != "2.79" -a $blender_version != "2.78"; then
