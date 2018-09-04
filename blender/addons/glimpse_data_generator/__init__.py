@@ -592,8 +592,8 @@ class GeneratorOperator(bpy.types.Operator):
                     # to get interactive feedback / test that it's working
                     # (Alt-P to run)
 
-                    spine = body_pose.pose.bones['spine_02']
-                    person_forward_2d = (spine.matrix.to_3x3() * z_forward).xy.normalized()
+                    focus = body_pose.pose.bones['pelvis']
+                    person_forward_2d = (focus.matrix.to_3x3() * z_forward).xy.normalized()
 
                     # Vector.rotate doesn't work for 2D vectors...
                     person_forward = mathutils.Vector((person_forward_2d.x, person_forward_2d.y, 0))
@@ -606,7 +606,7 @@ class GeneratorOperator(bpy.types.Operator):
                     dist_mm = random.randrange(min_distance_mm, max_distance_mm)
                     dist_m = dist_mm / 1000
 
-                    camera.location.xy = spine.head.xy + dist_m * person_forward_2d
+                    camera.location.xy = focus.head.xy + dist_m * person_forward_2d
 
                     height_mm = random.randrange(min_height_mm, max_height_mm)
                     camera.location.z = height_mm / 1000
@@ -614,18 +614,18 @@ class GeneratorOperator(bpy.types.Operator):
                     meta['camera']['distance'] = dist_m
                     meta['camera']['viewing_angle'] = view_angle
 
-                    # We roughly point the camera at the spine_02 bone but randomize
+                    # We roughly point the camera at the focus bone but randomize
                     # this a little...
-                    target_fuzz_range_mm = 200
-                    spine_x_mm = spine.head.x * 1000
-                    spine_y_mm = spine.head.y * 1000
-                    spine_z_mm = spine.head.z * 1000
-                    target_x_mm = random.randrange(int(spine_x_mm - target_fuzz_range_mm),
-                                                   int(spine_x_mm + target_fuzz_range_mm))
-                    target_y_mm = random.randrange(int(spine_y_mm - target_fuzz_range_mm),
-                                                   int(spine_y_mm + target_fuzz_range_mm))
-                    target_z_mm = random.randrange(int(spine_z_mm - target_fuzz_range_mm),
-                                                   int(spine_z_mm + target_fuzz_range_mm))
+                    target_fuzz_range_mm = 100
+                    focus_x_mm = focus.head.x * 1000
+                    focus_y_mm = focus.head.y * 1000
+                    focus_z_mm = focus.head.z * 1000
+                    target_x_mm = random.randrange(int(focus_x_mm - target_fuzz_range_mm),
+                                                   int(focus_x_mm + target_fuzz_range_mm))
+                    target_y_mm = random.randrange(int(focus_y_mm - target_fuzz_range_mm),
+                                                   int(focus_y_mm + target_fuzz_range_mm))
+                    target_z_mm = random.randrange(int(focus_z_mm - target_fuzz_range_mm),
+                                                   int(focus_z_mm + target_fuzz_range_mm))
                     target = mathutils.Vector((target_x_mm / 1000,
                                                target_y_mm / 1000,
                                                target_z_mm / 1000))
