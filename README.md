@@ -282,7 +282,7 @@ the `label-maps/` directory). (See `label-maps/README.md` for more details)
 
 If we have rendered data via `glimpse-cli.py` under
 `/path/to/glimpse-training-data/renders/test-render` then these images
-can be processed as follows:
+can be processed with `image-pre-processor` found in glimpse build folder (e.g. `build-release`) as follows:
 
 ```
 image-pre-processor \
@@ -291,6 +291,7 @@ image-pre-processor \
     /path/to/glimpse-training-data/label-maps/2018-06-render-to-2018-08-rdt-map.json \
     -c /path/to/glimpse-training-data/pre-processor-configs/iphone-x-config.json
 ```
+
 
 # Index frames to train with
 
