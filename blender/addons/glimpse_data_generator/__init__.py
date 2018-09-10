@@ -561,8 +561,7 @@ class GeneratorOperator(bpy.types.Operator):
 
                             for wear in fixed_clothes:
                                 if wear in hat_choices:
-                                    hat = wear
-                                    hat_obj_name = "%sClothes:%s" % (body, hat)
+                                    hat_obj_name = "%sClothes:%s" % (body, wear)
                                     if hat_obj_name in bpy.data.objects:
                                         hat_obj = bpy.data.objects[hat_obj_name]
                                         hat_obj.hide = False
@@ -570,8 +569,7 @@ class GeneratorOperator(bpy.types.Operator):
                                         clothes_meta['hat'] = hat
 
                                 if wear in trouser_choices:
-                                    trousers = wear
-                                    trouser_obj_name = "%sClothes:%s" % (body, trousers)
+                                    trouser_obj_name = "%sClothes:%s" % (body, wear)
                                     if trouser_obj_name in bpy.data.objects:
                                         trouser_obj = bpy.data.objects[trouser_obj_name]
                                         trouser_obj.hide = False
@@ -579,8 +577,7 @@ class GeneratorOperator(bpy.types.Operator):
                                         clothes_meta['trousers'] = trousers
 
                                 if wear in top_choices:
-                                    top = wear
-                                    top_obj_name = "%sClothes:%s" % (body, top)
+                                    top_obj_name = "%sClothes:%s" % (body, wear)
                                     if top_obj_name in bpy.data.objects:
                                         top_obj = bpy.data.objects[top_obj_name]
                                         top_obj.hide = False
@@ -588,8 +585,7 @@ class GeneratorOperator(bpy.types.Operator):
                                         clothes_meta['top'] = top
 
                                 if wear in glasses_choices:
-                                    glasses = wear
-                                    glasses_obj_name = "%sClothes:%s" % (body, glasses)
+                                    glasses_obj_name = "%sClothes:%s" % (body, wear)
                                     if glasses_obj_name in bpy.data.objects:
                                         glasses_obj = bpy.data.objects[glasses_obj_name]
                                         glasses_obj.hide = False
@@ -1301,6 +1297,11 @@ def register():
             name="FixedClothes",
             description="A set of specified clothes to be used in all renders",
             default='none')
+
+    bpy.types.Scene.GlimpseFixedBody = StringProperty(
+            name="FixedBody",
+            description="A specified body to use during the rendering",
+            default='Man0')
 
     bpy.utils.register_module(__name__)
 

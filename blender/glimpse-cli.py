@@ -68,6 +68,7 @@ parser.add_argument('--max-camera-height', default=1.4, type=float, help='Maximu
 parser.add_argument('--max-angle-left', default=30, type=int, help='Max viewing angle deviation to the left (measured from face-on direction, default=30)')
 parser.add_argument('--max-angle-right', default=0, type=int, help='Max viewing angle deviation to the right (measured from face-on direction, default=0)')
 parser.add_argument('--fixed-camera', help='Lock camera in a fixed position using the specified min parameters', action='store_true')
+parser.add_argument('--fixed-body', default='Man0', help='A specified body to use during the rendering (default \'Man0\')')
 
 parser.add_argument('--dest', default=os.path.join(os.getcwd(), 'renders'), help='Directory to write files too')
 parser.add_argument('--name', default=date_str, help='Unique name for this render run')
@@ -168,6 +169,7 @@ bpy.context.scene.GlimpseDryRun = cli_args.dry_run
 bpy.context.scene.GlimpseSkipPercentage = cli_args.skip_percentage
 bpy.context.scene.GlimpseClothingStep = cli_args.clothing_step
 bpy.context.scene.GlimpseFixedCamera = cli_args.fixed_camera
+bpy.context.scene.GlimpseFixedBody= cli_args.fixed_body
 bpy.context.scene.GlimpseFixedClothes= cli_args.fixed_clothes
 
 mocaps_dir = os.path.join(cli_args.training_data, 'mocap')
