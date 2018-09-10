@@ -434,24 +434,28 @@ class GeneratorOperator(bpy.types.Operator):
         is_camera_fixed = bpy.context.scene.GlimpseFixedCamera;
         top_meta['is_camera_fixed'] = is_camera_fixed
 
+
+
         if(is_camera_fixed):
             min_viewing_angle = bpy.context.scene.GlimpseMinViewingAngle
             top_meta['min_viewing_angle'] = min_viewing_angle
+            min_distance_mm = bpy.context.scene.GlimpseMinCameraDistanceMM
+            top_meta['min_camera_distance'] = min_distance_mm
+            min_height_mm = bpy.context.scene.GlimpseMinCameraHeightMM
+            top_meta['min_camera_height'] = min_height_mm
         else:
             min_viewing_angle = bpy.context.scene.GlimpseMinViewingAngle
             max_viewing_angle = bpy.context.scene.GlimpseMaxViewingAngle
             top_meta['min_viewing_angle'] = min_viewing_angle
             top_meta['max_viewing_angle'] = max_viewing_angle
-
-        min_distance_mm = bpy.context.scene.GlimpseMinCameraDistanceMM
-        max_distance_mm = bpy.context.scene.GlimpseMaxCameraDistanceMM
-        top_meta['min_camera_distance'] = min_distance_mm
-        top_meta['max_camera_distance'] = max_distance_mm
-
-        min_height_mm = bpy.context.scene.GlimpseMinCameraHeightMM
-        max_height_mm = bpy.context.scene.GlimpseMaxCameraHeightMM
-        top_meta['min_camera_height'] = min_height_mm
-        top_meta['max_camera_height'] = max_height_mm
+            min_distance_mm = bpy.context.scene.GlimpseMinCameraDistanceMM
+            max_distance_mm = bpy.context.scene.GlimpseMaxCameraDistanceMM
+            top_meta['min_camera_distance'] = min_distance_mm
+            top_meta['max_camera_distance'] = max_distance_mm
+            min_height_mm = bpy.context.scene.GlimpseMinCameraHeightMM
+            max_height_mm = bpy.context.scene.GlimpseMaxCameraHeightMM
+            top_meta['min_camera_height'] = min_height_mm
+            top_meta['max_camera_height'] = max_height_mm
 
         top_meta_filename = os.path.join(abs_gen_dir, 'meta.json')
 
