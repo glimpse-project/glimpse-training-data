@@ -431,10 +431,17 @@ class GeneratorOperator(bpy.types.Operator):
         top_meta['camera'] = camera_meta
         top_meta['n_labels'] = 34
 
-        max_viewing_angle_left = bpy.context.scene.GlimpseMaxViewingAngleLeft
-        max_viewing_angle_right = bpy.context.scene.GlimpseMaxViewingAngleRight
-        top_meta['max_viewing_angle_left'] = max_viewing_angle_left
-        top_meta['max_viewing_angle_right'] = max_viewing_angle_right
+        is_camera_fixed = bpy.context.scene.GlimpseFixedCamera;
+        top_meta['is_camera_fixed'] = is_camera_fixed
+
+        if(is_camera_fixed):
+            min_viewing_angle = bpy.context.scene.GlimpseMinViewingAngle
+            top_meta['min_viewing_angle'] = min_viewing_angle
+        else:
+            min_viewing_angle = bpy.context.scene.GlimpseMinViewingAngle
+            max_viewing_angle = bpy.context.scene.GlimpseMaxViewingAngle
+            top_meta['min_viewing_angle'] = min_viewing_angle
+            top_meta['max_viewing_angle'] = max_viewing_angle
 
         min_distance_mm = bpy.context.scene.GlimpseMinCameraDistanceMM
         max_distance_mm = bpy.context.scene.GlimpseMaxCameraDistanceMM
@@ -652,7 +659,6 @@ class GeneratorOperator(bpy.types.Operator):
                     # to get interactive feedback / test that it's working
                     # (Alt-P to run)
 
-                    is_camera_fixed = bpy.context.scene.GlimpseFixedCamera;
                     focus = body_pose.pose.bones['pelvis']
                     person_forward_2d = (focus.matrix.to_3x3() * z_forward).xy.normalized()
 
@@ -663,14 +669,14 @@ class GeneratorOperator(bpy.types.Operator):
                     # angle needs to be fixed if set in parameter
                     if is_camera_fixed:
                         dist_mm = min_distance_mm
-                        view_angle = max_viewing_angle_left
+                        view_angle = min_viewing_angle
                         height_mm = min_height_mm
                         target_x_mm = focus.head.x * 1000
                         target_y_mm = focus.head.y * 1000
                         target_z_mm = focus.head.z * 1000
                     else:
                         dist_mm = random.randrange(min_distance_mm, max_distance_mm)
-                        view_angle = random.randrange(-max_viewing_angle_left, max_viewing_angle_right)
+                        view_angle = random.randrange(min_viewing_angle, max_viewing_angle)
                         height_mm = random.randrange(min_height_mm, max_height_mm)
 
                         # We roughly point the camera at the focus bone but randomize
@@ -745,9 +751,12 @@ class GeneratorOperator(bpy.types.Operator):
 
             # For now we unconditionally render each mocap using all the body
             # meshes we have, just randomizing the clothing
-            is_body_fixed = bpy.context.scene.GlimpseFixedBody;
-            if is_body_fixed and is_body_fixed in all_bodies:
-                render_body(is_body_fixed)
+            fixed_bodies = bpy.context.scene.GlimpseFixedBodies;
+            if fixed_bodies != 'none':
+                fixed_bodies = fixed_bodies.split(",")
+                for fixed_body in fixed_bodies:
+                    if fixed_body in all_bodies:
+                        render_body(fixed_body)
             else:
                 for body in all_bodies:
                     render_body(body)
@@ -1259,19 +1268,19 @@ def register():
             min=0,
             max=5000)
 
-    bpy.types.Scene.GlimpseMaxViewingAngleLeft = IntProperty(
-            name="MaxViewLeft",
+    bpy.types.Scene.GlimpseMinViewingAngle = IntProperty(
+            name="MinViewAngle",
             description="Maximum viewing angle, to left of center, for rendered training images",
             default=30,
-            min=0,
-            max=90)
+            min=-180,
+            max=180)
 
-    bpy.types.Scene.GlimpseMaxViewingAngleRight = IntProperty(
-            name="MaxViewRight",
+    bpy.types.Scene.GlimpseMaxViewingAngle = IntProperty(
+            name="MaxViewAngle",
             description="Maximum viewing angle, to right of center, for rendered training images",
             default=0,
-            min=0,
-            max=90)
+            min=-180,
+            max=180)
 
     bpy.types.Scene.GlimpseDryRun = BoolProperty(
             name="DryRun",
@@ -1302,8 +1311,8 @@ def register():
             description="A set of specified clothes to be used in all renders",
             default='none')
 
-    bpy.types.Scene.GlimpseFixedBody = StringProperty(
-            name="FixedBody",
+    bpy.types.Scene.GlimpseFixedBodies = StringProperty(
+            name="FixedBodies",
             description="A specified body to use during the rendering",
             default='none')
 

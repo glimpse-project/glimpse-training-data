@@ -65,8 +65,8 @@ parser.add_argument('--min-camera-distance', default=2, type=float, help='Minimu
 parser.add_argument('--max-camera-distance', default=2.5, type=float, help='Maximum distance of camera from person (meters, default 2.5m)')
 parser.add_argument('--min-camera-height', default=1.1, type=float, help='Minimum height of camera (meters, default 1.1m)')
 parser.add_argument('--max-camera-height', default=1.4, type=float, help='Maximum height of camera (meters, default 1.4m)')
-parser.add_argument('--max-angle-left', default=30, type=int, help='Max viewing angle deviation to the left (measured from face-on direction, default=30)')
-parser.add_argument('--max-angle-right', default=0, type=int, help='Max viewing angle deviation to the right (measured from face-on direction, default=0)')
+parser.add_argument('--min-camera-angle', default=30, type=int, help='Min viewing angle deviation (measured from face-on direction, default=30)')
+parser.add_argument('--max-camera-angle', default=0, type=int, help='Max viewing angle deviation (measured from face-on direction, default=0)')
 parser.add_argument('--fixed-camera', help='Lock camera in a fixed position using the specified min parameters', action='store_true')
 
 parser.add_argument('--dest', default=os.path.join(os.getcwd(), 'renders'), help='Directory to write files too')
@@ -75,7 +75,7 @@ parser.add_argument('--mocap-library', default="//glimpse-training-mocap-library
 parser.add_argument('--dry-run', help='Just print information without rendering', action='store_true')
 parser.add_argument('--skip-percentage', type=int, default=0, help='(random) percentage of frames to skip (default 0)')
 parser.add_argument('--clothing-step', type=int, default=5, help='randomize the clothing items every N frames (default 5)')
-parser.add_argument('--fixed-body', default='none', help='A specified body to use during the rendering (default \'none\')')
+parser.add_argument('--fixed-bodies', default='none', help='A set specified bodies to be used in all renders - needs to be comma separated (default \'none\')')
 parser.add_argument('--fixed-clothes', default='none', help='A set of specified clothes to be used in all renders - needs to be comma separated (default \'none\')')
 
 parser.add_argument('training_data', help='Directory with all training data')
@@ -113,10 +113,14 @@ if cli_args.skip_percentage < 0 or cli_args.skip_percentage > 100:
 if cli_args.clothing_step <= 0 or cli_args.clothing_step > 1000:
     sys.exit("Clothing step out of range [1,1000]")
 
-if cli_args.max_angle_left < 0 or cli_args.max_angle_left > 90:
-    sys.exit("Max viewing angle out of range [0,90]]")
-if cli_args.max_angle_right < 0 or cli_args.max_angle_right > 90:
-    sys.exit("Max viewing angle out of range [0,90]]")
+if cli_args.min_camera_angle < -180 or cli_args.min_camera_angle > 180:
+    sys.exit("Min viewing angle out of range [-180,180]]")
+if cli_args.max_camera_angle < -180 or cli_args.max_camera_angle > 180:
+    sys.exit("Max viewing angle out of range [-180,180]]")
+if cli_args.min_camera_angle >= cli_args.max_camera_angle:
+    sys.exit("Min viewing angle is higher than max viewing angle")
+if cli_args.max_camera_angle <= cli_args.min_camera_angle:
+    sys.exit("Max viewing angle is less than min viewing angle")
 
 if cli_args.max_camera_distance <= cli_args.min_camera_distance:
     sys.exit("Maximum camera distance must be >= minimum camera distance")
@@ -160,8 +164,8 @@ bpy.context.scene.GlimpseMinCameraDistanceMM = int(cli_args.min_camera_distance 
 bpy.context.scene.GlimpseMaxCameraDistanceMM = int(cli_args.max_camera_distance * 1000)
 bpy.context.scene.GlimpseMinCameraHeightMM = int(cli_args.min_camera_height * 1000)
 bpy.context.scene.GlimpseMaxCameraHeightMM = int(cli_args.max_camera_height * 1000)
-bpy.context.scene.GlimpseMaxViewingAngleLeft = cli_args.max_angle_left
-bpy.context.scene.GlimpseMaxViewingAngleRight = cli_args.max_angle_right
+bpy.context.scene.GlimpseMinViewingAngle = cli_args.min_camera_angle
+bpy.context.scene.GlimpseMaxViewingAngle= cli_args.max_camera_angle
 bpy.context.scene.GlimpseMocapLibrary = cli_args.mocap_library
 bpy.context.scene.GlimpseBvhGenFrom = cli_args.start
 bpy.context.scene.GlimpseBvhGenTo = cli_args.end
@@ -169,7 +173,7 @@ bpy.context.scene.GlimpseDryRun = cli_args.dry_run
 bpy.context.scene.GlimpseSkipPercentage = cli_args.skip_percentage
 bpy.context.scene.GlimpseClothingStep = cli_args.clothing_step
 bpy.context.scene.GlimpseFixedCamera = cli_args.fixed_camera
-bpy.context.scene.GlimpseFixedBody= cli_args.fixed_body
+bpy.context.scene.GlimpseFixedBodies= cli_args.fixed_bodies
 bpy.context.scene.GlimpseFixedClothes= cli_args.fixed_clothes
 
 mocaps_dir = os.path.join(cli_args.training_data, 'mocap')
