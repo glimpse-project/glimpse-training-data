@@ -117,15 +117,15 @@ if cli_args.min_camera_angle < -180 or cli_args.min_camera_angle > 180:
     sys.exit("Min viewing angle out of range [-180,180]]")
 if cli_args.max_camera_angle < -180 or cli_args.max_camera_angle > 180:
     sys.exit("Max viewing angle out of range [-180,180]]")
-if cli_args.min_camera_angle >= cli_args.max_camera_angle:
-    sys.exit("Min viewing angle is higher than max viewing angle")
-if cli_args.max_camera_angle <= cli_args.min_camera_angle:
-    sys.exit("Max viewing angle is less than min viewing angle")
+if not cli_args.fixed_camera and (cli_args.min_camera_angle >= cli_args.max_camera_angle):
+    sys.exit("Min viewing angle is higher than or equal to max viewing angle")
+if not cli_args.fixed_camera and (cli_args.max_camera_angle <= cli_args.min_camera_angle):
+    sys.exit("Max viewing angle is less than or equal to min viewing angle")
 
-if cli_args.max_camera_distance <= cli_args.min_camera_distance:
+if not cli_args.fixed_camera and (cli_args.max_camera_distance <= cli_args.min_camera_distance):
     sys.exit("Maximum camera distance must be >= minimum camera distance")
 
-if cli_args.max_camera_height <= cli_args.min_camera_height:
+if not cli_args.fixed_camera and (cli_args.max_camera_height <= cli_args.min_camera_height):
     sys.exit("Maximum camera height must be >= minimum camera height")
 
 #

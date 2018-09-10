@@ -434,8 +434,6 @@ class GeneratorOperator(bpy.types.Operator):
         is_camera_fixed = bpy.context.scene.GlimpseFixedCamera;
         top_meta['is_camera_fixed'] = is_camera_fixed
 
-
-
         if(is_camera_fixed):
             min_viewing_angle = bpy.context.scene.GlimpseMinViewingAngle
             top_meta['min_viewing_angle'] = min_viewing_angle
