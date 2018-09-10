@@ -68,7 +68,6 @@ parser.add_argument('--max-camera-height', default=1.4, type=float, help='Maximu
 parser.add_argument('--max-angle-left', default=30, type=int, help='Max viewing angle deviation to the left (measured from face-on direction, default=30)')
 parser.add_argument('--max-angle-right', default=0, type=int, help='Max viewing angle deviation to the right (measured from face-on direction, default=0)')
 parser.add_argument('--fixed-camera', help='Lock camera in a fixed position using the specified min parameters', action='store_true')
-parser.add_argument('--fixed-body', default='Man0', help='A specified body to use during the rendering (default \'Man0\')')
 
 parser.add_argument('--dest', default=os.path.join(os.getcwd(), 'renders'), help='Directory to write files too')
 parser.add_argument('--name', default=date_str, help='Unique name for this render run')
@@ -76,6 +75,7 @@ parser.add_argument('--mocap-library', default="//glimpse-training-mocap-library
 parser.add_argument('--dry-run', help='Just print information without rendering', action='store_true')
 parser.add_argument('--skip-percentage', type=int, default=0, help='(random) percentage of frames to skip (default 0)')
 parser.add_argument('--clothing-step', type=int, default=5, help='randomize the clothing items every N frames (default 5)')
+parser.add_argument('--fixed-body', default='none', help='A specified body to use during the rendering (default \'none\')')
 parser.add_argument('--fixed-clothes', default='none', help='A set of specified clothes to be used in all renders - needs to be comma separated (default \'none\')')
 
 parser.add_argument('training_data', help='Directory with all training data')

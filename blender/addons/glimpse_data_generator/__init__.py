@@ -566,7 +566,7 @@ class GeneratorOperator(bpy.types.Operator):
                                         hat_obj = bpy.data.objects[hat_obj_name]
                                         hat_obj.hide = False
                                         hat_obj.layers[0] = True
-                                        clothes_meta['hat'] = hat
+                                        clothes_meta['hat'] = wear
 
                                 if wear in trouser_choices:
                                     trouser_obj_name = "%sClothes:%s" % (body, wear)
@@ -574,7 +574,7 @@ class GeneratorOperator(bpy.types.Operator):
                                         trouser_obj = bpy.data.objects[trouser_obj_name]
                                         trouser_obj.hide = False
                                         trouser_obj.layers[0] = True
-                                        clothes_meta['trousers'] = trousers
+                                        clothes_meta['trousers'] = wear
 
                                 if wear in top_choices:
                                     top_obj_name = "%sClothes:%s" % (body, wear)
@@ -582,7 +582,7 @@ class GeneratorOperator(bpy.types.Operator):
                                         top_obj = bpy.data.objects[top_obj_name]
                                         top_obj.hide = False
                                         top_obj.layers[0] = True
-                                        clothes_meta['top'] = top
+                                        clothes_meta['top'] = wear
 
                                 if wear in glasses_choices:
                                     glasses_obj_name = "%sClothes:%s" % (body, wear)
@@ -590,7 +590,7 @@ class GeneratorOperator(bpy.types.Operator):
                                         glasses_obj = bpy.data.objects[glasses_obj_name]
                                         glasses_obj.hide = False
                                         glasses_obj.layers[0] = True
-                                        clothes_meta['glasses'] = glasses
+                                        clothes_meta['glasses'] = wear
 
                             context.scene.layers = render_layers
                             meta['clothes'] = clothes_meta
@@ -745,8 +745,12 @@ class GeneratorOperator(bpy.types.Operator):
 
             # For now we unconditionally render each mocap using all the body
             # meshes we have, just randomizing the clothing
-            for body in all_bodies:
-                render_body(body)
+            is_body_fixed = bpy.context.scene.GlimpseFixedBody;
+            if is_body_fixed and is_body_fixed in all_bodies:
+                render_body(is_body_fixed)
+            else:
+                for body in all_bodies:
+                    render_body(body)
 
         print("Rendering MoCap indices from " + str(context.scene.GlimpseBvhGenFrom) + " to " + str(context.scene.GlimpseBvhGenTo))
         for idx in range(bpy.context.scene.GlimpseBvhGenFrom, bpy.context.scene.GlimpseBvhGenTo):
@@ -1301,7 +1305,7 @@ def register():
     bpy.types.Scene.GlimpseFixedBody = StringProperty(
             name="FixedBody",
             description="A specified body to use during the rendering",
-            default='Man0')
+            default='none')
 
     bpy.utils.register_module(__name__)
 
