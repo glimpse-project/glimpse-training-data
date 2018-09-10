@@ -55,12 +55,17 @@ Render training data:
     --max-camera-height 1.4 \
     --min-camera-distance 2 \
     --max-camera-distance 2.5 \
-    --max-angle-left 30 \
-    --max-angle-right 0 \
+    --min-camera-angle 30 \
+    --max-camera-angle 0 \
+    --fixed-camera \
+    --fixed-bodies "none" \
+    --fixed-clothes "none" \
     --dest ./renders \
     --name "test-render" \
     .
 ```
+Note: when `--fixed-camera` parameter is set only the min values are used
+to specify the position and orientation of the camera (e.g. `--min-camera-angle`, `--min-camera-distance`, etc.)
 
 Pre-process images:
 ```
@@ -259,7 +264,7 @@ A small number of images can be rendered as follows:
     --name "test-render" \
     .
 ```
-Note: when `--fixed-camera` parameter is set only the min camera values are used
+Note: when `--fixed-camera` parameter is set only the min values are used
 to specify the position and orientation of the camera (e.g. `--min-camera-angle`, `--min-camera-distance`, etc.)
 
 # Pre-process rendered images
