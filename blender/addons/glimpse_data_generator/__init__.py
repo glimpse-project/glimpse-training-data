@@ -57,6 +57,7 @@ from bpy_extras.io_utils import (
         orientation_helper_factory,
         axis_conversion,
         )
+
 import bmesh
 
 
@@ -431,8 +432,10 @@ class GeneratorOperator(bpy.types.Operator):
         top_meta['camera'] = camera_meta
         top_meta['n_labels'] = 34
 
-        is_camera_fixed = bpy.context.scene.GlimpseFixedCamera;
+        is_camera_fixed = bpy.context.scene.GlimpseFixedCamera
         top_meta['is_camera_fixed'] = is_camera_fixed
+        is_camera_smooth_movement = bpy.context.scene.GlimpseSmoothCameraMovement
+        top_meta['is_camera_smooth_movement'] = is_camera_smooth_movement
 
         if(is_camera_fixed):
             min_viewing_angle = bpy.context.scene.GlimpseMinViewingAngle
@@ -478,6 +481,8 @@ class GeneratorOperator(bpy.types.Operator):
             bvh_name = bvh['name']
             print("> Rendering " + bvh_name)
 
+            bvh_fps = bvh['fps']
+
             action_name = "Base" + bvh_name
             if action_name not in bpy.data.actions:
                 print("WARNING: Skipping %s (not preloaded)" % bvh_name)
@@ -515,6 +520,10 @@ class GeneratorOperator(bpy.types.Operator):
                         mesh_obj.layers[0] = False
                         hide_body_clothes(_body)
                         bpy.data.armatures[_body + 'Pose'].pose_position = 'REST'
+
+                dist_mm = 0
+                view_angle = 0
+                height_mm = 0
 
                 print("> Rendering with " + body)
 
@@ -670,13 +679,54 @@ class GeneratorOperator(bpy.types.Operator):
                     # the distance to the camera as well as the
                     # angle needs to be fixed if set in parameter
                     if is_camera_fixed:
+
                         dist_mm = min_distance_mm
                         view_angle = min_viewing_angle
                         height_mm = min_height_mm
                         target_x_mm = focus.head.x * 1000
                         target_y_mm = focus.head.y * 1000
                         target_z_mm = focus.head.z * 1000
+
+                    elif is_camera_smooth_movement:
+
+                        if height_mm == 0:
+                            height_mm = min_height_mm
+
+                        if dist_mm == 0:
+                            dist_mm = min_distance_mm
+
+                        if view_angle == 0:
+                            view_angle = min_viewing_angle
+
+                        H = 2
+                        lacunarity = 1
+                        octaves = 4
+
+                        current_frame_time = (1 / bvh_fps) * frame
+                        position = mathutils.Vector((current_frame_time, height_mm, 0))
+                        z = mathutils.noise.fractal(position, H, lacunarity, octaves, mathutils.noise.types.STDPERLIN)
+                        height_mm += z
+                        print(">>> Current perlin z: %.5f and height_mm: %.4f" % (z, height_mm))
+
+                        position = mathutils.Vector((current_frame_time, view_angle, 0))
+                        z = mathutils.noise.fractal(position, H, lacunarity, octaves, mathutils.noise.types.STDPERLIN)
+                        view_angle += z
+                        print(">>> Current perlin z: %.5f and dist_mm: %.4f" % (z, dist_mm))
+
+                        position = mathutils.Vector((current_frame_time, dist_mm, 0))
+                        z = mathutils.noise.fractal(position, H, lacunarity, octaves, mathutils.noise.types.STDPERLIN)
+                        dist_mm += z
+                        print(">>> Current perlin z: %.5f and view_angle: %.4f" % (z, view_angle))
+
+                        # temporary call
+                        # We roughly point the camera at the focus bone but randomize
+                        # this a little...
+                        target_x_mm = focus.head.x * 1000
+                        target_y_mm = focus.head.y * 1000
+                        target_z_mm = focus.head.z * 1000
+
                     else:
+
                         dist_mm = random.randrange(min_distance_mm, max_distance_mm)
                         view_angle = random.randrange(min_viewing_angle, max_viewing_angle)
                         height_mm = random.randrange(min_height_mm, max_height_mm)
@@ -693,6 +743,7 @@ class GeneratorOperator(bpy.types.Operator):
                                                        int(focus_y_mm + target_fuzz_range_mm))
                         target_z_mm = random.randrange(int(focus_z_mm - target_fuzz_range_mm),
                                                        int(focus_z_mm + target_fuzz_range_mm))
+
 
                     dist_m = dist_mm / 1000
                     view_rot = mathutils.Quaternion((0, 0, 1), math.radians(view_angle));
@@ -896,6 +947,9 @@ def load_mocap_index():
 
             if 'name' not in bvh:
                 bvh['name'] = ntpath.basename(bvh['file'])[:-4]
+
+            if 'fps' not in bvh:
+                bvh['fps'] = 120
 
             if 'end' not in bvh:
                 bvh_name = bvh['name']
@@ -1306,6 +1360,11 @@ def register():
     bpy.types.Scene.GlimpseFixedCamera = BoolProperty(
             name="FixedCamera",
             description="Lock camera in a fixed position using the specified min parameters",
+            default=False)
+
+    bpy.types.Scene.GlimpseSmoothCameraMovement = BoolProperty(
+            name="SmoothCameraMovement",
+            description="Smooth camera movement (disable randomization of the camera position and orientation)",
             default=False)
 
     bpy.types.Scene.GlimpseFixedClothes = StringProperty(
