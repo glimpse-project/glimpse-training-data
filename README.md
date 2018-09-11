@@ -55,12 +55,13 @@ Render training data:
     --max-camera-height 1.4 \
     --min-camera-distance 2 \
     --max-camera-distance 2.5 \
-    --min-camera-angle 30 \
+    --min-camera-angle -30 \
     --max-camera-angle 0 \
     --dest ./renders \
     --name "test-render" \
     .
 ```
+Note: `--min-camera-angle` and `--max-camera-angle` accept values within range [-180, 180].
 
 Pre-process images:
 ```
@@ -250,12 +251,13 @@ A small number of images can be rendered as follows:
     --max-camera-height 1.4 \
     --min-camera-distance 2 \
     --max-camera-distance 2.5 \
-    --min-camera-angle 30 \
+    --min-camera-angle -30 \
     --max-camera-angle 0 \
     --dest ./renders \
     --name "test-render" \
     .
 ```
+Note: `--min-camera-angle` and `--max-camera-angle` accept values within range [-180, 180].
 
 # Pre-process rendered images
 

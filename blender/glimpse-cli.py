@@ -65,7 +65,7 @@ parser.add_argument('--min-camera-distance', default=2, type=float, help='Minimu
 parser.add_argument('--max-camera-distance', default=2.5, type=float, help='Maximum distance of camera from person (meters, default 2.5m)')
 parser.add_argument('--min-camera-height', default=1.1, type=float, help='Minimum height of camera (meters, default 1.1m)')
 parser.add_argument('--max-camera-height', default=1.4, type=float, help='Maximum height of camera (meters, default 1.4m)')
-parser.add_argument('--min-camera-angle', default=30, type=int, help='Min viewing angle deviation (measured from face-on direction, default=30)')
+parser.add_argument('--min-camera-angle', default=-30, type=int, help='Min viewing angle deviation (measured from face-on direction, default=-30)')
 parser.add_argument('--max-camera-angle', default=0, type=int, help='Max viewing angle deviation (measured from face-on direction, default=0)')
 parser.add_argument('--fixed-camera', help='Lock camera in a fixed position using the specified min parameters', action='store_true')
 parser.add_argument('--smooth-camera-movement', help='Smooth camera movement (disable randomization of the camera position and orientation)', action='store_true')
