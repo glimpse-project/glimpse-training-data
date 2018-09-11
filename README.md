@@ -105,7 +105,7 @@ Train joint inference parameters:
 ```
 train_joint_params /path/to/glimpse-training-data/pre-processed/test-render \
                    joint-param-training \
-                   /path/to/glimpse-training-data/joint-maps/2018-06-joint-map.json \
+                   /path/to/glimpse-training-data/joint-maps/2018-08-joint-map.json \
                    output.jip -- tree0.json tree1.json tree2.json
 ```
 
@@ -396,7 +396,7 @@ joint parameters from a decision forest of three trees named `tree0.json`,
 ```
 train_joint_params /path/to/glimpse-training-data/pre-processed/test-render \
                    joint-param-training \
-                   /path/to/glimpse-training-data/joint-maps/2018-06-joint-map.json \
+                   /path/to/glimpse-training-data/joint-maps/2018-08-joint-map.json \
                    output.jip -- tree0.json tree1.json tree2.json
 ```
 

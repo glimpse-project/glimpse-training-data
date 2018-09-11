@@ -1,0 +1,84 @@
+[
+    {
+        "joint": "head.tail",
+        "labels": [ 3, 4 ],
+        "connections": [ "neck_01.head" ]
+    },
+    {
+        "joint": "neck_01.head",
+        "labels": [ 5 ],
+        "connections": [ "upperarm_l.head", "upperarm_r.head", "thigh_l.head", "thigh_r.head" ]
+    },
+    {
+        "joint": "upperarm_l.head",
+        "labels": [ 8 ],
+        "labels_flipped": [ 10 ],
+        "connections": [ "lowerarm_l.head" ]
+    },
+    {
+        "joint": "upperarm_r.head",
+        "labels": [ 10 ],
+        "labels_flipped": [ 8 ],
+        "connections": [ "lowerarm_r.head" ]
+    },
+    {
+        "joint": "lowerarm_l.head",
+        "labels": [ 12 ],
+        "labels_flipped": [ 14 ],
+        "connections": [ "lowerarm_l.tail" ]
+    },
+    {
+        "joint": "lowerarm_l.tail",
+        "labels": [ 17 ],
+        "labels_flipped": [ 19 ],
+        "connections": []
+    },
+    {
+        "joint": "lowerarm_r.head",
+        "labels": [ 14 ],
+        "labels_flipped": [ 12 ],
+        "connections": [ "lowerarm_r.tail" ]
+    },
+    {
+        "joint": "lowerarm_r.tail",
+        "labels": [ 19 ],
+        "labels_flipped": [ 17 ],
+        "connections": []
+    },
+    {
+        "joint": "thigh_l.head",
+        "labels": [ 20 ],
+        "labels_flipped": [ 22 ],
+        "connections": [ "thigh_l.tail" ]
+    },
+    {
+        "joint": "thigh_l.tail",
+        "labels": [ 24 ],
+        "labels_flipped": [ 26 ],
+        "connections": [ "foot_l.head" ]
+    },
+    {
+        "joint": "thigh_r.head",
+        "labels": [ 22 ],
+        "labels_flipped": [ 20 ],
+        "connections": [ "thigh_r.tail" ]
+    },
+    {
+        "joint": "thigh_r.tail",
+        "labels": [ 26 ],
+        "labels_flipped": [ 24 ],
+        "connections": [ "foot_r.head" ]
+    },
+    {
+        "joint": "foot_l.head",
+        "labels": [ 28 ],
+        "labels_flipped": [ 29 ],
+        "connections" : []
+    },
+    {
+        "joint": "foot_r.head",
+        "labels": [ 29 ],
+        "labels_flipped": [ 28 ],
+        "connections": []
+    }
+]
