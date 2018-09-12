@@ -699,7 +699,7 @@ class GeneratorOperator(bpy.types.Operator):
                     elif is_camera_smooth_movement:
 
                         # add perlin noise to all factors of the camera
-                        # final position for a given frame to simulate 
+                        # final position for a given frame to simulate
                         # the smooth movement of a hand holding a phone camera
                         def perlin_noise(frame, bvh_fps, factor, base_factor):
 
@@ -724,7 +724,7 @@ class GeneratorOperator(bpy.types.Operator):
 
                         dist_mm = random.randrange(min_distance_mm, max_distance_mm)
                         view_angle = random.randrange(min_viewing_angle, max_viewing_angle)
-                        height_mm = random.randrange(min_height_mm, max_height_mm)
+                        height_mm = random.randrange(min_height_mm, max_height_mm) 
 
                         # We roughly point the camera at the focus bone but randomize
                         # this a little...
