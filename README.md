@@ -105,8 +105,8 @@ Train joint inference parameters:
 ```
 train_joint_params /path/to/glimpse-training-data/pre-processed/test-render \
                    joint-param-training \
-                   /path/to/glimpse-training-data/joint-maps/2018-06-joint-map.json \
-                   output.jip -- tree0.json tree1.json tree2.json
+                   /path/to/glimpse-training-data/joint-maps/2018-08-joint-map.json \
+                   joint-params.json -f -- tree0.json tree1.json tree2.json
 ```
 
 Create binary-format decision trees for use at runtime:
@@ -396,13 +396,18 @@ joint parameters from a decision forest of three trees named `tree0.json`,
 ```
 train_joint_params /path/to/glimpse-training-data/pre-processed/test-render \
                    joint-param-training \
-                   /path/to/glimpse-training-data/joint-maps/2018-06-joint-map.json \
-                   output.jip -- tree0.json tree1.json tree2.json
+                   /path/to/glimpse-training-data/joint-maps/2018-08-joint-map.json \
+                   joint-params.json -f -- tree0.json tree1.json tree2.json
 ```
 
 _Note: the YEAR-MONTH prefix for the chosen joint-map should typically match
 the -to-YEAR-MONTH-rdt-map.json suffix of the label map used when running
 the pre-processor._
+
+The `-f` option is shorthand for `--fast` which means the tool will train with
+the assumption that `infer_joints_fast()` is going to be used at runtime
+instead of using mean shift (slow) and in this case won't output bandwidth
+parameters.
 
 
 # Convert .json trees to .rdt for runtime usage
