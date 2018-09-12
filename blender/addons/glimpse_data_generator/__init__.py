@@ -699,7 +699,7 @@ class GeneratorOperator(bpy.types.Operator):
                     elif is_camera_smooth_movement:
 
                         # add perlin noise to all factors of the camera
-                        # final position for a given frame to simulate
+                        # final position for a given frame to simulate 
                         # the smooth movement of a hand holding a phone camera
                         def perlin_noise(frame, bvh_fps, factor, base_factor):
 
