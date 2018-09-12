@@ -524,15 +524,19 @@ class GeneratorOperator(bpy.types.Operator):
                 dist_mm = 0
                 view_angle = 0
                 height_mm = 0
+                target_x_mm = 0
+                target_y_mm = 0
+                target_z_mm = 0
+
+                H = 0
+                lacunarity = 0.5
+                octaves = 1
 
                 print("> Rendering with " + body)
 
                 meta['body'] = body
 
                 hide_bodies_from_render()
-
-                # Make sure you render the clothes specified in meta
-                show_body_clothes_from_meta(body)
 
                 body_pose = bpy.data.objects[body + "PoseObject"]
                 body_obj = bpy.data.objects[body + "BodyMeshObject"]
@@ -614,6 +618,7 @@ class GeneratorOperator(bpy.types.Operator):
                             meta['clothes'] = clothes_meta
 
                     else:
+
                         if 'clothes' not in meta or frame % bpy.context.scene.GlimpseClothingStep == 0:
                             print("> Randomizing clothing")
 
@@ -663,6 +668,10 @@ class GeneratorOperator(bpy.types.Operator):
                             context.scene.layers = render_layers
                             meta['clothes'] = clothes_meta
 
+                    # Make sure you render the clothes specified in meta
+                    hide_body_clothes(body)
+                    show_body_clothes_from_meta(body)
+
                     # Randomize the placement of the camera...
                     #
                     # See RandomizedCamView script embedded in glimpse-training.blend
@@ -689,41 +698,27 @@ class GeneratorOperator(bpy.types.Operator):
 
                     elif is_camera_smooth_movement:
 
-                        if height_mm == 0:
-                            height_mm = min_height_mm
+                        # add perlin noise to all factors of the camera
+                        # final position for a given frame to simulate
+                        # the smooth movement of a hand holding a phone camera
+                        def perlin_noise(frame, bvh_fps, factor, base_factor):
 
-                        if dist_mm == 0:
-                            dist_mm = min_distance_mm
+                            if factor == 0:
+                                factor = base_factor
 
-                        if view_angle == 0:
-                            view_angle = min_viewing_angle
+                            current_frame_time = (1 / bvh_fps) * frame
+                            position = mathutils.Vector((current_frame_time, factor, 0))
+                            #noise = mathutils.noise.fractal(position, H, lacunarity, octaves, mathutils.noise.types.STDPERLIN)
+                            noise = mathutils.noise.noise(position, mathutils.noise.types.STDPERLIN)
+                            factor += noise
+                            return factor
 
-                        H = 2
-                        lacunarity = 1
-                        octaves = 4
-
-                        current_frame_time = (1 / bvh_fps) * frame
-                        position = mathutils.Vector((current_frame_time, height_mm, 0))
-                        z = mathutils.noise.fractal(position, H, lacunarity, octaves, mathutils.noise.types.STDPERLIN)
-                        height_mm += z
-                        print(">>> Current perlin z: %.5f and height_mm: %.4f" % (z, height_mm))
-
-                        position = mathutils.Vector((current_frame_time, view_angle, 0))
-                        z = mathutils.noise.fractal(position, H, lacunarity, octaves, mathutils.noise.types.STDPERLIN)
-                        view_angle += z
-                        print(">>> Current perlin z: %.5f and dist_mm: %.4f" % (z, dist_mm))
-
-                        position = mathutils.Vector((current_frame_time, dist_mm, 0))
-                        z = mathutils.noise.fractal(position, H, lacunarity, octaves, mathutils.noise.types.STDPERLIN)
-                        dist_mm += z
-                        print(">>> Current perlin z: %.5f and view_angle: %.4f" % (z, view_angle))
-
-                        # temporary call
-                        # We roughly point the camera at the focus bone but randomize
-                        # this a little...
-                        target_x_mm = focus.head.x * 1000
-                        target_y_mm = focus.head.y * 1000
-                        target_z_mm = focus.head.z * 1000
+                        target_x_mm = perlin_noise(frame, bvh_fps, target_x_mm, focus.head.x * 1000)
+                        target_y_mm = perlin_noise(frame, bvh_fps, target_y_mm, focus.head.y * 1000)
+                        target_z_mm = perlin_noise(frame, bvh_fps, target_z_mm, focus.head.z * 1000)
+                        height_mm = perlin_noise(frame, bvh_fps, height_mm, min_height_mm)
+                        dist_mm = perlin_noise(frame, bvh_fps, dist_mm, min_distance_mm)
+                        view_angle = perlin_noise(frame, bvh_fps, view_angle, min_viewing_angle)
 
                     else:
 
@@ -743,7 +738,6 @@ class GeneratorOperator(bpy.types.Operator):
                                                        int(focus_y_mm + target_fuzz_range_mm))
                         target_z_mm = random.randrange(int(focus_z_mm - target_fuzz_range_mm),
                                                        int(focus_z_mm + target_fuzz_range_mm))
-
 
                     dist_m = dist_mm / 1000
                     view_rot = mathutils.Quaternion((0, 0, 1), math.radians(view_angle));
