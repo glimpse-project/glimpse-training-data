@@ -404,6 +404,11 @@ _Note: the YEAR-MONTH prefix for the chosen joint-map should typically match
 the -to-YEAR-MONTH-rdt-map.json suffix of the label map used when running
 the pre-processor._
 
+The `-f` option is shorthand for `--fast` which means the tool will train with
+the assumption that `infer_joints_fast()` is going to be used at runtime
+instead of using mean shift (slow) and in this case won't output bandwidth
+parameters.
+
 
 # Convert .json trees to .rdt for runtime usage
 
