@@ -705,7 +705,6 @@ class GeneratorOperator(bpy.types.Operator):
                             position = mathutils.Vector((frame_time, factor, 0))
                             noise = mathutils.noise.noise(position, mathutils.noise.types.STDPERLIN)
                             factor += noise
-                            print("Noise: %.5f" % noise)
                             return factor
 
                         current_frame_time = (1 / bvh_fps) * frame
