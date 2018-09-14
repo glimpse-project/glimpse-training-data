@@ -528,6 +528,9 @@ class GeneratorOperator(bpy.types.Operator):
                 target_y_mm = 0
                 target_z_mm = 0
 
+                # random seed when smooth_camera_movement is true
+                height_seed = 0
+
                 print("> Rendering with " + body)
 
                 meta['body'] = body
@@ -697,23 +700,28 @@ class GeneratorOperator(bpy.types.Operator):
                         # add perlin noise to all factors of the camera
                         # final position for a given frame to simulate
                         # the smooth movement of a hand holding a phone camera
-                        def perlin_noise(frame_time, factor, base_factor):
 
-                            if factor == 0:
-                                factor = base_factor
+                        # mid points and ranges based on min and max values
+                        height_range_mm = max_height_mm - min_height_mm
+                        mid_height_mm = min_height_mm + (height_range_mm / 2)
+                        dist_range_mm = max_distance_mm - min_distance_mm
+                        mid_dist_mm = min_distance_mm + (dist_range_mm / 2)
+                        view_angle_range_mm = max_viewing_angle - min_viewing_angle
+                        mid_view_angle = min_viewing_angle + (view_angle_range_mm / 2)
 
-                            position = mathutils.Vector((frame_time, factor, 0))
+                        def perlin_noise(frame, bvh_fps, frequency, seed):
+                            frame_time = (1 / bvh_fps) * frame * frequency
+                            position = mathutils.Vector((frame_time, 0, seed))
                             noise = mathutils.noise.noise(position, mathutils.noise.types.STDPERLIN)
-                            factor += noise
-                            return factor
+                            return noise
 
-                        current_frame_time = (1 / bvh_fps) * frame
-                        target_x_mm = perlin_noise(current_frame_time, target_x_mm, focus.head.x * 1000)
-                        target_y_mm = perlin_noise(current_frame_time, target_y_mm, focus.head.y * 1000)
-                        target_z_mm = perlin_noise(current_frame_time, target_z_mm, focus.head.z * 1000)
-                        height_mm = perlin_noise(current_frame_time, height_mm, min_height_mm)
-                        dist_mm = perlin_noise(current_frame_time, dist_mm, min_distance_mm)
-                        view_angle = perlin_noise(current_frame_time, view_angle, min_viewing_angle)
+                        height_mm = mid_height_mm + (perlin_noise(frame, bvh_fps, 1, height_seed) * height_range_mm)
+                        dist_mm = mid_dist_mm + (perlin_noise(frame, bvh_fps, 1, height_seed) * dist_range_mm)
+                        view_angle = mid_view_angle + (perlin_noise(frame, bvh_fps, 1, height_seed) * view_angle_range_mm)
+
+                        target_x_mm = (focus.head.x * 1000) + perlin_noise(frame, bvh_fps, 1, height_seed)
+                        target_y_mm = (focus.head.y * 1000) + perlin_noise(frame, bvh_fps, 1, height_seed)
+                        target_z_mm = (focus.head.z * 1000) + perlin_noise(frame, bvh_fps, 1, height_seed)
 
                     else:
 
