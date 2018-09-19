@@ -784,6 +784,7 @@ class GeneratorOperator(bpy.types.Operator):
 
                     # Then put the calculated quaternion vector as the
                     # camera pose orientation in the meta
+                    # replace y with x to get rid of mirroring
                     meta['camera']['pose'] = {
                         'orientation': {
                             'x': pose_quaternion.y,
