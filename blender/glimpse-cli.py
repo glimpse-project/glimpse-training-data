@@ -69,6 +69,7 @@ parser.add_argument('--min-camera-angle', default=-30, type=int, help='Min viewi
 parser.add_argument('--max-camera-angle', default=0, type=int, help='Max viewing angle deviation (measured from face-on direction, default=0)')
 parser.add_argument('--fixed-camera', help='Lock camera in a fixed position using the specified min parameters', action='store_true')
 parser.add_argument('--smooth-camera-movement', help='Smooth camera movement (disable randomization of the camera position and orientation)', action='store_true')
+parser.add_argument('--smooth-camera-frequency', default=1, type=int, help='Period at which data is sampled when --smooth-camera-movement is enabled (frequency, default=1)')
 
 parser.add_argument('--dest', default=os.path.join(os.getcwd(), 'renders'), help='Directory to write files too')
 parser.add_argument('--name', default=date_str, help='Unique name for this render run')
@@ -177,7 +178,7 @@ bpy.context.scene.GlimpseFixedCamera = cli_args.fixed_camera
 bpy.context.scene.GlimpseFixedBodies= cli_args.fixed_bodies
 bpy.context.scene.GlimpseFixedClothes= cli_args.fixed_clothes
 bpy.context.scene.GlimpseSmoothCameraMovement= cli_args.smooth_camera_movement
-
+bpy.context.scene.GlimpseSmoothCameraFrequency= cli_args.smooth_camera_frequency
 
 mocaps_dir = os.path.join(cli_args.training_data, 'mocap')
 if not os.path.isdir(mocaps_dir):

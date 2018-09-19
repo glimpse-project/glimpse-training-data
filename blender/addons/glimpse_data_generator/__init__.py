@@ -427,15 +427,17 @@ class GeneratorOperator(bpy.types.Operator):
         camera_meta['width'] = bpy.context.scene.render.resolution_x
         camera_meta['height'] = bpy.context.scene.render.resolution_y
         camera_meta['vertical_fov'] = math.degrees(bpy.data.cameras['Camera'].angle)
-        meta['camera'] = camera_meta
+        is_camera_fixed = bpy.context.scene.GlimpseFixedCamera
+        camera_meta['is_camera_fixed'] = is_camera_fixed
+        is_camera_smooth_movement = bpy.context.scene.GlimpseSmoothCameraMovement
+        camera_meta['is_camera_smooth_movement'] = is_camera_smooth_movement
+        frequency = bpy.context.scene.GlimpseSmoothCameraFrequency
+        camera_meta['smooth_camera_frequency'] = frequency
 
+        meta['camera'] = camera_meta
         top_meta['camera'] = camera_meta
         top_meta['n_labels'] = 34
 
-        is_camera_fixed = bpy.context.scene.GlimpseFixedCamera
-        top_meta['is_camera_fixed'] = is_camera_fixed
-        is_camera_smooth_movement = bpy.context.scene.GlimpseSmoothCameraMovement
-        top_meta['is_camera_smooth_movement'] = is_camera_smooth_movement
 
         if(is_camera_fixed):
             min_viewing_angle = bpy.context.scene.GlimpseMinViewingAngle
@@ -715,13 +717,13 @@ class GeneratorOperator(bpy.types.Operator):
                             noise = mathutils.noise.noise(position, mathutils.noise.types.STDPERLIN)
                             return noise
 
-                        height_mm = mid_height_mm + (perlin_noise(frame, bvh_fps, 1, height_seed) * height_range_mm)
-                        dist_mm = mid_dist_mm + (perlin_noise(frame, bvh_fps, 1, height_seed) * dist_range_mm)
-                        view_angle = mid_view_angle + (perlin_noise(frame, bvh_fps, 1, height_seed) * view_angle_range_mm)
+                        height_mm = mid_height_mm + (perlin_noise(frame, bvh_fps, frequency, height_seed) * height_range_mm)
+                        dist_mm = mid_dist_mm + (perlin_noise(frame, bvh_fps, frequency, height_seed + 1) * dist_range_mm)
+                        view_angle = mid_view_angle + (perlin_noise(frame, bvh_fps, frequency, height_seed + 2) * view_angle_range_mm)
 
-                        target_x_mm = (focus.head.x * 1000) + perlin_noise(frame, bvh_fps, 1, height_seed)
-                        target_y_mm = (focus.head.y * 1000) + perlin_noise(frame, bvh_fps, 1, height_seed)
-                        target_z_mm = (focus.head.z * 1000) + perlin_noise(frame, bvh_fps, 1, height_seed)
+                        target_x_mm = (focus.head.x * 1000) + perlin_noise(frame, bvh_fps, frequency, height_seed + 3)
+                        target_y_mm = (focus.head.y * 1000) + perlin_noise(frame, bvh_fps, frequency, height_seed + 4)
+                        target_z_mm = (focus.head.z * 1000) + perlin_noise(frame, bvh_fps, frequency, height_seed + 5)
 
                     else:
 
@@ -749,6 +751,7 @@ class GeneratorOperator(bpy.types.Operator):
 
                     camera.location.xy = focus.head.xy + dist_m * person_forward_2d
                     camera.location.z = height_mm / 1000
+                    #camera.location.z = focus.head.z
 
                     meta['camera']['distance'] = dist_m
                     meta['camera']['viewing_angle'] = view_angle
@@ -766,6 +769,28 @@ class GeneratorOperator(bpy.types.Operator):
 
                     context.scene.update() # update camera.matrix_world
                     camera_world_inverse_mat4 = camera.matrix_world.inverted()
+
+                    # create a meta for synthetic camera orientation
+                    # that mimics iphone os
+                    #
+                    # First, calculate the angle between the camera
+                    # pointing direction vector and gravity vector
+                    current_vec = camera.matrix_world.inverted().to_quaternion() * mathutils.Vector((0, 0, -1))
+                    ground = mathutils.Vector((1, 0, 0))
+                    axis = current_vec.cross(ground)
+                    ground_current_dot = ground.dot(current_vec)
+                    angle = math.acos(ground_current_dot)
+                    pose_quaternion = mathutils.Quaternion(axis, angle)
+
+                    # Then put the calculated quaternion vector as the
+                    # camera pose orientation in the meta
+                    meta['camera']['pose'] = {
+                        'orientation': {
+                            'x': pose_quaternion.y,
+                            'y': pose_quaternion.x,
+                            'z': pose_quaternion.z,
+                            'w': pose_quaternion.w}
+                    }
 
                     meta['bones'] = []
                     for bone in body_pose.pose.bones:
@@ -1363,6 +1388,12 @@ def register():
             name="SmoothCameraMovement",
             description="Smooth camera movement (disable randomization of the camera position and orientation)",
             default=False)
+    bpy.types.Scene.GlimpseSmoothCameraFrequency = IntProperty(
+            name="SmoothCameraFrequency",
+            description="Period at which data is sampled when --smooth-camera-movement is enabled",
+            default=1,
+            min=1,
+            max=100)
 
     bpy.types.Scene.GlimpseFixedClothes = StringProperty(
             name="FixedClothes",
