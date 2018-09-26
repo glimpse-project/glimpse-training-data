@@ -531,7 +531,7 @@ class GeneratorOperator(bpy.types.Operator):
                 target_z_mm = 0
 
                 # random seed when smooth_camera_movement is true
-                height_seed = 0
+                height_seed = 1
 
                 print("> Rendering with " + body)
 
@@ -751,7 +751,6 @@ class GeneratorOperator(bpy.types.Operator):
 
                     camera.location.xy = focus.head.xy + dist_m * person_forward_2d
                     camera.location.z = height_mm / 1000
-                    #camera.location.z = focus.head.z
 
                     meta['camera']['distance'] = dist_m
                     meta['camera']['viewing_angle'] = view_angle
@@ -768,6 +767,7 @@ class GeneratorOperator(bpy.types.Operator):
                     camera.rotation_quaternion = rot
 
                     context.scene.update() # update camera.matrix_world
+
                     camera_world_inverse_mat4 = camera.matrix_world.inverted()
 
                     # create a meta for synthetic camera orientation
@@ -775,23 +775,25 @@ class GeneratorOperator(bpy.types.Operator):
                     #
                     # First, calculate the angle between the camera
                     # pointing direction vector and gravity vector
-                    current_vec = camera.matrix_world.inverted().to_quaternion() * mathutils.Vector((0, 0, -1))
-                    ground = mathutils.Vector((1, 0, 0))
-                    axis = current_vec.cross(ground)
-                    ground_current_dot = ground.dot(current_vec)
+                    camera_direction = (camera_world_inverse_mat4 * mathutils.Vector((0, 0, -1))).normalized()
+                    ground = mathutils.Vector((0, 0, -1))
+                    axis = camera_direction.cross(ground)
+                    ground_current_dot = ground.dot(camera_direction)
                     angle = math.acos(ground_current_dot)
                     pose_quaternion = mathutils.Quaternion(axis, angle)
 
                     # Then put the calculated quaternion vector as the
                     # camera pose orientation in the meta
-                    # replace y with x to get rid of mirroring
+                    # swap y with x to get rid of mirroring
                     meta['camera']['pose'] = {
-                        'orientation': {
-                            'x': pose_quaternion.y,
-                            'y': pose_quaternion.x,
-                            'z': pose_quaternion.z,
-                            'w': pose_quaternion.w}
+                        'orientation': [pose_quaternion.y, pose_quaternion.x, pose_quaternion.z, pose_quaternion.w],
+                        'translation': [camera.location.x, camera.location.y, camera.location.z]
                     }
+
+                    # Calculating the gravity vector
+                    z_point = camera.matrix_world.translation - mathutils.Vector((0, 0, 1))
+                    cam_gravity_vec = (camera_world_inverse_mat4 * z_point).normalized()
+                    meta['gravity_vector'] = [cam_gravity_vec.x, cam_gravity_vec.y, -cam_gravity_vec.z]
 
                     meta['bones'] = []
                     for bone in body_pose.pose.bones:
