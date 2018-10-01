@@ -770,26 +770,6 @@ class GeneratorOperator(bpy.types.Operator):
 
                     camera_world_inverse_mat4 = camera.matrix_world.inverted()
 
-                    # create a meta for synthetic camera orientation
-                    # that mimics iphone os
-                    #
-                    # First, calculate the angle between the camera
-                    # pointing direction vector and gravity vector
-                    camera_direction = (camera_world_inverse_mat4 * mathutils.Vector((0, 0, -1))).normalized()
-                    ground = mathutils.Vector((0, 0, -1))
-                    axis = camera_direction.cross(ground)
-                    ground_current_dot = ground.dot(camera_direction)
-                    angle = math.acos(ground_current_dot)
-                    pose_quaternion = mathutils.Quaternion(axis, angle)
-
-                    # Then put the calculated quaternion vector as the
-                    # camera pose orientation in the meta
-                    # swap y with x to get rid of mirroring
-                    meta['camera']['pose'] = {
-                        'orientation': [pose_quaternion.y, pose_quaternion.x, pose_quaternion.z, pose_quaternion.w],
-                        'translation': [camera.location.x, camera.location.y, camera.location.z]
-                    }
-
                     # Calculating the gravity vector
                     z_point = camera.matrix_world.translation - mathutils.Vector((0, 0, 1))
                     cam_gravity_vec = (camera_world_inverse_mat4 * z_point).normalized()
