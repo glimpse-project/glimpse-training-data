@@ -228,7 +228,7 @@ with open(args.index_filename, 'r+') as fp:
 
         i = 0
         for entry in index[args.start:end]:
-            blacklisted=True
+            blacklisted=False
             if 'blacklist' in entry:
                 blacklisted=entry['blacklist']
 
