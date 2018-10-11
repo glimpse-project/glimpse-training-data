@@ -39,6 +39,11 @@ parser.add_argument("-s", "--start", type=int, default=0, help="Start range (neg
 parser.add_argument("-e", "--end", type=int, default=0, help="End range (zero means to go to the end of the index, negative values are relative to end of index)")
 parser.add_argument("-m", "--match", action='append', help="Only look at entries whose name matches this wildcard pattern")
 parser.add_argument("--file-match", action='append', help="Only look at entries whose relative filename matches this wildcard pattern")
+parser.add_argument("--blacklisted", action='store_true', help="Only look at blacklisted entries")
+parser.add_argument("--non-blacklisted", action='store_true', help="Only look at non-blacklisted entries")
+parser.add_argument("--with-tag", action='append', help="Only look at entries with this tag")
+parser.add_argument("--without-tag", action='append', help="Only look at entries without this tag")
+
 
 # Edit commands
 parser.add_argument("-t", "--tag", action='append', help="Add tag")
@@ -196,9 +201,9 @@ with open(args.index_filename, 'r+') as fp:
                 sys.exit("ERROR: %s has duplicate entries for name: '%s'" % (args.index_filename, entry['name']))
             name_map[entry['name']] = entry
 
-    # --start, --end and --match are ignored when adding new entries and
-    # instead it's as if all the new entries were selected for any edit
-    # operations...
+    # All filtering options (--start, --end, --match, --with[out]-tag etc) are
+    # ignored when adding new entries and instead it's as if all the new
+    # entries were selected for any edit operations...
     if args.add:
         i = len(index)
         for bvh_path in args.add:
@@ -223,6 +228,34 @@ with open(args.index_filename, 'r+') as fp:
 
         i = 0
         for entry in index[args.start:end]:
+            blacklisted=True
+            if 'blacklist' in entry:
+                blacklisted=entry['blacklist']
+
+            if args.blacklisted and not blacklisted:
+                continue
+
+            if args.non_blacklisted and blacklisted:
+                continue
+
+            if args.with_tag:
+                tags_match=True
+                for with_tag in args.with_tag:
+                    if with_tag not in entry['tags']:
+                        tags_match=False
+                        break
+                if not tags_match:
+                    continue
+
+            if args.without_tag:
+                tags_match=True
+                for without_tag in args.without_tag:
+                    if without_tag in entry['tags']:
+                        tags_match=False
+                        break
+                if not tags_match:
+                    continue
+
             if 'name' in entry:
                 match_name=entry['name']
             else:
