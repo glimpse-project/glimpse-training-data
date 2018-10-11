@@ -165,7 +165,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -176,7 +176,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -187,16 +187,18 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
+        "blacklist": true,
         "end": 97,
         "file": "cmuconvert-mb2-01-09\\02\\02_04.bvh",
         "name": "02_04",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -213,12 +215,14 @@
         }
     },
     {
+        "blacklist": true,
         "end": 447,
         "file": "cmuconvert-mb2-01-09\\02\\02_06.bvh",
         "name": "02_06",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -275,7 +279,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -286,7 +290,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -297,7 +301,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -308,7 +312,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -319,214 +323,252 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
+        "blacklist": true,
         "end": 225,
         "file": "cmuconvert-mb2-01-09\\05\\05_02.bvh",
         "name": "05_02",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 87,
         "file": "cmuconvert-mb2-01-09\\05\\05_03.bvh",
         "name": "05_03",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 239,
         "file": "cmuconvert-mb2-01-09\\05\\05_04.bvh",
         "name": "05_04",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 183,
         "file": "cmuconvert-mb2-01-09\\05\\05_05.bvh",
         "name": "05_05",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 178,
         "file": "cmuconvert-mb2-01-09\\05\\05_06.bvh",
         "name": "05_06",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 238,
         "file": "cmuconvert-mb2-01-09\\05\\05_07.bvh",
         "name": "05_07",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 144,
         "file": "cmuconvert-mb2-01-09\\05\\05_08.bvh",
         "name": "05_08",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 228,
         "file": "cmuconvert-mb2-01-09\\05\\05_09.bvh",
         "name": "05_09",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 163,
         "file": "cmuconvert-mb2-01-09\\05\\05_10.bvh",
         "name": "05_10",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 119,
         "file": "cmuconvert-mb2-01-09\\05\\05_11.bvh",
         "name": "05_11",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 271,
         "file": "cmuconvert-mb2-01-09\\05\\05_12.bvh",
         "name": "05_12",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 219,
         "file": "cmuconvert-mb2-01-09\\05\\05_13.bvh",
         "name": "05_13",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 128,
         "file": "cmuconvert-mb2-01-09\\05\\05_14.bvh",
         "name": "05_14",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 109,
         "file": "cmuconvert-mb2-01-09\\05\\05_15.bvh",
         "name": "05_15",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 105,
         "file": "cmuconvert-mb2-01-09\\05\\05_16.bvh",
         "name": "05_16",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 208,
         "file": "cmuconvert-mb2-01-09\\05\\05_17.bvh",
         "name": "05_17",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 365,
         "file": "cmuconvert-mb2-01-09\\05\\05_18.bvh",
         "name": "05_18",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 172,
         "file": "cmuconvert-mb2-01-09\\05\\05_19.bvh",
         "name": "05_19",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 220,
         "file": "cmuconvert-mb2-01-09\\05\\05_20.bvh",
         "name": "05_20",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -539,7 +581,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -549,8 +591,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "basketball": true,
+            "cmu": true
         }
     },
     {
@@ -560,8 +602,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "basketball": true,
+            "cmu": true
         }
     },
     {
@@ -571,8 +613,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "basketball": true,
+            "cmu": true
         }
     },
     {
@@ -582,8 +624,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "basketball": true,
+            "cmu": true
         }
     },
     {
@@ -593,8 +635,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "basketball": true,
+            "cmu": true
         }
     },
     {
@@ -604,8 +646,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "basketball": true,
+            "cmu": true
         }
     },
     {
@@ -615,8 +657,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "basketball": true,
+            "cmu": true
         }
     },
     {
@@ -626,72 +668,84 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "basketball": true,
+            "cmu": true
         }
     },
     {
+        "blacklist": true,
         "end": 222,
         "file": "cmuconvert-mb2-01-09\\06\\06_10.bvh",
         "name": "06_10",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 229,
         "file": "cmuconvert-mb2-01-09\\06\\06_11.bvh",
         "name": "06_11",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 244,
         "file": "cmuconvert-mb2-01-09\\06\\06_12.bvh",
         "name": "06_12",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 981,
         "file": "cmuconvert-mb2-01-09\\06\\06_13.bvh",
         "name": "06_13",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 95,
         "file": "cmuconvert-mb2-01-09\\06\\06_14.bvh",
         "name": "06_14",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 109,
         "file": "cmuconvert-mb2-01-09\\06\\06_15.bvh",
         "name": "06_15",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -704,7 +758,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -715,7 +769,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -726,7 +780,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -737,7 +791,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -748,7 +802,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -759,7 +813,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -770,7 +824,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -781,7 +835,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -792,7 +846,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -803,7 +857,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -814,7 +868,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -825,7 +879,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -836,7 +890,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -847,7 +901,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -858,7 +912,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -869,7 +923,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -880,7 +934,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -891,16 +945,18 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
+        "blacklist": true,
         "end": 60,
         "file": "cmuconvert-mb2-01-09\\08\\08_07.bvh",
         "name": "08_07",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -913,7 +969,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -924,7 +980,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -935,7 +991,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -946,7 +1002,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -957,7 +1013,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -968,7 +1024,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -979,7 +1035,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -990,7 +1046,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -1001,7 +1057,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -1012,7 +1068,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -1023,7 +1079,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -1034,7 +1090,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -1045,7 +1101,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -1056,7 +1112,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -1067,16 +1123,18 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
+        "blacklist": true,
         "end": 383,
         "file": "cmuconvert-mb2-01-09\\09\\09_12.bvh",
         "name": "09_12",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -1089,7 +1147,9 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "football": true,
+            "kick": true,
+            "soccer": true
         }
     },
     {
@@ -1100,7 +1160,9 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "football": true,
+            "kick": true,
+            "soccer": true
         }
     },
     {
@@ -1111,7 +1173,9 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "football": true,
+            "kick": true,
+            "soccer": true
         }
     },
     {
@@ -1122,7 +1186,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -1133,7 +1197,9 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "football": true,
+            "kick": true,
+            "soccer": true
         }
     },
     {
@@ -1144,7 +1210,9 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "football": true,
+            "kick": true,
+            "soccer": true
         }
     },
     {
@@ -1155,7 +1223,9 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "football": true,
+            "kick": true,
+            "soccer": true
         }
     },
     {
@@ -1166,7 +1236,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -1177,7 +1247,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -1188,7 +1258,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -1203,89 +1273,105 @@
         }
     },
     {
+        "blacklist": true,
         "end": 462,
         "file": "cmuconvert-mb2-10-14\\13\\13_01.bvh",
         "name": "13_01",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 695,
         "file": "cmuconvert-mb2-10-14\\13\\13_02.bvh",
         "name": "13_02",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 743,
         "file": "cmuconvert-mb2-10-14\\13\\13_03.bvh",
         "name": "13_03",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 951,
         "file": "cmuconvert-mb2-10-14\\13\\13_04.bvh",
         "name": "13_04",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 880,
         "file": "cmuconvert-mb2-10-14\\13\\13_05.bvh",
         "name": "13_05",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 882,
         "file": "cmuconvert-mb2-10-14\\13\\13_06.bvh",
         "name": "13_06",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 290,
         "file": "cmuconvert-mb2-10-14\\13\\13_07.bvh",
         "name": "13_07",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "end": 320,
         "file": "cmuconvert-mb2-10-14\\13\\13_08.bvh",
         "name": "13_08",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -1302,12 +1388,14 @@
         }
     },
     {
+        "blacklist": true,
         "end": 479,
         "file": "cmuconvert-mb2-10-14\\13\\13_10.bvh",
         "name": "13_10",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -1320,16 +1408,18 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
+        "blacklist": true,
         "end": 686,
         "file": "cmuconvert-mb2-10-14\\13\\13_12.bvh",
         "name": "13_12",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -1341,7 +1431,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -1380,8 +1470,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "boxing": true,
+            "cmu": true
         }
     },
     {
@@ -1390,8 +1480,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "boxing": true,
+            "cmu": true
         }
     },
     {
@@ -1401,7 +1491,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -1465,61 +1555,73 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-10-14\\13\\13_26.bvh",
         "name": "13_26",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-10-14\\13\\13_27.bvh",
         "name": "13_27",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-10-14\\13\\13_28.bvh",
         "name": "13_28",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-10-14\\13\\13_29.bvh",
         "name": "13_29",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-10-14\\13\\13_30.bvh",
         "name": "13_30",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-10-14\\13\\13_31.bvh",
         "name": "13_31",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -1531,7 +1633,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -1540,8 +1642,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "climb": true,
+            "cmu": true
         }
     },
     {
@@ -1550,8 +1652,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "climb": true,
+            "cmu": true
         }
     },
     {
@@ -1560,8 +1662,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "climb": true,
+            "cmu": true
         }
     },
     {
@@ -1570,8 +1672,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "climb": true,
+            "cmu": true
         }
     },
     {
@@ -1580,8 +1682,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "climb": true,
+            "cmu": true
         }
     },
     {
@@ -1590,8 +1692,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "climb": true,
+            "cmu": true
         }
     },
     {
@@ -1601,7 +1703,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -1611,7 +1713,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -1621,7 +1723,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -1631,7 +1733,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -1640,8 +1742,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "boxing": true,
+            "cmu": true
         }
     },
     {
@@ -1650,8 +1752,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "boxing": true,
+            "cmu": true
         }
     },
     {
@@ -1660,66 +1762,78 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "boxing": true,
+            "cmu": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-10-14\\14\\14_04.bvh",
         "name": "14_04",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-10-14\\14\\14_05.bvh",
         "name": "14_05",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-10-14\\14\\14_06.bvh",
         "name": "14_06",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-10-14\\14\\14_07.bvh",
         "name": "14_07",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-10-14\\14\\14_08.bvh",
         "name": "14_08",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-10-14\\14\\14_09.bvh",
         "name": "14_09",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -1765,11 +1879,13 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-10-14\\14\\14_14.bvh",
         "name": "14_14",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -1825,11 +1941,13 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-10-14\\14\\14_20.bvh",
         "name": "14_20",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -1840,8 +1958,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "climb": true,
+            "cmu": true
         }
     },
     {
@@ -1850,8 +1968,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "climb": true,
+            "cmu": true
         }
     },
     {
@@ -1860,96 +1978,114 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "climb": true,
+            "cmu": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-10-14\\14\\14_24.bvh",
         "name": "14_24",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-10-14\\14\\14_25.bvh",
         "name": "14_25",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-10-14\\14\\14_26.bvh",
         "name": "14_26",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-10-14\\14\\14_27.bvh",
         "name": "14_27",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-10-14\\14\\14_28.bvh",
         "name": "14_28",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-10-14\\14\\14_29.bvh",
         "name": "14_29",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-10-14\\14\\14_30.bvh",
         "name": "14_30",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-10-14\\14\\14_31.bvh",
         "name": "14_31",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-10-14\\14\\14_32.bvh",
         "name": "14_32",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -1960,8 +2096,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "climb": true,
+            "cmu": true
         }
     },
     {
@@ -1970,8 +2106,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "climb": true,
+            "cmu": true
         }
     },
     {
@@ -1980,16 +2116,18 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "climb": true,
+            "cmu": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-10-14\\14\\14_36.bvh",
         "name": "14_36",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -12291,15 +12429,17 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\15\\15_02.bvh",
         "name": "15_02",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -12311,45 +12451,53 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\15\\15_04.bvh",
         "name": "15_04",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\15\\15_05.bvh",
         "name": "15_05",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\15\\15_06.bvh",
         "name": "15_06",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\15\\15_07.bvh",
         "name": "15_07",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -12371,35 +12519,41 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\15\\15_10.bvh",
         "name": "15_10",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\15\\15_11.bvh",
         "name": "15_11",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\15\\15_12.bvh",
         "name": "15_12",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -12410,8 +12564,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "boxing": true,
+            "cmu": true
         }
     },
     {
@@ -12421,7 +12575,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -12431,7 +12585,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -12441,7 +12595,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -12451,7 +12605,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -12461,7 +12615,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -12471,7 +12625,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -12481,7 +12635,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -12491,15 +12645,17 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_08.bvh",
         "name": "16_08",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -12511,7 +12667,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -12521,45 +12677,53 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_11.bvh",
         "name": "16_11",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_12.bvh",
         "name": "16_12",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_13.bvh",
         "name": "16_13",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_14.bvh",
         "name": "16_14",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -12571,7 +12735,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -12581,45 +12745,53 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_17.bvh",
         "name": "16_17",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_18.bvh",
         "name": "16_18",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_19.bvh",
         "name": "16_19",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_20.bvh",
         "name": "16_20",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -12631,7 +12803,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -12641,85 +12813,101 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_23.bvh",
         "name": "16_23",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_24.bvh",
         "name": "16_24",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_25.bvh",
         "name": "16_25",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_26.bvh",
         "name": "16_26",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_27.bvh",
         "name": "16_27",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_28.bvh",
         "name": "16_28",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_29.bvh",
         "name": "16_29",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_30.bvh",
         "name": "16_30",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -12731,7 +12919,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -12741,25 +12929,29 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_33.bvh",
         "name": "16_33",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_34.bvh",
         "name": "16_34",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -12771,7 +12963,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -12781,85 +12973,101 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_37.bvh",
         "name": "16_37",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_38.bvh",
         "name": "16_38",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_39.bvh",
         "name": "16_39",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_40.bvh",
         "name": "16_40",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_41.bvh",
         "name": "16_41",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_42.bvh",
         "name": "16_42",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_43.bvh",
         "name": "16_43",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_44.bvh",
         "name": "16_44",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -12871,7 +13079,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -12881,7 +13089,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -12891,75 +13099,89 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_48.bvh",
         "name": "16_48",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_49.bvh",
         "name": "16_49",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_50.bvh",
         "name": "16_50",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_51.bvh",
         "name": "16_51",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_52.bvh",
         "name": "16_52",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_53.bvh",
         "name": "16_53",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_54.bvh",
         "name": "16_54",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -12971,7 +13193,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -12981,15 +13203,17 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\16\\16_57.bvh",
         "name": "16_57",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -13001,25 +13225,29 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\17\\17_01.bvh",
         "name": "17_01",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\17\\17_02.bvh",
         "name": "17_02",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -13031,7 +13259,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -13041,7 +13269,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -13051,45 +13279,53 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\17\\17_06.bvh",
         "name": "17_06",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\17\\17_07.bvh",
         "name": "17_07",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\17\\17_08.bvh",
         "name": "17_08",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\17\\17_09.bvh",
         "name": "17_09",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -13100,26 +13336,30 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "boxing": true,
+            "cmu": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\18\\18_01.bvh",
         "name": "18_01",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\18\\18_02.bvh",
         "name": "18_02",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -13165,11 +13405,13 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\18\\18_07.bvh",
         "name": "18_07",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -13185,11 +13427,13 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\18\\18_09.bvh",
         "name": "18_09",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -13215,31 +13459,37 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\18\\18_12.bvh",
         "name": "18_12",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\18\\18_13.bvh",
         "name": "18_13",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\18\\18_14.bvh",
         "name": "18_14",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -13251,25 +13501,29 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\19\\19_01.bvh",
         "name": "19_01",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\19\\19_02.bvh",
         "name": "19_02",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -13315,11 +13569,13 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\19\\19_07.bvh",
         "name": "19_07",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -13335,11 +13591,13 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\19\\19_09.bvh",
         "name": "19_09",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -13365,31 +13623,37 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\19\\19_12.bvh",
         "name": "19_12",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\19\\19_13.bvh",
         "name": "19_13",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-15-19\\19\\19_14.bvh",
         "name": "19_14",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -13401,7 +13665,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true
         }
     },
     {
@@ -13411,25 +13675,29 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\20\\20_02.bvh",
         "name": "20_02",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\20\\20_03.bvh",
         "name": "20_03",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -13441,7 +13709,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -13451,7 +13719,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -13461,7 +13729,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "march": true
         }
     },
     {
@@ -13471,7 +13739,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "march": true
         }
     },
     {
@@ -13481,7 +13749,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "march": true
         }
     },
     {
@@ -13505,21 +13773,25 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\20\\20_11.bvh",
         "name": "20_11",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\20\\20_12.bvh",
         "name": "20_12",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -13541,25 +13813,29 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\21\\21_02.bvh",
         "name": "21_02",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\21\\21_03.bvh",
         "name": "21_03",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -13571,7 +13847,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -13581,7 +13857,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -13591,7 +13867,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "march": true
         }
     },
     {
@@ -13601,7 +13877,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "march": true
         }
     },
     {
@@ -13611,7 +13887,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "march": true
         }
     },
     {
@@ -13635,21 +13911,25 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\21\\21_11.bvh",
         "name": "21_11",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\21\\21_12.bvh",
         "name": "21_12",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -13685,91 +13965,109 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\22\\22_03.bvh",
         "name": "22_03",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\22\\22_04.bvh",
         "name": "22_04",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\22\\22_05.bvh",
         "name": "22_05",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\22\\22_06.bvh",
         "name": "22_06",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\22\\22_07.bvh",
         "name": "22_07",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\22\\22_08.bvh",
         "name": "22_08",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\22\\22_09.bvh",
         "name": "22_09",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\22\\22_10.bvh",
         "name": "22_10",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\22\\22_11.bvh",
         "name": "22_11",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -13811,7 +14109,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -13821,55 +14119,65 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\22\\22_17.bvh",
         "name": "22_17",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\22\\22_18.bvh",
         "name": "22_18",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\22\\22_19.bvh",
         "name": "22_19",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\22\\22_20.bvh",
         "name": "22_20",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\22\\22_21.bvh",
         "name": "22_21",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -13881,7 +14189,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -13891,7 +14199,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -13901,7 +14209,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -13911,7 +14219,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -13935,91 +14243,109 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\23\\23_03.bvh",
         "name": "23_03",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\23\\23_04.bvh",
         "name": "23_04",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\23\\23_05.bvh",
         "name": "23_05",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\23\\23_06.bvh",
         "name": "23_06",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\23\\23_07.bvh",
         "name": "23_07",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\23\\23_08.bvh",
         "name": "23_08",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\23\\23_09.bvh",
         "name": "23_09",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\23\\23_10.bvh",
         "name": "23_10",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\23\\23_11.bvh",
         "name": "23_11",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -14061,7 +14387,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -14071,55 +14397,65 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\23\\23_17.bvh",
         "name": "23_17",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\23\\23_18.bvh",
         "name": "23_18",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\23\\23_19.bvh",
         "name": "23_19",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\23\\23_20.bvh",
         "name": "23_20",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\23\\23_21.bvh",
         "name": "23_21",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -14131,7 +14467,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -14141,7 +14477,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -14151,7 +14487,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -14161,7 +14497,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -14191,7 +14527,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -14200,8 +14536,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "basketball": true,
+            "cmu": true
         }
     },
     {
@@ -14265,31 +14601,37 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\26\\26_09.bvh",
         "name": "26_09",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\26\\26_10.bvh",
         "name": "26_10",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-20-29\\26\\26_11.bvh",
         "name": "26_11",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -14301,7 +14643,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -14310,8 +14652,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "basketball": true,
+            "cmu": true
         }
     },
     {
@@ -14350,8 +14692,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "basketball": true,
+            "cmu": true
         }
     },
     {
@@ -14410,8 +14752,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "basketball": true,
+            "cmu": true
         }
     },
     {
@@ -14450,8 +14792,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "basketball": true,
+            "cmu": true
         }
     },
     {
@@ -14601,7 +14943,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -14610,8 +14952,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "basketball": true,
+            "cmu": true
         }
     },
     {
@@ -14660,8 +15002,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "basketball": true,
+            "cmu": true
         }
     },
     {
@@ -14850,8 +15192,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "basketball": true,
+            "cmu": true
         }
     },
     {
@@ -14910,8 +15252,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "basketball": true,
+            "cmu": true
         }
     },
     {
@@ -15080,8 +15422,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "basketball": true,
+            "cmu": true
         }
     },
     {
@@ -15120,8 +15462,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "basketball": true,
+            "cmu": true
         }
     },
     {
@@ -15291,7 +15633,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15301,7 +15643,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15310,8 +15652,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "basketball": true,
+            "cmu": true
         }
     },
     {
@@ -15350,8 +15692,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "basketball": true,
+            "cmu": true
         }
     },
     {
@@ -15505,41 +15847,49 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-30-34\\33\\33_01.bvh",
         "name": "33_01",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-30-34\\33\\33_02.bvh",
         "name": "33_02",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-30-34\\34\\34_01.bvh",
         "name": "34_01",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-30-34\\34\\34_02.bvh",
         "name": "34_02",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -15551,7 +15901,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15561,7 +15911,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15571,7 +15921,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15581,7 +15931,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15591,7 +15941,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15601,7 +15951,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15611,7 +15961,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15621,7 +15971,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15631,7 +15981,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15641,7 +15991,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15651,7 +16001,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15661,7 +16011,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15671,7 +16021,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15681,7 +16031,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15691,7 +16041,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15701,7 +16051,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15711,7 +16061,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -15721,7 +16071,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -15731,7 +16081,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -15741,7 +16091,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -15751,7 +16101,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -15761,7 +16111,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -15771,7 +16121,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -15781,7 +16131,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -15791,7 +16141,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -15801,7 +16151,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -15821,7 +16171,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15831,7 +16181,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15841,7 +16191,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15851,7 +16201,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15861,7 +16211,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15871,7 +16221,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15881,7 +16231,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15891,25 +16241,29 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-35-39\\36\\36_02.bvh",
         "name": "36_02",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-35-39\\36\\36_03.bvh",
         "name": "36_03",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -15921,7 +16275,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15931,7 +16285,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15941,7 +16295,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15951,7 +16305,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15961,15 +16315,17 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-35-39\\36\\36_09.bvh",
         "name": "36_09",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -15981,7 +16337,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -15991,7 +16347,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16001,7 +16357,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16011,7 +16367,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16021,7 +16377,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16031,7 +16387,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16041,7 +16397,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16051,7 +16407,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16061,7 +16417,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16071,7 +16427,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16081,7 +16437,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16091,7 +16447,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16101,7 +16457,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16111,7 +16467,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16121,7 +16477,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16131,7 +16487,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16141,7 +16497,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16151,7 +16507,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16161,7 +16517,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16171,7 +16527,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16181,7 +16537,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16191,7 +16547,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16201,7 +16557,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16211,7 +16567,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16221,7 +16577,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16231,7 +16587,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16241,7 +16597,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16251,7 +16607,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -16261,7 +16617,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16271,7 +16627,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16281,7 +16637,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16291,15 +16647,17 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-35-39\\38\\38_04.bvh",
         "name": "38_04",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -16311,7 +16669,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16321,7 +16679,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16331,7 +16689,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16341,7 +16699,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16351,7 +16709,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16361,7 +16719,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16371,7 +16729,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16381,7 +16739,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16391,7 +16749,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16401,15 +16759,17 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-35-39\\39\\39_11.bvh",
         "name": "39_11",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -16421,7 +16781,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16431,7 +16791,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16441,85 +16801,101 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-40-45\\40\\40_02.bvh",
         "name": "40_02",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-40-45\\40\\40_03.bvh",
         "name": "40_03",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-40-45\\40\\40_04.bvh",
         "name": "40_04",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-40-45\\40\\40_05.bvh",
         "name": "40_05",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-40-45\\40\\40_06.bvh",
         "name": "40_06",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-40-45\\40\\40_07.bvh",
         "name": "40_07",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-40-45\\40\\40_08.bvh",
         "name": "40_08",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-40-45\\40\\40_09.bvh",
         "name": "40_09",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -16550,86 +16926,102 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "basketball": true,
+            "cmu": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-40-45\\41\\41_02.bvh",
         "name": "41_02",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-40-45\\41\\41_03.bvh",
         "name": "41_03",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-40-45\\41\\41_04.bvh",
         "name": "41_04",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-40-45\\41\\41_05.bvh",
         "name": "41_05",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-40-45\\41\\41_06.bvh",
         "name": "41_06",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-40-45\\41\\41_07.bvh",
         "name": "41_07",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-40-45\\41\\41_08.bvh",
         "name": "41_08",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-40-45\\41\\41_09.bvh",
         "name": "41_09",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -16640,8 +17032,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "basketball": true,
+            "cmu": true
         }
     },
     {
@@ -16650,16 +17042,18 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "basketball": true,
+            "cmu": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-40-45\\42\\42_01.bvh",
         "name": "42_01",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -16671,25 +17065,29 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-40-45\\43\\43_02.bvh",
         "name": "43_02",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-40-45\\43\\43_03.bvh",
         "name": "43_03",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -16701,7 +17099,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -16711,15 +17109,17 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\47\\47_01.bvh",
         "name": "47_01",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -16731,45 +17131,53 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\49\\49_02.bvh",
         "name": "49_02",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\49\\49_03.bvh",
         "name": "49_03",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\49\\49_04.bvh",
         "name": "49_04",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\49\\49_05.bvh",
         "name": "49_05",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -16780,8 +17188,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "cartwheel": true,
+            "cmu": true
         }
     },
     {
@@ -16790,8 +17198,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "cartwheel": true,
+            "cmu": true
         }
     },
     {
@@ -16805,141 +17213,169 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\49\\49_09.bvh",
         "name": "49_09",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\49\\49_10.bvh",
         "name": "49_10",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\49\\49_11.bvh",
         "name": "49_11",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\49\\49_12.bvh",
         "name": "49_12",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\49\\49_13.bvh",
         "name": "49_13",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\49\\49_14.bvh",
         "name": "49_14",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\49\\49_15.bvh",
         "name": "49_15",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\49\\49_16.bvh",
         "name": "49_16",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\49\\49_17.bvh",
         "name": "49_17",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\49\\49_18.bvh",
         "name": "49_18",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\49\\49_19.bvh",
         "name": "49_19",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\49\\49_20.bvh",
         "name": "49_20",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\49\\49_21.bvh",
         "name": "49_21",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\49\\49_22.bvh",
         "name": "49_22",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -17135,31 +17571,37 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\54\\54_20.bvh",
         "name": "54_20",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\54\\54_21.bvh",
         "name": "54_21",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\54\\54_22.bvh",
         "name": "54_22",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -17215,11 +17657,13 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\55\\55_01.bvh",
         "name": "55_01",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -17231,7 +17675,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true
         }
     },
     {
@@ -17251,7 +17695,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -17501,75 +17945,89 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\56\\56_02.bvh",
         "name": "56_02",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\56\\56_03.bvh",
         "name": "56_03",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\56\\56_04.bvh",
         "name": "56_04",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\56\\56_05.bvh",
         "name": "56_05",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\56\\56_06.bvh",
         "name": "56_06",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\56\\56_07.bvh",
         "name": "56_07",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-46-56\\56\\56_08.bvh",
         "name": "56_08",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -17581,7 +18039,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17591,7 +18050,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17601,7 +18061,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17611,7 +18072,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17621,7 +18083,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17631,7 +18094,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17641,7 +18105,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17651,7 +18116,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17661,7 +18127,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17671,7 +18138,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17681,7 +18149,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17691,7 +18160,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17701,7 +18171,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17711,7 +18182,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17721,7 +18193,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17731,7 +18204,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17741,7 +18215,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17751,7 +18226,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17761,7 +18237,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17771,7 +18248,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17781,7 +18259,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17791,7 +18270,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17801,7 +18281,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17811,7 +18292,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17821,7 +18303,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17831,7 +18314,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17841,7 +18325,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17851,7 +18336,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17861,7 +18347,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
@@ -17871,35 +18358,42 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true,
+            "dance_salsa": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-60-75\\62\\62_01.bvh",
         "name": "62_01",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-60-75\\62\\62_02.bvh",
         "name": "62_02",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-60-75\\62\\62_03.bvh",
         "name": "62_03",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -18065,11 +18559,13 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-60-75\\62\\62_20.bvh",
         "name": "62_20",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -18105,21 +18601,25 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-60-75\\62\\62_24.bvh",
         "name": "62_24",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-60-75\\62\\62_25.bvh",
         "name": "62_25",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -18131,7 +18631,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true,
+            "golf_swing": true
         }
     },
     {
@@ -18431,7 +18932,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true,
+            "golf_swing": true
         }
     },
     {
@@ -18441,7 +18943,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true,
+            "golf_swing": true
         }
     },
     {
@@ -18451,7 +18954,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true,
+            "golf_swing": true
         }
     },
     {
@@ -18461,7 +18965,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true,
+            "golf_swing": true
         }
     },
     {
@@ -18471,7 +18976,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true,
+            "golf_swing": true
         }
     },
     {
@@ -18481,7 +18987,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true,
+            "golf_swing": true
         }
     },
     {
@@ -18491,7 +18998,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true,
+            "golf_swing": true
         }
     },
     {
@@ -18501,7 +19009,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true,
+            "golf_swing": true
         }
     },
     {
@@ -18511,7 +19020,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true,
+            "golf_swing": true
         }
     },
     {
@@ -18521,7 +19031,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true,
+            "golf_swing": true
         }
     },
     {
@@ -18531,7 +19042,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true,
+            "golf_putt": true
         }
     },
     {
@@ -18541,7 +19053,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true,
+            "golf_putt": true
         }
     },
     {
@@ -18551,7 +19064,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true,
+            "golf_putt": true
         }
     },
     {
@@ -18561,7 +19075,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true,
+            "golf_putt": true
         }
     },
     {
@@ -18571,7 +19086,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true,
+            "golf_putt": true
         }
     },
     {
@@ -18581,7 +19097,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true
         }
     },
     {
@@ -18591,7 +19107,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true
         }
     },
     {
@@ -18601,7 +19117,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true
         }
     },
     {
@@ -18611,7 +19127,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true
         }
     },
     {
@@ -18621,7 +19137,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true
         }
     },
     {
@@ -18631,7 +19147,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true
         }
     },
     {
@@ -18641,7 +19157,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true
         }
     },
     {
@@ -18651,7 +19167,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true
         }
     },
     {
@@ -18661,7 +19177,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true
         }
     },
     {
@@ -18671,7 +19187,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true
         }
     },
     {
@@ -18681,7 +19197,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true
         }
     },
     {
@@ -18691,7 +19207,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true
         }
     },
     {
@@ -18701,7 +19217,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true
         }
     },
     {
@@ -18711,7 +19227,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true
         }
     },
     {
@@ -18721,7 +19237,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "golf": true
         }
     },
     {
@@ -18731,7 +19247,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -18741,7 +19257,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -18751,7 +19267,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -18761,7 +19277,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -18771,7 +19287,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -18781,7 +19297,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -18791,7 +19307,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -18801,7 +19317,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -18811,7 +19327,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -18821,7 +19337,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -18831,7 +19347,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -18841,35 +19357,41 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-60-75\\69\\69_13.bvh",
         "name": "69_13",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-60-75\\69\\69_14.bvh",
         "name": "69_14",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-60-75\\69\\69_15.bvh",
         "name": "69_15",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -18921,7 +19443,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -18931,7 +19453,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -18941,7 +19463,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -18951,7 +19473,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -18961,7 +19483,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -18971,7 +19493,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -18981,7 +19503,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -18991,7 +19513,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19001,7 +19523,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19011,7 +19533,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19021,7 +19543,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19031,7 +19553,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19041,7 +19563,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19051,7 +19573,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19061,7 +19583,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19071,7 +19593,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19081,7 +19603,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19091,7 +19613,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19101,35 +19623,41 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-60-75\\69\\69_39.bvh",
         "name": "69_39",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-60-75\\69\\69_40.bvh",
         "name": "69_40",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-60-75\\69\\69_41.bvh",
         "name": "69_41",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -19141,7 +19669,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19151,7 +19679,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19161,7 +19689,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19171,7 +19699,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19181,7 +19709,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19191,7 +19719,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19201,7 +19729,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19211,7 +19739,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19221,7 +19749,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19231,7 +19759,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19241,7 +19769,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19251,7 +19779,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19261,7 +19789,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19271,7 +19799,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19281,7 +19809,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19291,7 +19819,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19301,7 +19829,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19311,7 +19839,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19321,7 +19849,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19331,7 +19859,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19341,7 +19869,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19351,7 +19879,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19361,7 +19889,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19371,7 +19899,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19381,7 +19909,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19391,85 +19919,101 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-60-75\\69\\69_68.bvh",
         "name": "69_68",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-60-75\\69\\69_69.bvh",
         "name": "69_69",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-60-75\\69\\69_70.bvh",
         "name": "69_70",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-60-75\\69\\69_71.bvh",
         "name": "69_71",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-60-75\\69\\69_72.bvh",
         "name": "69_72",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-60-75\\69\\69_73.bvh",
         "name": "69_73",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-60-75\\69\\69_74.bvh",
         "name": "69_74",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-60-75\\69\\69_75.bvh",
         "name": "69_75",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -19741,7 +20285,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19751,7 +20295,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19761,7 +20305,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "kick": true
         }
     },
     {
@@ -19771,7 +20315,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "kick": true
         }
     },
     {
@@ -19781,7 +20325,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "kick": true
         }
     },
     {
@@ -19791,7 +20335,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "kick": true
         }
     },
     {
@@ -19931,7 +20475,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -19941,7 +20485,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true,
+            "run": true
         }
     },
     {
@@ -19951,7 +20496,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true,
+            "run": true
         }
     },
     {
@@ -19961,7 +20507,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true,
+            "run": true
         }
     },
     {
@@ -19971,7 +20518,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -19981,7 +20528,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -19991,7 +20538,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -20021,7 +20568,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -20031,7 +20578,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -20041,7 +20588,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -20051,7 +20598,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -20091,7 +20638,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true,
+            "kick": true
         }
     },
     {
@@ -20141,15 +20689,17 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-76-80\\76\\76_02.bvh",
         "name": "76_02",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -20341,7 +20891,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -20351,7 +20901,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -20361,7 +20911,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -20371,7 +20921,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "run": true
         }
     },
     {
@@ -20395,51 +20945,61 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-76-80\\77\\77_16.bvh",
         "name": "77_16",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-76-80\\77\\77_17.bvh",
         "name": "77_17",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-76-80\\77\\77_18.bvh",
         "name": "77_18",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-76-80\\77\\77_19.bvh",
         "name": "77_19",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-76-80\\77\\77_20.bvh",
         "name": "77_20",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -20455,31 +21015,37 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-76-80\\77\\77_22.bvh",
         "name": "77_22",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-76-80\\77\\77_23.bvh",
         "name": "77_23",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-76-80\\77\\77_24.bvh",
         "name": "77_24",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -20491,7 +21057,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -20501,7 +21067,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -20511,7 +21077,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -20521,7 +21087,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -20531,7 +21097,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -20541,7 +21107,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -20551,7 +21117,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -20561,7 +21127,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -20575,11 +21141,13 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-76-80\\77\\77_34.bvh",
         "name": "77_34",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -20761,7 +21329,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -20771,7 +21339,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -21010,8 +21578,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "boxing": true,
+            "cmu": true
         }
     },
     {
@@ -21990,8 +22558,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "boxing": true,
+            "cmu": true
         }
     },
     {
@@ -22631,7 +23199,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -22641,7 +23209,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -22651,7 +23219,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -22661,7 +23229,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -22741,7 +23309,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -22751,7 +23319,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -22760,8 +23328,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "climb": true,
+            "cmu": true
         }
     },
     {
@@ -22770,8 +23338,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "climb": true,
+            "cmu": true
         }
     },
     {
@@ -22791,7 +23359,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -22801,7 +23369,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -22821,7 +23389,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -22831,7 +23399,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -22841,7 +23409,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -22881,7 +23449,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -22891,7 +23459,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -22901,7 +23469,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -22911,7 +23479,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -22921,7 +23489,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -22931,7 +23499,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -22941,7 +23509,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -22951,7 +23519,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -23235,11 +23803,13 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-81-85\\83\\83_26.bvh",
         "name": "83_26",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -23251,7 +23821,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -23261,7 +23831,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -23271,7 +23841,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -23281,7 +23851,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -23291,7 +23861,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -23301,7 +23871,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -23321,7 +23891,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -23331,7 +23901,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -23341,7 +23911,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -23351,7 +23921,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -23361,7 +23931,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -23371,7 +23941,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -23401,7 +23971,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -23411,7 +23981,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -23451,7 +24021,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -23481,7 +24051,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -23871,7 +24441,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -23881,7 +24451,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -23921,7 +24491,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "kick": true
         }
     },
     {
@@ -23931,7 +24501,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "kick": true
         }
     },
     {
@@ -23961,7 +24531,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true
         }
     },
     {
@@ -24025,141 +24595,169 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-86-94\\86\\86_02.bvh",
         "name": "86_02",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-86-94\\86\\86_03.bvh",
         "name": "86_03",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-86-94\\86\\86_04.bvh",
         "name": "86_04",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-86-94\\86\\86_05.bvh",
         "name": "86_05",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-86-94\\86\\86_06.bvh",
         "name": "86_06",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-86-94\\86\\86_07.bvh",
         "name": "86_07",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-86-94\\86\\86_08.bvh",
         "name": "86_08",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-86-94\\86\\86_09.bvh",
         "name": "86_09",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-86-94\\86\\86_10.bvh",
         "name": "86_10",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-86-94\\86\\86_11.bvh",
         "name": "86_11",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-86-94\\86\\86_12.bvh",
         "name": "86_12",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-86-94\\86\\86_13.bvh",
         "name": "86_13",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-86-94\\86\\86_14.bvh",
         "name": "86_14",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-86-94\\86\\86_15.bvh",
         "name": "86_15",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -24171,7 +24769,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true,
+            "kick": true
         }
     },
     {
@@ -24190,8 +24789,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "backflip": true,
+            "cmu": true
         }
     },
     {
@@ -24200,8 +24799,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "backflip": true,
+            "cmu": true
         }
     },
     {
@@ -24220,16 +24819,18 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "backflip": true,
+            "cmu": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-86-94\\88\\88_02.bvh",
         "name": "88_02",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -24245,11 +24846,13 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-86-94\\88\\88_04.bvh",
         "name": "88_04",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -24260,8 +24863,9 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "backflip": true,
+            "cartwheel": true,
+            "cmu": true
         }
     },
     {
@@ -24271,7 +24875,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true,
+            "kick": true
         }
     },
     {
@@ -24280,8 +24885,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "cartwheel": true,
+            "cmu": true
         }
     },
     {
@@ -24300,8 +24905,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "cartwheel": true,
+            "cmu": true
         }
     },
     {
@@ -24355,21 +24960,25 @@
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-86-94\\89\\89_04.bvh",
         "name": "89_04",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
     },
     {
+        "blacklist": true,
         "file": "cmuconvert-mb2-86-94\\89\\89_05.bvh",
         "name": "89_05",
         "start": 1,
         "tags": {
             "auto_tag": true,
+            "blacklist": true,
             "cmu": true,
             "unknown": true
         }
@@ -24400,8 +25009,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "cartwheel": true,
+            "cmu": true
         }
     },
     {
@@ -24410,8 +25019,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "cartwheel": true,
+            "cmu": true
         }
     },
     {
@@ -24420,8 +25029,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "cartwheel": true,
+            "cmu": true
         }
     },
     {
@@ -24431,7 +25040,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true,
+            "kick": true
         }
     },
     {
@@ -24441,7 +25051,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true,
+            "kick": true
         }
     },
     {
@@ -24451,7 +25062,8 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true,
+            "kick": true
         }
     },
     {
@@ -24500,8 +25112,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "backflip": true,
+            "cmu": true
         }
     },
     {
@@ -24510,8 +25122,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "backflip": true,
+            "cmu": true
         }
     },
     {
@@ -24570,8 +25182,8 @@
         "start": 1,
         "tags": {
             "auto_tag": true,
-            "cmu": true,
-            "unknown": true
+            "backflip": true,
+            "cmu": true
         }
     },
     {
@@ -24601,7 +25213,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -24611,7 +25223,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -24631,7 +25243,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -24641,7 +25253,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -24651,7 +25263,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -24681,7 +25293,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true
         }
     },
     {
@@ -24691,7 +25303,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "dance": true
         }
     },
     {
@@ -24751,7 +25363,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -24761,7 +25373,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -24771,7 +25383,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -24791,7 +25403,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -24831,7 +25443,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -24841,7 +25453,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -24851,7 +25463,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -24861,7 +25473,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -24871,7 +25483,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -24881,7 +25493,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -24891,7 +25503,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -24911,7 +25523,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -24921,7 +25533,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -24931,7 +25543,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "march": true
         }
     },
     {
@@ -24941,7 +25553,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -24951,7 +25563,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -24961,7 +25573,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -24971,7 +25583,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -24981,7 +25593,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -24991,7 +25603,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -25001,7 +25613,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -25011,7 +25623,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -25021,7 +25633,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -25031,7 +25643,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -25041,7 +25653,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -25051,7 +25663,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -25061,7 +25673,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -25071,7 +25683,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -25081,7 +25693,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -25091,7 +25703,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -25101,7 +25713,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -25131,7 +25743,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -25141,7 +25753,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -25151,7 +25763,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -25161,7 +25773,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -25171,7 +25783,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -25181,7 +25793,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -25191,7 +25803,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -25201,7 +25813,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -25211,7 +25823,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -25221,7 +25833,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -25231,7 +25843,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -25241,7 +25853,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -25251,7 +25863,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -25261,7 +25873,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -25271,7 +25883,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "jump": true
         }
     },
     {
@@ -25311,7 +25923,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
@@ -25431,7 +26043,7 @@
         "tags": {
             "auto_tag": true,
             "cmu": true,
-            "unknown": true
+            "walk": true
         }
     },
     {
