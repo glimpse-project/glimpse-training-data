@@ -46,6 +46,7 @@ parser.add_argument("--without-tag", action='append', help="Only look at entries
 
 
 # Edit commands
+parser.add_argument("--clear-tags", action='store_true', help="Clear all tags (done before adding any new tags")
 parser.add_argument("-t", "--tag", action='append', help="Add tag")
 parser.add_argument("-u", "--untag", action='append', help="Remove tag")
 parser.add_argument("--blacklist", action='store_true', help="Mark entries as blacklisted (will add a 'blacklist' tag too)")
@@ -100,19 +101,27 @@ def process_entry(entry, i):
         name_map[new_name] = entry
         changes += [ "Set name to '%s', based on filename" % new_name]
 
+    if args.clear_tags:
+        if 'tags' in entry:
+            del entry['tags']
+            changes += [ "Clear tags" ]
+
     if 'camera' in entry:
         del entry['camera']
         changes += [ "Delete legacy camera data" ]
 
     if args.blacklist:
-        entry['blacklist']=True
-        if 'tags' not in entry:
-            entry['tags']={}
-        entry['tags']['blacklist']=True
+        if 'blacklist' not in entry or not entry['blacklist']:
+            entry['blacklist']=True
+            if 'tags' not in entry:
+                entry['tags']={}
+            entry['tags']['blacklist']=True
+            changes += [ "Blacklisted" ]
 
     if args.unblacklist:
         if 'blacklist' in entry:
             del entry['blacklist']
+            changes += [ "Un-blacklisted" ]
         if 'tags' in entry and 'blacklist' in entry['tags']:
             del entry['tags']['blacklist']
 
