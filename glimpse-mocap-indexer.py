@@ -108,7 +108,7 @@ def process_entry(entry, i):
         entry['blacklist']=True
         if 'tags' not in entry:
             entry['tags']={}
-        entry['tags']['blacklist']=1
+        entry['tags']['blacklist']=True
 
     if args.unblacklist:
         if 'blacklist' in entry:
@@ -118,13 +118,9 @@ def process_entry(entry, i):
 
     if 'blacklist' in entry:
         if entry['blacklist'] == True:
-            #if 'start' in entry:
-            #    del entry['start']
-            #    changes += [ "delete redundant 'start' from blacklisted entry" ]
-            #if 'end' in entry:
-            #    del entry['end']
-            #    changes += [ "delete redundant 'end' from blacklisted entry" ]
-            pass
+            if 'tags' not in entry:
+                entry['tags']={}
+            entry['tags']['blacklist']=True
         else:
             del entry['blacklist']
             changes += [ "Remove redundant blacklist=false" ]
