@@ -48,9 +48,12 @@ parser.add_argument("--without-tag", action='append', help="Only look at entries
 # Edit commands
 parser.add_argument("-t", "--tag", action='append', help="Add tag")
 parser.add_argument("-u", "--untag", action='append', help="Remove tag")
+parser.add_argument("--blacklist", action='store_true', help="Mark entries as blacklisted (will add a 'blacklist' tag too)")
+parser.add_argument("--unblacklist", action='store_true', help="Clear blacklist status of entries (will remove any 'blacklist' tag too)")
 parser.add_argument("--fps", type=int, default=0, help="Define what the capture frame rate was (negative means to unset any definition, zero means leave untouched)")
 parser.add_argument("--note", help="Append a descriptive comment")
 
+parser.add_argument("--list", action="store_true", help="List the names of matched entries")
 parser.add_argument("--dry-run", action="store_true", help="Dry run")
 parser.add_argument("-v", "--verbose", action="store_true", help="Display verbose debug information")
 
@@ -58,10 +61,21 @@ parser.add_argument("index_filename", help="Filename of index.json to parse / ed
 
 args = parser.parse_args()
 
-if args.verbose or args.dry_run:
-    print_summary=True
-else:
-    print_summary=False
+print_matched=False
+print_entries=False
+print_changes=False
+
+if args.verbose:
+    print_matched=True
+    print_changes=True
+    print_entries=True
+
+if args.dry_run:
+    print_matched=True
+    print_changes=True
+
+if args.list:
+    print_matched=True
 
 filename_map = {}
 name_map = {}
@@ -89,6 +103,18 @@ def process_entry(entry, i):
     if 'camera' in entry:
         del entry['camera']
         changes += [ "Delete legacy camera data" ]
+
+    if args.blacklist:
+        entry['blacklist']=True
+        if 'tags' not in entry:
+            entry['tags']={}
+        entry['tags']['blacklist']=1
+
+    if args.unblacklist:
+        if 'blacklist' in entry:
+            del entry['blacklist']
+        if 'tags' in entry and 'blacklist' in entry['tags']:
+            del entry['tags']['blacklist']
 
     if 'blacklist' in entry:
         if entry['blacklist'] == True:
@@ -128,7 +154,7 @@ def process_entry(entry, i):
             if 'tags' not in entry:
                 entry['tags'] = {}
             if tag not in entry['tags']:
-                entry['tags'][tag] = 1
+                entry['tags'][tag] = True
                 changes += [ "Add tag %s" % tag ]
 
     if 'tags' in entry and args.untag:
@@ -142,14 +168,15 @@ def process_entry(entry, i):
         del entry['tags']
         changes += [ "Remove empty tags" ]
 
-    if print_summary:
+    if print_matched:
         if len(changes):
             print("%d) %s - CHANGED" % (i, entry['name']))
-            for c in changes:
-                print("> %s" % c)
+            if print_changes:
+                for c in changes:
+                    print("> %s" % c)
         else:
             print("%d) %s - unchanged" % (i, entry['name']))
-        if args.verbose:
+        if print_entries:
             print("  > filename: %s" % entry['file'])
             if 'blacklist' in entry and entry['blacklist']:
                 print("  > black-listed: true")
@@ -184,7 +211,7 @@ with open(args.index_filename, 'r+') as fp:
             before_len = len(index)
             index = [ entry for entry in index if entry['file'] != rel_path ]
             if len(index) < before_len:
-                if print_summary:
+                if print_changes:
                     print("Remove %s from index" % bvh_path)
             else:
                 print("WARNING: no entry for %s found for removal" % bvh_path)
@@ -217,7 +244,7 @@ with open(args.index_filename, 'r+') as fp:
             filename_map[rel_path] = new_entry
 
             index.append(new_entry)
-            if print_summary:
+            if print_changes:
                 print("Add %s to index" % rel_path)
             process_entry(new_entry, i)
             i+=1
