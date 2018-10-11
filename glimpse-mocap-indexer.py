@@ -185,15 +185,14 @@ def process_entry(entry, i):
             print("  > filename: %s" % entry['file'])
             if 'blacklist' in entry and entry['blacklist']:
                 print("  > black-listed: true")
-            else:
-                if 'fps' in entry:
-                    print("  > fps: %d" % entry['fps'])
-                if 'notes' in entry and len(entry['notes']):
-                    print("  > notes:")
-                    for note in entry['notes']:
-                        print("  > | %s" % note)
-                if 'tags' in entry and len(entry['tags']):
-                    print("  > tags: %s" % ','.join(entry['tags']))
+            if 'fps' in entry:
+                print("  > fps: %d" % entry['fps'])
+            if 'notes' in entry and len(entry['notes']):
+                print("  > notes:")
+                for note in entry['notes']:
+                    print("  > | %s" % note)
+            if 'tags' in entry and len(entry['tags']):
+                print("  > tags: %s" % ','.join(entry['tags']))
 
 
 def normalize_path(path):
