@@ -301,7 +301,7 @@ with open(args.index_filename, 'r+') as fp:
                 if 'name' not in entry:
                     continue
                 for match in args.match:
-                    if fnmatch.fnmatch(entry['name'], args.match):
+                    if fnmatch.fnmatch(entry['name'], match):
                         matched = True
                         break
             if args.file_match and matched == False:
