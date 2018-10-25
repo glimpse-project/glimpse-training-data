@@ -57,6 +57,9 @@ parser.add_argument('--purge', help='Purge mocap actions', action='store_true')
 parser.add_argument('--link', help='Link mocap actions', action='store_true')
 parser.add_argument('--start', type=int, default=20, help='Index of first MoCap to render')
 parser.add_argument('--end', default=25, type=int, help='Index of last MoCap to render')
+parser.add_argument('--tags-whitelist', default='all', help='A set of specified tags for index entries that will be rendered - needs to be comma separated (default \'all\')')
+parser.add_argument('--tags-blacklist', default='blacklist', help='A set of specified tags for index entries that will not be rendered - needs to be comma separated (default \'blacklist\')')
+parser.add_argument('--tags-skip', nargs='+', action='append', help='(random) tag-based percentage of frames to skip (default \'none\'). The tags and percentages need to be provided in a <tag>=<integer> format.') 
 
 parser.add_argument('--width', default=172, type=int, help='Width, in pixels, of rendered frames (default 172)')
 parser.add_argument('--height', default=224, type=int, help='Height, in pixels, of rendered frames (default 224)')
@@ -68,6 +71,7 @@ parser.add_argument('--max-camera-height', default=1.4, type=float, help='Maximu
 parser.add_argument('--min-camera-angle', default=-30, type=int, help='Min viewing angle deviation (measured from face-on direction, default=-30)')
 parser.add_argument('--max-camera-angle', default=0, type=int, help='Max viewing angle deviation (measured from face-on direction, default=0)')
 parser.add_argument('--fixed-camera', help='Lock camera in a fixed position using the specified min parameters', action='store_true')
+parser.add_argument('--debug-camera', help='Lock camera straight in front of a model in order to debug glimpse viewer', action='store_true')
 parser.add_argument('--smooth-camera-movement', help='Smooth camera movement (disable randomization of the camera position and orientation)', action='store_true')
 parser.add_argument('--smooth-camera-frequency', default=1, type=int, help='Period at which data is sampled when --smooth-camera-movement is enabled (frequency, default=1)')
 
@@ -79,6 +83,7 @@ parser.add_argument('--skip-percentage', type=int, default=0, help='(random) per
 parser.add_argument('--clothing-step', type=int, default=5, help='randomize the clothing items every N frames (default 5)')
 parser.add_argument('--fixed-bodies', default='none', help='A set specified bodies to be used in all renders - needs to be comma separated (default \'none\')')
 parser.add_argument('--fixed-clothes', default='none', help='A set of specified clothes to be used in all renders - needs to be comma separated (default \'none\')')
+parser.add_argument('--added-background', help='Add background in a form of a floor and walls', action='store_true')
 
 parser.add_argument('training_data', help='Directory with all training data')
 
@@ -110,7 +115,7 @@ else:
     sys.exit(ret)
 
 if cli_args.skip_percentage < 0 or cli_args.skip_percentage > 100:
-    sys.exit("Skip perctange out of range [0,100]")
+    sys.exit("Skip percetange out of range [0,100]")
 
 if cli_args.clothing_step <= 0 or cli_args.clothing_step > 1000:
     sys.exit("Clothing step out of range [1,1000]")
@@ -123,12 +128,24 @@ if not cli_args.fixed_camera and (cli_args.min_camera_angle >= cli_args.max_came
     sys.exit("Min viewing angle is higher than or equal to max viewing angle")
 if not cli_args.fixed_camera and (cli_args.max_camera_angle <= cli_args.min_camera_angle):
     sys.exit("Max viewing angle is less than or equal to min viewing angle")
-
 if not cli_args.fixed_camera and (cli_args.max_camera_distance <= cli_args.min_camera_distance):
     sys.exit("Maximum camera distance must be >= minimum camera distance")
-
 if not cli_args.fixed_camera and (cli_args.max_camera_height <= cli_args.min_camera_height):
     sys.exit("Maximum camera height must be >= minimum camera height")
+
+tags_skipped = cli_args.tags_skip
+
+if cli_args.tags_skip is not None:
+    tags_skip = cli_args.tags_skip[0]
+    tags_skipped = ""
+    for skip_tag in tags_skip:
+        tag_data = skip_tag.split("=")
+        if int(tag_data[1]) > 100 or int(tag_data[1]) < 0:
+            sys.exit("Skip percetange for '%s' tag out of range [0,100]" % tag_data[0])
+        else:
+            tags_skipped += "%s=%s#" % (tag_data[0], tag_data[1])
+else:
+    tags_skipped = ""
 
 #
 # XXX: from here on, we know we are running within Blender...
@@ -171,14 +188,20 @@ bpy.context.scene.GlimpseMaxViewingAngle= cli_args.max_camera_angle
 bpy.context.scene.GlimpseMocapLibrary = cli_args.mocap_library
 bpy.context.scene.GlimpseBvhGenFrom = cli_args.start
 bpy.context.scene.GlimpseBvhGenTo = cli_args.end
+bpy.context.scene.GlimpseBvhTagsWhitelist = cli_args.tags_whitelist
+bpy.context.scene.GlimpseBvhTagsBlacklist = cli_args.tags_blacklist
+bpy.context.scene.GlimpseBvhTagsSkip = tags_skipped
+
 bpy.context.scene.GlimpseDryRun = cli_args.dry_run
 bpy.context.scene.GlimpseSkipPercentage = cli_args.skip_percentage
 bpy.context.scene.GlimpseClothingStep = cli_args.clothing_step
 bpy.context.scene.GlimpseFixedCamera = cli_args.fixed_camera
+bpy.context.scene.GlimpseDebugCamera = cli_args.debug_camera
 bpy.context.scene.GlimpseFixedBodies= cli_args.fixed_bodies
 bpy.context.scene.GlimpseFixedClothes= cli_args.fixed_clothes
 bpy.context.scene.GlimpseSmoothCameraMovement= cli_args.smooth_camera_movement
 bpy.context.scene.GlimpseSmoothCameraFrequency= cli_args.smooth_camera_frequency
+bpy.context.scene.GlimpseAddedBackground= cli_args.added_background
 
 mocaps_dir = os.path.join(cli_args.training_data, 'mocap')
 if not os.path.isdir(mocaps_dir):

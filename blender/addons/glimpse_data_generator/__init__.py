@@ -428,6 +428,7 @@ class GeneratorOperator(bpy.types.Operator):
         camera_meta['height'] = bpy.context.scene.render.resolution_y
         camera_meta['vertical_fov'] = math.degrees(bpy.data.cameras['Camera'].angle)
         is_camera_fixed = bpy.context.scene.GlimpseFixedCamera
+        is_camera_debug = bpy.context.scene.GlimpseDebugCamera
         camera_meta['is_camera_fixed'] = is_camera_fixed
         is_camera_smooth_movement = bpy.context.scene.GlimpseSmoothCameraMovement
         camera_meta['is_camera_smooth_movement'] = is_camera_smooth_movement
@@ -437,8 +438,7 @@ class GeneratorOperator(bpy.types.Operator):
         meta['camera'] = camera_meta
         top_meta['camera'] = camera_meta
         top_meta['n_labels'] = 34
-
-
+        
         if(is_camera_fixed):
             min_viewing_angle = bpy.context.scene.GlimpseMinViewingAngle
             top_meta['min_viewing_angle'] = min_viewing_angle
@@ -459,7 +459,15 @@ class GeneratorOperator(bpy.types.Operator):
             max_height_mm = bpy.context.scene.GlimpseMaxCameraHeightMM
             top_meta['min_camera_height'] = min_height_mm
             top_meta['max_camera_height'] = max_height_mm
-
+        
+        tags_skip = bpy.context.scene.GlimpseBvhTagsSkip.split("#")
+        tags_skip.pop()
+        tags_skipped = {}
+        if tags_skip != 'none':
+            for skip_tag in tags_skip:
+                tag_data = skip_tag.split("=") 
+                tags_skipped[tag_data[0]] = tag_data[1]
+        
         top_meta_filename = os.path.join(abs_gen_dir, 'meta.json')
 
         if bpy.context.scene.GlimpseDryRun == False:
@@ -468,28 +476,51 @@ class GeneratorOperator(bpy.types.Operator):
 
         # Nested function for sake of improving cProfile data
         def render_bvh_index(idx):
-            bvh = bvh_index[idx]
+            bvh = bvh_index[idx] 
+
+            bvh_name = bvh['name']
 
             if bvh['blacklist']:
                 self.report({'INFO'}, "skipping blacklisted")
-                return
+                return 
+            
+            if bvh['tags'] != 'unknown':    
+                tags_blacklist = bpy.context.scene.GlimpseBvhTagsBlacklist
+                tags_blacklist = tags_blacklist.split(",")            
+                
+                for tag in tags_blacklist:
+                    if tag in bvh['tags']:
+                        print(bvh_name + " blacklisted - skipping")
+                        self.report({'INFO'}, "skipping blacklisted tags")
+                        return
 
+                tags_whitelist = bpy.context.scene.GlimpseBvhTagsWhitelist
+                if tags_whitelist != "all":
+                    tags_whitelist = tags_whitelist.split(",")
+                    for tag in tags_whitelist:
+                        if tag not in bvh['tags']:
+                            print(bvh_name + " not whitelisted - skipping")
+                            self.report({'INFO'}, "not whitelisted - skipping")                        
+                            return
+
+            print("> Rendering " + bvh_name)
+    
             numpy.random.seed(0)
             random.seed(0)
 
             bpy.context.scene.frame_start = bvh['start']
             bpy.context.scene.frame_end = bvh['end']
 
-            bvh_name = bvh['name']
-            print("> Rendering " + bvh_name)
-
             bvh_fps = bvh['fps']
 
             action_name = "Base" + bvh_name
             if action_name not in bpy.data.actions:
-                print("WARNING: Skipping %s (not preloaded)" % bvh_name)
+                print("WARNING: Skipping %s (not preloaded)" % bvh_name) 
                 return
-
+    
+            numpy.random.seed(0)
+            random.seed(0)
+           
             print("Setting %s action on all body meshes" % action_name)
             assign_body_poses(action_name)
 
@@ -529,6 +560,9 @@ class GeneratorOperator(bpy.types.Operator):
                 target_x_mm = 0
                 target_y_mm = 0
                 target_z_mm = 0
+                camera_location = mathutils.Vector((0,0,0))
+                target = mathutils.Vector((0,0,0))
+                is_camera_pointing = False
 
                 # random seed when smooth_camera_movement is true
                 height_seed = 1
@@ -544,6 +578,9 @@ class GeneratorOperator(bpy.types.Operator):
                 body_obj.layers[0] = True
                 bpy.data.armatures[body + 'Pose'].pose_position = 'POSE'
 
+                if is_camera_debug:
+                    hide_bodies_from_render()
+
                 # Hit some errors with the range bounds not being integer and I
                 # guess that comes from the json library loading our mocap
                 # index may make some numeric fields float so bvh['start'] or
@@ -553,7 +590,19 @@ class GeneratorOperator(bpy.types.Operator):
                     if random.randrange(0, 100) < bpy.context.scene.GlimpseSkipPercentage:
                         print("> Skipping (randomized)" + bvh_name + " frame " + str(frame))
                         continue
+                    
+                    skip = False
+                    tag_name = ""
+                    for skip_tag in tags_skipped:
+                        if skip_tag in bvh['tags'] and random.randrange(0, 100) < int(tags_skipped[skip_tag]):
+                            skip = True
+                            tag_name = skip_tag
+                            break
 
+                    if skip:
+                        print("> Skipping (randomized) by tag '" + tag_name + "' in " + bvh_name + " frame " + str(frame))
+                        continue
+                    
                     nonlocal frame_count
                     frame_count += 1
 
@@ -568,9 +617,103 @@ class GeneratorOperator(bpy.types.Operator):
                     bpy.context.scene.frame_set(frame) # XXX: this is very slow!
                     context.scene.update()
 
+                    # turn off/on the background (floor and walls) depending
+                    # on the set flag
+                    added_background = bpy.context.scene.GlimpseAddedBackground;
+
+                    if added_background:
+
+                        print("> Generating background...")
+
+                        floor_obj_name = "Background:Floor"
+                        if floor_obj_name in bpy.data.objects:
+                            floor_obj = bpy.data.objects[floor_obj_name]
+                            floor_obj.hide = False
+                            floor_obj.layers[0] = True
+
+                        print("> Background:Floor added")
+                        print("> Generating walls...")
+
+                        wall_obj_name = "Background:Wall"
+                        if wall_obj_name in bpy.data.objects:
+                            wall_obj = bpy.data.objects[wall_obj_name]
+                            for obj in wall_obj.children:
+                                obj.hide = False
+                                obj.layers[0] = True
+                        else:
+                            objects = bpy.data.objects
+                            materials = bpy.data.materials
+                            wall_width = 10
+                            wall_height = 10
+                            room_sides = 3
+                            wall_part_size = mathutils.Vector((1.0, 0.5, 0.5))
+
+                            # Create few materials to use for wall parts
+                            for m in range(0, 5):
+                                if ("BrickMat_%s" % m) not in materials:
+                                    materials.new("BrickMat_%s" % m)
+                                    materials[("BrickMat_%s" % m)].use_shadeless = True
+                                    materials[("BrickMat_%s" % m)].diffuse_color = (random.uniform(0.0, 1.0),
+                                                                                    random.uniform(0.0, 1.0),
+                                                                                    random.uniform(0.0, 1.0))
+
+                            # Create an empty mesh and the object.
+                            wall_start_pos = body_pose.pose.bones['pelvis'].location + mathutils.Vector((-wall_width, wall_width / 3,0))
+                            wall_empty = bpy.data.objects.new("Background:Wall", None )
+                            bpy.context.scene.objects.link( wall_empty )
+                            wall_empty.location = wall_start_pos
+
+                            for k in range(0, room_sides):
+
+                                wall_side = bpy.data.objects.new("Wall:Side_%s" % k, None )
+                                bpy.context.scene.objects.link( wall_side )
+                                wall_side.location = wall_start_pos
+
+                                for i in range(0, wall_height):
+                                    for j in range(0, wall_width):
+                                        wall_depth = random.randrange(-1,1)
+                                        bpy.ops.mesh.primitive_cube_add(location=(wall_start_pos.x + (j * (wall_part_size.x * 2)),
+                                                                                  wall_start_pos.y + wall_depth,
+                                                                                  wall_start_pos.z + i))
+                                        bpy.ops.transform.resize(value=(wall_part_size.x, wall_part_size.y, wall_part_size.z))
+                                        bpy.context.active_object.name = ("WallSide_%s_Part_%s_%s" % (k,i,j))
+
+                                        if len(bpy.context.active_object.material_slots) == 0:
+                                            bpy.ops.object.material_slot_add()
+                                            bpy.context.active_object.material_slots[0].material = materials['BrickMat_%s' % random.randrange(0,5)]
+
+                                        bpy.context.active_object.select = True
+                                        wall_side.select = True
+                                        bpy.context.scene.objects.active = wall_side
+                                        bpy.ops.object.parent_set(type='OBJECT')
+                                        bpy.ops.object.select_all(action='DESELECT')
+
+                                wall_side.select = True
+                                wall_empty.select = True
+                                bpy.context.scene.objects.active = wall_empty
+                                bpy.ops.object.parent_set(type='OBJECT')
+                                bpy.ops.object.select_all(action='DESELECT')
+
+                            side1 = objects["Wall:Side_1"]
+                            side2 = objects["Wall:Side_2"]
+
+                            wall_rot = mathutils.Quaternion(mathutils.Vector((0,0,1)), math.radians(-90))
+
+                            side1_pos = mathutils.Vector((wall_part_size.x * wall_width, wall_part_size.y * 5,0))
+                            side1.location = side1_pos
+                            side1.rotation_mode = 'QUATERNION'
+                            side1.rotation_quaternion = wall_rot
+
+                            side2_pos = mathutils.Vector((wall_start_pos.x, wall_part_size.y * 5,wall_start_pos.z))
+                            side2.location = side2_pos
+                            side2.rotation_mode = 'QUATERNION'
+                            side2.rotation_quaternion = wall_rot
+
+                            print("> Background:Wall added")
+
                     # turn off/on the randomization of the clothes in a pool
                     # depending on whether the GlimpseFixedClothes is not "none"
-                    fixed_clothes = bpy.context.scene.GlimpseFixedClothes;
+                    fixed_clothes = bpy.context.scene.GlimpseFixedClothes
 
                     if fixed_clothes != 'none':
 
@@ -671,7 +814,8 @@ class GeneratorOperator(bpy.types.Operator):
 
                     # Make sure you render the clothes specified in meta
                     hide_body_clothes(body)
-                    show_body_clothes_from_meta(body)
+                    if not is_camera_debug:
+                        show_body_clothes_from_meta(body)
 
                     # Randomize the placement of the camera...
                     #
@@ -686,16 +830,42 @@ class GeneratorOperator(bpy.types.Operator):
                     # Vector.rotate doesn't work for 2D vectors...
                     person_forward = mathutils.Vector((person_forward_2d.x, person_forward_2d.y, 0))
 
+                    if is_camera_debug:
+                        rot = mathutils.Quaternion((0.707, 0.707, 0, 0))
+                        camera.rotation_mode = 'QUATERNION'
+                        camera.rotation_quaternion = rot
+                        camera_location = mathutils.Vector((0, -3, 1))
+                        camera.location = camera_location
+                        dist_m = 3
+                        view_angle = 0
+
                     # the distance to the camera as well as the
                     # angle needs to be fixed if set in parameter
-                    if is_camera_fixed:
+                    elif is_camera_fixed:
 
                         dist_mm = min_distance_mm
+                        dist_m = dist_mm / 1000
                         view_angle = min_viewing_angle
                         height_mm = min_height_mm
                         target_x_mm = focus.head.x * 1000
                         target_y_mm = focus.head.y * 1000
                         target_z_mm = focus.head.z * 1000
+
+                        # fixed camera location
+                        if camera_location.length == 0:
+                            view_rot = mathutils.Quaternion((0, 0, 1), math.radians(view_angle))
+                            person_forward.rotate(view_rot)
+                            person_forward_2d = person_forward.xy
+                            camera_location = focus.head.xy + dist_m * person_forward_2d
+
+                        # fixed camera pointing
+                        if target.length == 0:
+                            target = mathutils.Vector((target_x_mm / 1000,
+                                                       target_y_mm / 1000,
+                                                       target_z_mm / 1000))
+
+                        # reset camera pointing
+                        is_camera_pointing = False
 
                     elif is_camera_smooth_movement:
 
@@ -719,15 +889,29 @@ class GeneratorOperator(bpy.types.Operator):
 
                         height_mm = mid_height_mm + (perlin_noise(frame, bvh_fps, frequency, height_seed) * height_range_mm)
                         dist_mm = mid_dist_mm + (perlin_noise(frame, bvh_fps, frequency, height_seed + 1) * dist_range_mm)
+                        dist_m = dist_mm / 1000
                         view_angle = mid_view_angle + (perlin_noise(frame, bvh_fps, frequency, height_seed + 2) * view_angle_range_mm)
 
                         target_x_mm = (focus.head.x * 1000) + perlin_noise(frame, bvh_fps, frequency, height_seed + 3)
                         target_y_mm = (focus.head.y * 1000) + perlin_noise(frame, bvh_fps, frequency, height_seed + 4)
                         target_z_mm = (focus.head.z * 1000) + perlin_noise(frame, bvh_fps, frequency, height_seed + 5)
 
+                        # smooth camera location
+                        view_rot = mathutils.Quaternion((0, 0, 1), math.radians(view_angle))
+
+                        person_forward.rotate(view_rot)
+                        person_forward_2d = person_forward.xy
+                        camera_location = focus.head.xy + dist_m * person_forward_2d
+
+                        # smooth camera target pointing
+                        target = mathutils.Vector((target_x_mm / 1000,
+                                                   target_y_mm / 1000,
+                                                   target_z_mm / 1000))
+
                     else:
 
                         dist_mm = random.randrange(min_distance_mm, max_distance_mm)
+                        dist_m = dist_mm / 1000
                         view_angle = random.randrange(min_viewing_angle, max_viewing_angle)
                         height_mm = random.randrange(min_height_mm, max_height_mm)
 
@@ -744,36 +928,44 @@ class GeneratorOperator(bpy.types.Operator):
                         target_z_mm = random.randrange(int(focus_z_mm - target_fuzz_range_mm),
                                                        int(focus_z_mm + target_fuzz_range_mm))
 
-                    dist_m = dist_mm / 1000
-                    view_rot = mathutils.Quaternion((0, 0, 1), math.radians(view_angle));
-                    person_forward.rotate(view_rot)
-                    person_forward_2d = person_forward.xy
+                        # camera location
+                        view_rot = mathutils.Quaternion((0, 0, 1), math.radians(view_angle))
+                        person_forward.rotate(view_rot)
+                        person_forward_2d = person_forward.xy
+                        camera_location = focus.head.xy + dist_m * person_forward_2d
 
-                    camera.location.xy = focus.head.xy + dist_m * person_forward_2d
-                    camera.location.z = height_mm / 1000
+                        # camera target pointing
+                        target = mathutils.Vector((target_x_mm / 1000,
+                                                   target_y_mm / 1000,
+                                                   target_z_mm / 1000))
+
+                        # reset camera pointing
+                        is_camera_pointing = False
+
+                    if not is_camera_debug:
+                        camera.location.z = height_mm / 1000
 
                     meta['camera']['distance'] = dist_m
                     meta['camera']['viewing_angle'] = view_angle
 
-                    # camera pointing
-                    target = mathutils.Vector((target_x_mm / 1000,
-                                               target_y_mm / 1000,
-                                               target_z_mm / 1000))
+                    if not is_camera_pointing and not is_camera_debug:
+                        camera.location.xy = camera_location
+                        direction = target - camera.location
+                        rot = direction.to_track_quat('-Z', 'Y')
 
-                    direction = target - camera.location
-                    rot = direction.to_track_quat('-Z', 'Y')
-
-                    camera.rotation_mode = 'QUATERNION'
-                    camera.rotation_quaternion = rot
+                        camera.rotation_mode = 'QUATERNION'
+                        camera.rotation_quaternion = rot
+                        is_camera_pointing = True
 
                     context.scene.update() # update camera.matrix_world
 
                     camera_world_inverse_mat4 = camera.matrix_world.inverted()
 
                     # Calculating the gravity vector
+                    # We are flipping the z-axis to match the iOS gravity vector specs
                     z_point = camera.matrix_world.translation - mathutils.Vector((0, 0, 1))
                     cam_gravity_vec = (camera_world_inverse_mat4 * z_point).normalized()
-                    meta['gravity_vector'] = [cam_gravity_vec.x, cam_gravity_vec.y, -cam_gravity_vec.z]
+                    meta['gravity'] = [cam_gravity_vec.x, cam_gravity_vec.y, -cam_gravity_vec.z]
 
                     meta['bones'] = []
                     for bone in body_pose.pose.bones:
@@ -946,6 +1138,9 @@ def load_mocap_index():
             # normalize so we don't have to consider that it's left unspecified
             if 'blacklist' not in bvh:
                 bvh['blacklist'] = False
+
+            if 'tags' not in bvh:
+                bvh['tags'] = { 'unknown' }
 
             if 'start' not in bvh:
                 bvh['start'] = 1
@@ -1279,6 +1474,21 @@ def register():
             description="To",
             default=0,
             min=0)
+    
+    bpy.types.Scene.GlimpseBvhTagsWhitelist = StringProperty(
+            name="TagsWhitelist",
+            description="A set of specified tags for index entries that will be rendered",
+            default='all')
+
+    bpy.types.Scene.GlimpseBvhTagsBlacklist = StringProperty(
+            name="TagsBlacklist",
+            description="A set of specified tags for index entries that will not be rendered",
+            default='none')
+    
+    bpy.types.Scene.GlimpseBvhTagsSkip = StringProperty(
+            name="TagsSkip",
+            description="A set of specified tags for index entries that will not be rendered",
+            default='none')
 
     bpy.types.Scene.GlimpseRenderWidth = IntProperty(
             name="RenderWidth",
@@ -1366,6 +1576,10 @@ def register():
             name="FixedCamera",
             description="Lock camera in a fixed position using the specified min parameters",
             default=False)
+    bpy.types.Scene.GlimpseDebugCamera = BoolProperty(
+            name="DebugCamera",
+            description="Lock camera straight in front of a model in order to debug glimpse viewer",
+            default=False)
 
     bpy.types.Scene.GlimpseSmoothCameraMovement = BoolProperty(
             name="SmoothCameraMovement",
@@ -1387,6 +1601,11 @@ def register():
             name="FixedBodies",
             description="A specified body to use during the rendering",
             default='none')
+
+    bpy.types.Scene.GlimpseAddedBackground = BoolProperty(
+            name="AddedBackground",
+            description="Add background in a form of a floor and walls",
+            default=False)
 
     bpy.utils.register_module(__name__)
 
