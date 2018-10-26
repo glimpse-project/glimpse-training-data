@@ -598,11 +598,21 @@ class GeneratorOperator(bpy.types.Operator):
                             skip = True
                             tag_name = skip_tag
                             break
-
+                                        
                     if skip:
                         print("> Skipping (randomized) by tag '" + tag_name + "' in " + bvh_name + " frame " + str(frame))
                         continue
                     
+                    #foot_l = body_pose.pose.bones['foot_l'].head.to_4d()
+                    #foot_r = body_pose.pose.bones['foot_r'].head.to_4d()
+                    
+                    #skip_foot = False
+                    #if foot_l.z > 0.2 or foot_r.z > 0.2:
+                    #    skip_foot = True
+                    
+                    #if skip_foot:
+                    #    print("> Skipping jumping legs")
+
                     nonlocal frame_count
                     frame_count += 1
 
@@ -823,8 +833,8 @@ class GeneratorOperator(bpy.types.Operator):
                     # for an experimental copy of this code where it's easy
                     # to get interactive feedback / test that it's working
                     # (Alt-P to run)
-
-                    focus = body_pose.pose.bones['pelvis']
+                    focus_bone_name = bpy.context.scene.GlimpseFocusBone 
+                    focus = body_pose.pose.bones[focus_bone_name]
                     person_forward_2d = (focus.matrix.to_3x3() * z_forward).xy.normalized()
 
                     # Vector.rotate doesn't work for 2D vectors...
@@ -1489,6 +1499,11 @@ def register():
             name="TagsSkip",
             description="A set of specified tags for index entries that will not be rendered",
             default='none')
+    
+    bpy.types.Scene.GlimpseFocusBone = StringProperty(
+            name="FocusBone",
+            description="Bone in the armature the camera will focus on during renders",
+            default='pelvis')
 
     bpy.types.Scene.GlimpseRenderWidth = IntProperty(
             name="RenderWidth",

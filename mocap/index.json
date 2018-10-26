@@ -191,7 +191,6 @@
         }
     },
     {
-        "blacklist": true,
         "end": 97,
         "file": "cmuconvert-mb2-01-09\\02\\02_04.bvh",
         "name": "02_04",

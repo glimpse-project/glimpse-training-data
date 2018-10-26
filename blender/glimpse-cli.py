@@ -74,6 +74,7 @@ parser.add_argument('--fixed-camera', help='Lock camera in a fixed position usin
 parser.add_argument('--debug-camera', help='Lock camera straight in front of a model in order to debug glimpse viewer', action='store_true')
 parser.add_argument('--smooth-camera-movement', help='Smooth camera movement (disable randomization of the camera position and orientation)', action='store_true')
 parser.add_argument('--smooth-camera-frequency', default=1, type=int, help='Period at which data is sampled when --smooth-camera-movement is enabled (frequency, default=1)')
+parser.add_argument('--focus-bone', default='pelvis', help='Bone in the armature the camera will focus on during renders (bone name in the armature, default=pelvis)')
 
 parser.add_argument('--dest', default=os.path.join(os.getcwd(), 'renders'), help='Directory to write files too')
 parser.add_argument('--name', default=date_str, help='Unique name for this render run')
@@ -191,6 +192,7 @@ bpy.context.scene.GlimpseBvhGenTo = cli_args.end
 bpy.context.scene.GlimpseBvhTagsWhitelist = cli_args.tags_whitelist
 bpy.context.scene.GlimpseBvhTagsBlacklist = cli_args.tags_blacklist
 bpy.context.scene.GlimpseBvhTagsSkip = tags_skipped
+bpy.context.scene.GlimpseFocusBone = cli_args.focus_bone
 
 bpy.context.scene.GlimpseDryRun = cli_args.dry_run
 bpy.context.scene.GlimpseSkipPercentage = cli_args.skip_percentage
