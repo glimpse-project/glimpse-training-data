@@ -40,7 +40,7 @@ parser.add_argument("-e", "--end", type=int, default=0, help="End range (zero me
 parser.add_argument('--tags-whitelist', default='all', help='A set of tags for index entries that will be included in ratio calculation - needs to be comma separated (default \'all\')')
 parser.add_argument('--tags-blacklist', default='blacklist', help='A set of tags for index entries that will NOT be included in ratio calculation - needs to be comma separated (default \'blacklist\')')
 parser.add_argument('--skip-percentage', type=int, default=0, help='(random) percentage of frames to skip (default 0)')
-parser.add_argument('--tags-skip', nargs='+', action='append', help='(random) tag-based percentage of frames to skip (default \'none\'). The tags and percentages need to be provided in a <tag>=<integer> format.')   
+parser.add_argument('--tags-skip', nargs='+', action='append', help='(random) tag-based percentage of frames to skip (default \'none\'). The tags and percentages need to be provided in a <tag>=<integer> space separated format.')   
 parser.add_argument("--show-stats", action="store_true", help="Output statistics at the top")
 
 args = parser.parse_args()
