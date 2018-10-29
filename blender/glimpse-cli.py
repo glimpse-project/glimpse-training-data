@@ -85,6 +85,7 @@ parser.add_argument('--clothing-step', type=int, default=5, help='randomize the 
 parser.add_argument('--fixed-bodies', default='none', help='A set specified bodies to be used in all renders - needs to be comma separated (default \'none\')')
 parser.add_argument('--fixed-clothes', default='none', help='A set of specified clothes to be used in all renders - needs to be comma separated (default \'none\')')
 parser.add_argument('--added-background', help='Add background in a form of a floor and walls', action='store_true')
+parser.add_argument("--show-stats", action="store_true", help="Output statistics after the rendering")
 
 parser.add_argument('training_data', help='Directory with all training data')
 
@@ -199,11 +200,13 @@ bpy.context.scene.GlimpseSkipPercentage = cli_args.skip_percentage
 bpy.context.scene.GlimpseClothingStep = cli_args.clothing_step
 bpy.context.scene.GlimpseFixedCamera = cli_args.fixed_camera
 bpy.context.scene.GlimpseDebugCamera = cli_args.debug_camera
-bpy.context.scene.GlimpseFixedBodies= cli_args.fixed_bodies
-bpy.context.scene.GlimpseFixedClothes= cli_args.fixed_clothes
-bpy.context.scene.GlimpseSmoothCameraMovement= cli_args.smooth_camera_movement
-bpy.context.scene.GlimpseSmoothCameraFrequency= cli_args.smooth_camera_frequency
-bpy.context.scene.GlimpseAddedBackground= cli_args.added_background
+bpy.context.scene.GlimpseFixedBodies = cli_args.fixed_bodies
+bpy.context.scene.GlimpseFixedClothes = cli_args.fixed_clothes
+bpy.context.scene.GlimpseSmoothCameraMovement = cli_args.smooth_camera_movement
+bpy.context.scene.GlimpseSmoothCameraFrequency = cli_args.smooth_camera_frequency
+bpy.context.scene.GlimpseAddedBackground = cli_args.added_background
+bpy.context.scene.GlimpseShowStats = cli_args.show_stats
+
 
 mocaps_dir = os.path.join(cli_args.training_data, 'mocap')
 if not os.path.isdir(mocaps_dir):

@@ -86,6 +86,23 @@ trouser_probabilities = [ 0.5, 0.5 ]
 shoe_choices = []
 shoe_probabilities = []
 
+hbars = [u"\u0020", u"\u258f", u"\u258e", u"\u258d", u"\u258b", u"\u258a", u"\u2589"]
+max_bar_width = 10
+
+# outputs the percentage bar (made from hbars) calculated from provided values
+def get_percentage_bar(value, max_entries):
+    bar_len = int(max_bar_width * 6 * value / max_entries)
+    bar_output = ""
+    for i in range(0, max_bar_width):
+        if bar_len > 6:
+            bar_output += hbars[6]
+            bar_len -= 6
+        else:
+            bar_output += hbars[bar_len]
+            bar_len = 0
+    return bar_output
+
+
 def add_clothing(op, context, clothing_name):
 
     if clothing_name + "_reference" not in bpy.data.objects:
@@ -375,6 +392,11 @@ class GeneratorOperator(bpy.types.Operator):
         top_meta = {}
         meta = {}
         frame_count = 0
+        frame_skip_count = 0
+
+        # stats
+        clothes_stats = {}
+        body_stats = {}
 
         dt = datetime.datetime.today()
         date_str = "%04u-%02u-%02u-%02u-%02u-%02u" % (dt.year,
@@ -418,6 +440,7 @@ class GeneratorOperator(bpy.types.Operator):
         camera = bpy.data.objects['Camera']
 
         z_forward = mathutils.Vector((0, 0, 1))
+        zero_vec = mathutils.Vector((0, 0, 0))
 
         res_x = bpy.context.scene.render.resolution_x = bpy.context.scene.GlimpseRenderWidth
         res_y = bpy.context.scene.render.resolution_y = bpy.context.scene.GlimpseRenderHeight
@@ -507,7 +530,7 @@ class GeneratorOperator(bpy.types.Operator):
                     for tag in tags_whitelist:
                         if tag not in bvh['tags']:
                             print(bvh_name + " not whitelisted - skipping")
-                            self.report({'INFO'}, "not whitelisted - skipping")                        
+                            self.report({'INFO'}, "not whitelisted - skipping")  
                             return
 
             print("> Rendering " + bvh_name)
@@ -560,7 +583,12 @@ class GeneratorOperator(bpy.types.Operator):
                         mesh_obj.layers[0] = False
                         hide_body_clothes(_body)
                         bpy.data.armatures[_body + 'Pose'].pose_position = 'REST'
-
+                
+                #if body in body_stats:
+                #    clothes_stats[meta['clothes'][key]] += 1
+                #else: 
+                #    clothes_stats[meta['clothes'][key]] = 1
+                
                 dist_mm = 0
                 view_angle = 0
                 height_mm = 0
@@ -577,7 +605,7 @@ class GeneratorOperator(bpy.types.Operator):
                 print("> Rendering with " + body)
 
                 meta['body'] = body
-
+                
                 hide_bodies_from_render()
 
                 body_pose = bpy.data.objects[body + "PoseObject"]
@@ -593,8 +621,11 @@ class GeneratorOperator(bpy.types.Operator):
                 # index may make some numeric fields float so bvh['start'] or
                 # bvh['end'] might be float
                 for frame in range(int(bvh['start']), int(bvh['end'])):
+                    
+                    nonlocal frame_skip_count
 
                     if random.randrange(0, 100) < bpy.context.scene.GlimpseSkipPercentage:
+                        frame_skip_count += 1
                         print("> Skipping (randomized)" + bvh_name + " frame " + str(frame))
                         continue
                     
@@ -607,12 +638,13 @@ class GeneratorOperator(bpy.types.Operator):
                             break
                                         
                     if skip:
+                        frame_skip_count += 1
                         print("> Skipping (randomized) by tag '" + tag_name + "' in " + bvh_name + " frame " + str(frame))
                         continue
-                    
-                    #foot_l = body_pose.pose.bones['foot_l'].head.to_4d()
-                    #foot_r = body_pose.pose.bones['foot_r'].head.to_4d()
-                    
+                   
+                    #foot_l = body_pose.pose.bones['foot_l'].tail.to_4d() 
+                    #foot_r = camera.matrix_world.inverted() * body_pose.pose.bones['foot_r'].tail.to_4d()
+                    #print("foot_l and foot_r %s | %s" %  (foot_l, foot_r) )
                     #skip_foot = False
                     #if foot_l.z > 0.2 or foot_r.z > 0.2:
                     #    skip_foot = True
@@ -620,8 +652,13 @@ class GeneratorOperator(bpy.types.Operator):
                     #if skip_foot:
                     #    print("> Skipping jumping legs")
 
-                    nonlocal frame_count
+                    nonlocal frame_count 
                     frame_count += 1
+                    
+                    if body in body_stats:
+                        body_stats[body] += 1
+                    else: 
+                        body_stats[body] = 1
 
                     if bpy.context.scene.GlimpseDryRun:
                         print("> DRY RUN: Rendering " + bvh_name +
@@ -828,6 +865,12 @@ class GeneratorOperator(bpy.types.Operator):
 
                             context.scene.layers = render_layers
                             meta['clothes'] = clothes_meta
+                    
+                    for key, val in sorted(meta['clothes'].items()):
+                        if meta['clothes'][key] in clothes_stats:
+                            clothes_stats[meta['clothes'][key]] += 1
+                        else: 
+                            clothes_stats[meta['clothes'][key]] = 1
 
                     # Make sure you render the clothes specified in meta
                     hide_body_clothes(body)
@@ -983,7 +1026,7 @@ class GeneratorOperator(bpy.types.Operator):
                     z_point = camera.matrix_world.translation - mathutils.Vector((0, 0, 1))
                     cam_gravity_vec = (camera_world_inverse_mat4 * z_point).normalized()
                     meta['gravity'] = [cam_gravity_vec.x, cam_gravity_vec.y, -cam_gravity_vec.z]
-
+                    
                     meta['bones'] = []
                     for bone in body_pose.pose.bones:
                         head_cam = camera_world_inverse_mat4 * bone.head.to_4d()
@@ -1033,10 +1076,42 @@ class GeneratorOperator(bpy.types.Operator):
             render_bvh_index(idx)
 
         if bpy.context.scene.GlimpseDryRun:
-            print("> DRY RUN FRAME COUNT:%d" % frame_count)
+            print("> DRY RUN FRAME COUNT:%d" % frame_count)         
+        
+        if bpy.context.scene.GlimpseShowStats:
+          
+            dash = '-' * 85
+            print(dash)
+            print('{:^85}'.format("RENDERING STATS"))
+            print(dash)   
+            print('{:<15s}{:<10d}'.format("Total Frames:", frame_count))   
+            print('{:<15s}{:<10d}'.format("Total Skipped Frames:", frame_skip_count))                        
+            print(dash)            
+            print('{:^85}'.format("BODIES"))
+            print(dash)   
+            print('{:<15s}{:<10s}{:<8s}{:<8s}'.format("NAME", "FRAMES", "RATIO FRA(%)", " "))    
+            print(dash)
+    
+            for body, val in sorted(body_stats.items(), key=lambda kv: (-kv[1], kv[0])):
+                percentage = val / frame_count * 100
+                ratio = get_percentage_bar(val, frame_count)
+                print('{:<15s}{:<10d}{:<8.2f}{:<8s}'.format(body, val, percentage, ratio))
+
+            print(dash)
+            print('{:^85}'.format("CLOTHES"))
+            print(dash)  
+            print('{:<25s}{:<10s}{:<8s}{:<8s}'.format("NAME", "FRAMES", "RATIO FRA(%)", " "))    
+            print(dash)
+    
+            for clothing, val in sorted(clothes_stats.items(), key=lambda kv: (-kv[1], kv[0])):
+                percentage = val / frame_count * 100
+                ratio = get_percentage_bar(val, frame_count)
+
+                print('{:<25s}{:<10d}{:<8.2f}{:<8s}'.format(clothing, val, percentage, ratio))
+
+            print(dash)
 
         return {'FINISHED'}
-
 
 class GeneratePanel(bpy.types.Panel):
     bl_category = "Glimpse Generate"
@@ -1627,6 +1702,11 @@ def register():
     bpy.types.Scene.GlimpseAddedBackground = BoolProperty(
             name="AddedBackground",
             description="Add background in a form of a floor and walls",
+            default=False)
+
+    bpy.types.Scene.GlimpseShowStats = BoolProperty(
+            name="ShowStats",
+            description="Output statistics after the rendering",
             default=False)
 
     bpy.utils.register_module(__name__)
