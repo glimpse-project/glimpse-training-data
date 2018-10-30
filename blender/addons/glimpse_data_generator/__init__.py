@@ -89,20 +89,6 @@ shoe_probabilities = []
 hbars = [u"\u0020", u"\u258f", u"\u258e", u"\u258d", u"\u258b", u"\u258a", u"\u2589"]
 max_bar_width = 10
 
-# outputs the percentage bar (made from hbars) calculated from provided values
-def get_percentage_bar(value, max_entries):
-    bar_len = int(max_bar_width * 6 * value / max_entries)
-    bar_output = ""
-    for i in range(0, max_bar_width):
-        if bar_len > 6:
-            bar_output += hbars[6]
-            bar_len -= 6
-        else:
-            bar_output += hbars[bar_len]
-            bar_len = 0
-    return bar_output
-
-
 def add_clothing(op, context, clothing_name):
 
     if clothing_name + "_reference" not in bpy.data.objects:
@@ -397,6 +383,7 @@ class GeneratorOperator(bpy.types.Operator):
         # stats
         clothes_stats = {}
         body_stats = {}
+        tags_frames = {}
 
         dt = datetime.datetime.today()
         date_str = "%04u-%02u-%02u-%02u-%02u-%02u" % (dt.year,
@@ -527,7 +514,11 @@ class GeneratorOperator(bpy.types.Operator):
                             return
 
             print("> Rendering " + bvh_name)
-    
+            
+            for tag in bvh['tags']:
+                if tag not in tags_frames:
+                    tags_frames[tag] = 0
+
             numpy.random.seed(0)
             random.seed(0)
 
@@ -576,12 +567,7 @@ class GeneratorOperator(bpy.types.Operator):
                         mesh_obj.layers[0] = False
                         hide_body_clothes(_body)
                         bpy.data.armatures[_body + 'Pose'].pose_position = 'REST'
-                
-                #if body in body_stats:
-                #    clothes_stats[meta['clothes'][key]] += 1
-                #else: 
-                #    clothes_stats[meta['clothes'][key]] = 1
-                
+                                
                 dist_mm = 0
                 view_angle = 0
                 height_mm = 0
@@ -614,7 +600,7 @@ class GeneratorOperator(bpy.types.Operator):
                 # index may make some numeric fields float so bvh['start'] or
                 # bvh['end'] might be float
                 for frame in range(int(bvh['start']), int(bvh['end'])):
-                    
+                   
                     nonlocal frame_skip_count
 
                     if random.randrange(0, 100) < bpy.context.scene.GlimpseSkipPercentage:
@@ -632,19 +618,13 @@ class GeneratorOperator(bpy.types.Operator):
                                         
                     if skip:
                         frame_skip_count += 1
+                        tags_frames[tag_name] += 1
                         print("> Skipping (randomized) by tag '" + tag_name + "' in " + bvh_name + " frame " + str(frame))
                         continue
                    
-                    #foot_l = body_pose.pose.bones['foot_l'].tail.to_4d() 
-                    #foot_r = camera.matrix_world.inverted() * body_pose.pose.bones['foot_r'].tail.to_4d()
-                    #print("foot_l and foot_r %s | %s" %  (foot_l, foot_r) )
-                    #skip_foot = False
-                    #if foot_l.z > 0.2 or foot_r.z > 0.2:
-                    #    skip_foot = True
-                    
-                    #if skip_foot:
-                    #    print("> Skipping jumping legs")
-
+                    #for tag in bvh['tags']:
+                    #    tags_frames[tag] += 1
+  
                     nonlocal frame_count 
                     frame_count += 1
                     
@@ -653,7 +633,7 @@ class GeneratorOperator(bpy.types.Operator):
                     else: 
                         body_stats[body] = 1
 
-                    if bpy.context.scene.GlimpseDryRun:
+                    if bpy.context.scene.GlimpseDryRun and not bpy.context.scene.GlimpseShowStats:
                         print("> DRY RUN: Rendering " + bvh_name +
                               " frame " + str(frame) +
                               " with " + body)
@@ -864,6 +844,12 @@ class GeneratorOperator(bpy.types.Operator):
                             clothes_stats[meta['clothes'][key]] += 1
                         else: 
                             clothes_stats[meta['clothes'][key]] = 1
+                    
+                    if bpy.context.scene.GlimpseDryRun and bpy.context.scene.GlimpseShowStats:
+                        print("> DRY RUN: Rendering " + bvh_name +
+                              " frame " + str(frame) +
+                              " with " + body)
+                        continue
 
                     # Make sure you render the clothes specified in meta
                     hide_body_clothes(body)
@@ -1067,20 +1053,38 @@ class GeneratorOperator(bpy.types.Operator):
         print("Rendering MoCap indices from " + str(context.scene.GlimpseBvhGenFrom) + " to " + str(context.scene.GlimpseBvhGenTo))
         for idx in range(bpy.context.scene.GlimpseBvhGenFrom, bpy.context.scene.GlimpseBvhGenTo):
             render_bvh_index(idx)
-
-        if bpy.context.scene.GlimpseDryRun:
-            print("> DRY RUN FRAME COUNT:%d" % frame_count)         
         
         if bpy.context.scene.GlimpseShowStats:
           
             dash = '-' * 85
+            stats_header = "RENDERING STATS"
             print(dash)
-            print('{:^85}'.format("RENDERING STATS"))
+            if bpy.context.scene.GlimpseDryRun:
+                stats_header += " - DRY RUN"
+
+            print('{:^85}'.format(stats_header))
             print(dash)   
             print('{:<15s}{:<10d}'.format("Total Frames:", frame_count))   
-            print('{:<15s}{:<10d}'.format("Total Skipped Frames:", frame_skip_count))                        
-            print(dash)            
-            print('{:^85}'.format("BODIES"))
+            print('{:<15s}{:<10d}'.format("Total Skipped Frames:", frame_skip_count))      
+            
+            tags_frames_total = 0
+            for tag in tags_frames:
+                tags_frames_total += tags_frames[tag]
+            
+            print('{:<15s}{:<10d}'.format("Total Skipped Frames by Tags:", tags_frames_total))  
+            print(dash)
+            print('{:^85}'.format("SKIPPED FRAMES BY TAGS"))
+            print(dash)   
+            print('{:<15s}{:<10s}{:<8s}{:<8s}'.format("TAG NAME", "FRAMES", "RATIO FRA(%)", " "))    
+            print(dash)
+
+            for tag, val in sorted(tags_frames.items(), key=lambda kv: (-kv[1], kv[0])):
+                percentage = val / frame_count * 100
+                ratio = get_percentage_bar(val, frame_count)
+                print('{:<15s}{:<10d}{:<8.2f}{:<8s}'.format(tag, val, percentage, ratio))
+
+            print(dash)
+            print('{:^85}'.format("BODIES IN FRAMES"))
             print(dash)   
             print('{:<15s}{:<10s}{:<8s}{:<8s}'.format("NAME", "FRAMES", "RATIO FRA(%)", " "))    
             print(dash)
@@ -1091,7 +1095,7 @@ class GeneratorOperator(bpy.types.Operator):
                 print('{:<15s}{:<10d}{:<8.2f}{:<8s}'.format(body, val, percentage, ratio))
 
             print(dash)
-            print('{:^85}'.format("CLOTHES"))
+            print('{:^85}'.format("CLOTHES IN FRAMES"))
             print(dash)  
             print('{:<25s}{:<10s}{:<8s}{:<8s}'.format("NAME", "FRAMES", "RATIO FRA(%)", " "))    
             print(dash)
@@ -1103,6 +1107,9 @@ class GeneratorOperator(bpy.types.Operator):
                 print('{:<25s}{:<10d}{:<8.2f}{:<8s}'.format(clothing, val, percentage, ratio))
 
             print(dash)
+
+            if bpy.context.scene.GlimpseDryRun:
+                print("> DRY RUN FRAME COUNT:%d" % frame_count)   
 
         return {'FINISHED'}
 
@@ -1411,6 +1418,18 @@ def set_mocap_blacklist(self, value):
     if bvh_index_pos < len(bvh_index):
         bvh_index[bvh_index_pos]['blacklist'] = value
 
+# outputs the percentage bar (made from hbars) calculated from provided values
+def get_percentage_bar(value, max_entries):
+    bar_len = int(max_bar_width * 6 * value / max_entries)
+    bar_output = ""
+    for i in range(0, max_bar_width):
+        if bar_len > 6:
+            bar_output += hbars[6]
+            bar_len -= 6
+        else:
+            bar_output += hbars[bar_len]
+            bar_len = 0
+    return bar_output
 
 class VIEW3D_MoCap_BlacklistButton(bpy.types.Operator):
     bl_idname = "glimpse.scan_bvh_files"
