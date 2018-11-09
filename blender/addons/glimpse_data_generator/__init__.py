@@ -1117,9 +1117,9 @@ class GeneratorOperator(bpy.types.Operator):
 
         return {'FINISHED'}
 
-class GeneratePanel(bpy.types.Panel):
+class VIEW3D_Generator_MainPanel(bpy.types.Panel):
     bl_category = "Glimpse Generate"
-    bl_label = "GlimpseGenerate v %d.%d.%d: Main" % bl_info["version"]
+    bl_label = "GlimpseGenerator v %d.%d.%d: Main" % bl_info["version"]
     bl_space_type = "VIEW_3D"
     bl_region_type = "TOOLS"
 
@@ -1146,6 +1146,8 @@ class GeneratePanel(bpy.types.Panel):
 bvh_index = []
 bvh_file_index = {}
 bvh_index_pos = 0
+bvh_index_tags = {}
+filter_tags = []
 
 def get_bvh_index_pos(self):
     return bvh_index_pos
@@ -1180,7 +1182,6 @@ def assign_body_poses(action_name):
             pose_obj.animation_data_create()
         pose_obj.animation_data.action = bpy.data.actions[action_name]
 
-
 # we index bvh files using ntpath conventions
 def ntpath_to_os(path):
     elems = path.split('\\')
@@ -1199,8 +1200,12 @@ def load_mocap_index():
         bvh_index = keep
 
         bpy.types.Scene.GlimpseBvhIndexPos[1]['max'] = max(0, len(bvh_index) - 1)
-
+       
+        # we want to clear all index tags on load 
+        bvh_index_tags.clear()
+        
         for bvh in bvh_index:
+            
             bvh_file_index[bvh['file']] = bvh
 
             # normalize so we don't have to consider that it's left unspecified
@@ -1209,7 +1214,13 @@ def load_mocap_index():
 
             if 'tags' not in bvh:
                 bvh['tags'] = { 'unknown' }
-
+            else:
+                for tag in bvh['tags']:
+                    if tag not in bvh_index_tags:
+                        bvh_index_tags[tag] = 1
+                    else:
+                        bvh_index_tags[tag] += 1
+                        
             if 'start' not in bvh:
                 bvh['start'] = 1
 
@@ -1235,6 +1246,174 @@ def load_mocap_index():
         self.report({'INFO'}, str(e))
 
     return bvh_index
+
+
+def get_mocap_blacklist(self):
+    if bvh_index_pos < len(bvh_index):
+        return bvh_index[bvh_index_pos]['blacklist']
+    else:
+        return False
+
+def set_mocap_blacklist(self, value):
+    if bvh_index_pos < len(bvh_index):
+        bvh_index[bvh_index_pos]['blacklist'] = value
+
+def update_tags_filter_whitelist(self, context):
+    whitelist = self.GlimpseTagsFilterWhitelist
+    
+    if whitelist:
+       context.scene.GlimpseTagsFilterBlacklist = False
+ 
+def update_tags_filter_blacklist(self, context):
+    blacklist = self.GlimpseTagsFilterBlacklist
+    
+    if blacklist:
+       context.scene.GlimpseTagsFilterWhitelist = False
+  
+# outputs the percentage bar (made from hbars) calculated from provided values
+def get_percentage_bar(value, max_entries):
+    bar_len = int(max_bar_width * 6 * value / max_entries)
+    bar_output = ""
+    for i in range(0, max_bar_width):
+        if bar_len > 6:
+            bar_output += hbars[6]
+            bar_len -= 6
+        else:
+            bar_output += hbars[bar_len]
+            bar_len = 0
+    return bar_output
+
+# check if any of the bvh tags are in filtered tags 
+def is_tags_filtered(tags_bvh):
+    return not set(tags_bvh).isdisjoint(filter_tags)
+
+# NB: sometimes called with no op
+def update_current_bvh_state(optional_op):
+    if bvh_index_pos >= len(bvh_index):
+        if optional_op != None:
+            optional_op.report({'ERROR'}, "Invalid Mo-cap index")
+        return
+
+    bvh_state = bvh_index[bvh_index_pos]
+
+    bvh_state['start'] = bpy.context.scene.frame_start
+    bvh_state['end'] = bpy.context.scene.frame_end
+
+def skip_to_next_bvh(op):
+    global bvh_index_pos
+    
+    filterBlacklist = bpy.context.scene.GlimpseTagsFilterBlacklist
+    filterWhitelist = bpy.context.scene.GlimpseTagsFilterWhitelist
+
+    while bvh_index_pos < len(bvh_index) - 1: 
+        bvh_index_pos = bvh_index_pos + 1
+
+        if filterBlacklist and not is_tags_filtered(bvh_index[bvh_index_pos]['tags'].keys()):
+            break
+        
+        if filterWhitelist and is_tags_filtered(bvh_index[bvh_index_pos]['tags'].keys()):
+            break
+
+        if not filterBlacklist and not filterWhitelist and bvh_index[bvh_index_pos]['blacklist'] == False:
+            break
+
+# NB: sometimes called with no op
+def switch_current_bvh_state(optional_op):
+    if bvh_index_pos >= len(bvh_index):
+        if optional_op != None:
+            optional_op.report({'ERROR'}, "Invalid Mo-cap index")
+        return
+
+    bvh = bvh_index[bvh_index_pos]
+    bvh_name = bvh['name']
+    action_name = "Base" + bvh_name
+
+    if action_name not in bpy.data.actions:
+        if optional_op != None:
+            optional_op.report({'WARNING'}, "Mocap index %d (%s) not preloaded yet" % (bvh_index_pos, bvh_name))
+        return
+
+    assign_body_poses(action_name)
+
+class VIEW3D_MoCap_MainPanel(bpy.types.Panel):
+    bl_label = "Motion Capture Index"
+    bl_idname = "glimpse_main_panel"    
+    bl_category = "Glimpse Generate"
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "TOOLS"
+
+    #@classmethod
+    #def poll(self, context):
+    #    return (context.object and context.object.type == 'ARMATURE')
+
+    def draw(self, context):
+        layout = self.layout
+        ob = context.object
+        scn = context.scene
+
+        layout.prop(scn, "GlimpseBvhRoot", text="Root Dir")
+        #layout.operator("glimpse.scan_bvh_files")
+        layout.operator("glimpse.open_bvh_index")
+        layout.separator()        
+        row = layout.row()
+        row.operator("glimpse.switch_bvh_prev")
+        row.operator("glimpse.switch_bvh_next")
+        row = layout.row()
+        row.prop(scn, "GlimpseBvhIndexPos", text="")
+        row.label("/ " + str(len(bvh_index)))
+
+        if bvh_index_pos < len(bvh_index):
+            layout.label("File: " + bvh_index[bvh_index_pos]['file'])            
+            layout.label("Name: " + bvh_index[bvh_index_pos]['name'])
+            layout.label("Tags:")
+            for tag in bvh_index[bvh_index_pos]['tags']:
+                row = layout.row()
+                row.label(tag)
+                row.operator("glimpse.edit_bvh_tag", icon="TEXT").tag = tag
+                row.operator("glimpse.remove_bvh_tag", icon="X").tag = tag
+            
+            # tag edit panel
+            if bpy.context.scene.GlimpseMoCapIsMoCapPanelTag:
+                row = layout.row()
+                row.prop(scn, "GlimpseMoCapEditTag", text="Edit Tag")
+                row_buttons = layout.row() 
+                row_buttons.operator("glimpse.cancel_bvh_tag", icon="X")                
+                row_buttons.operator("glimpse.save_bvh_tag", icon="FILE_TICK")                    
+            
+            # add tag edit panel
+            if bpy.context.scene.GlimpseMoCapIsMoCapPanelAddTag:
+                row = layout.row()
+                row.prop(scn, "GlimpseMoCapAddTag", text="New Tag")       
+                row_buttons = layout.row() 
+                row_buttons.operator("glimpse.cancel_new_bvh_tag", icon="X")
+                row_buttons.operator("glimpse.save_new_bvh_tag", icon="FILE_TICK")             
+            
+            if not bpy.context.scene.GlimpseMoCapIsMoCapPanelAddTag:
+                layout.operator("glimpse.add_new_bvh_tag", icon="ZOOMIN", text="Add New Tag")
+
+            layout.label("Blacklist Field")
+            layout.prop(scn, "GlimpseMoCapBlacklist", text="Is Blacklist?")
+            
+            layout.label("Skip By Tag")
+            row = layout.row()
+            row.prop(scn, "GlimpseTagsFilterBlacklist", toggle=True)
+            row.prop(scn, "GlimpseTagsFilterWhitelist", toggle=True)
+            row = layout.row()
+            row.label("Tag")
+            row.label("Count")
+            row.label("Filter")
+            for tag in bvh_index_tags:
+                row = layout.row()
+                row.label(tag)
+                row.label(str(bvh_index_tags[tag]))
+                if tag in filter_tags:
+                    row.operator("glimpse.filter_tag", icon="ZOOMOUT", text="Remove").tag = tag
+                else: 
+                    row.operator("glimpse.filter_tag", icon="ZOOMIN", text="Add").tag = tag
+        else:
+            layout.label("File: None")
+
+        layout.operator("glimpse.save_bvh_index")
 
 class VIEW3D_MoCap_OpenBvhIndexButton(bpy.types.Operator):
     bl_idname = "glimpse.open_bvh_index"
@@ -1318,95 +1497,7 @@ class VIEW3D_MoCap_Preload(bpy.types.Operator):
 
         return {"FINISHED"}
 
-def get_mocap_blacklist(self):
-    if bvh_index_pos < len(bvh_index):
-        return bvh_index[bvh_index_pos]['blacklist']
-    else:
-        return False
-
-def set_mocap_blacklist(self, value):
-    if bvh_index_pos < len(bvh_index):
-        bvh_index[bvh_index_pos]['blacklist'] = value
-
-# outputs the percentage bar (made from hbars) calculated from provided values
-def get_percentage_bar(value, max_entries):
-    bar_len = int(max_bar_width * 6 * value / max_entries)
-    bar_output = ""
-    for i in range(0, max_bar_width):
-        if bar_len > 6:
-            bar_output += hbars[6]
-            bar_len -= 6
-        else:
-            bar_output += hbars[bar_len]
-            bar_len = 0
-    return bar_output
-
-class VIEW3D_MoCap_BlacklistButton(bpy.types.Operator):
-    bl_idname = "glimpse.scan_bvh_files"
-    bl_label = "Index BVH Files"
-
-    def execute(self, context):
-        bvh_index[bvh_index_pos]['blacklist': True]
-
-
-class VIEW3D_MoCap_SaveBvhIndexButton(bpy.types.Operator):
-    bl_idname = "glimpse.save_bvh_index"
-    bl_label = "Save Index"
-
-    def execute(self, context):
-
-        if len(bvh_index):
-            update_current_bvh_state(self)
-
-            try:
-                with open(bpy.path.abspath(os.path.join(bpy.context.scene.GlimpseBvhRoot, "index.json")), "w", encoding="utf-8") as fp:
-                    json.dump(bvh_index, fp, sort_keys = True, indent = 4)
-            except IOError as e:
-                self.report({'ERROR'}, str(e))
-        else:
-            self.report({'ERROR'}, "No Mo-cap data to save")
-
-        return {"FINISHED"}
-
-# NB: sometimes called with no op
-def update_current_bvh_state(optional_op):
-    if bvh_index_pos >= len(bvh_index):
-        if optional_op != None:
-            optional_op.report({'ERROR'}, "Invalid Mo-cap index")
-        return
-
-    bvh_state = bvh_index[bvh_index_pos]
-
-    bvh_state['start'] = bpy.context.scene.frame_start
-    bvh_state['end'] = bpy.context.scene.frame_end
-
-def skip_to_next_bvh(op):
-    global bvh_index_pos
-
-    while bvh_index_pos < len(bvh_index) - 1:
-        bvh_index_pos = bvh_index_pos + 1
-        if bvh_index[bvh_index_pos]['blacklist'] == False:
-            break
-
-# NB: sometimes called with no op
-def switch_current_bvh_state(optional_op):
-    if bvh_index_pos >= len(bvh_index):
-        if optional_op != None:
-            optional_op.report({'ERROR'}, "Invalid Mo-cap index")
-        return
-
-    bvh = bvh_index[bvh_index_pos]
-    bvh_name = bvh['name']
-    action_name = "Base" + bvh_name
-
-    if action_name not in bpy.data.actions:
-        if optional_op != None:
-            optional_op.report({'WARNING'}, "Mocap index %d (%s) not preloaded yet" % (bvh_index_pos, bvh_name))
-        return
-
-    assign_body_poses(action_name)
-
-class VIEW3D_MainPanel_SwitchBvhNext(bpy.types.Operator):
+class VIEW3D_MoCap_SwitchBvhNext(bpy.types.Operator):
     bl_idname = "glimpse.switch_bvh_next"
     bl_label = "Next"
 
@@ -1441,71 +1532,24 @@ class VIEW3D_MoCap_SwitchBvhPrev(bpy.types.Operator):
 
         update_current_bvh_state(self)
 
+        filterBlacklist = bpy.context.scene.GlimpseTagsFilterBlacklist
+        filterWhitelist = bpy.context.scene.GlimpseTagsFilterWhitelist
+
         while bvh_index_pos > 0:
             bvh_index_pos = bvh_index_pos - 1
+            
+            if filterBlacklist and not is_tags_filtered(bvh_index[bvh_index_pos]['tags'].keys()):
+                break
+        
+            if filterWhitelist and is_tags_filtered(bvh_index[bvh_index_pos]['tags'].keys()):
+                break
 
-            if bvh_index[bvh_index_pos]['blacklist'] == False:
+            if not filterBlacklist and not filterWhitelist and bvh_index[bvh_index_pos]['blacklist'] == False:
                 break
 
         switch_current_bvh_state(self)
 
         return {"FINISHED"}
-
-class MoCapPanel(bpy.types.Panel):
-    bl_label = "Motion Capture"
-    bl_idname = "glimpse_main_panel"    
-    bl_category = "Glimpse Generate"
-    bl_space_type = "VIEW_3D"
-    bl_region_type = "TOOLS"
-
-    #@classmethod
-    #def poll(self, context):
-    #    return (context.object and context.object.type == 'ARMATURE')
-
-    def draw(self, context):
-        layout = self.layout
-        ob = context.object
-        scn = context.scene
-
-        layout.prop(scn, "GlimpseBvhRoot", text="")
-        layout.separator()
-        layout.operator("glimpse.scan_bvh_files")
-        layout.separator()
-        layout.operator("glimpse.open_bvh_index")
-        row = layout.row()
-        row.operator("glimpse.switch_bvh_prev")
-        row.operator("glimpse.switch_bvh_next")
-        row.prop(scn, "GlimpseBvhIndexPos", text="")
-        row.label("/ " + str(len(bvh_index)))
-        layout.separator()
-        if bvh_index_pos < len(bvh_index):
-            layout.label("File: " + bvh_index[bvh_index_pos]['file'])            
-            layout.label("Name: " + bvh_index[bvh_index_pos]['name'])
-            layout.label("Tags:")
-            for tag in bvh_index[bvh_index_pos]['tags']:
-                row = layout.row()
-                row.label(tag)
-                row.operator("glimpse.edit_bvh_tag", icon="TEXT").tag = tag
-                row.operator("glimpse.remove_bvh_tag", icon="X").tag = tag
-            
-            # tag edit panel
-            if bpy.context.scene.GlimpseMoCapIsMoCapPanelTag:
-                layout.prop(scn, "GlimpseMoCapEditTag", text="Edit Tag")       
-                layout.operator("glimpse.save_bvh_tag", icon="FILE_TICK")            
-        else:
-            layout.label("File: None")
-    
-        # add edit panel
-        if bpy.context.scene.GlimpseMoCapIsMoCapPanelAddTag:
-            layout.prop(scn, "GlimpseMoCapAddTag", text="New Tag")       
-            layout.operator("glimpse.save_new_bvh_tag", icon="FILE_TICK") 
-
-        layout.operator("glimpse.add_bvh_tag", icon="ZOOMIN", text="Add New Tag")
-        
-        layout.separator()
-        layout.prop(scn, "GlimpseMoCapBlacklist")
-        layout.separator()        
-        layout.operator("glimpse.save_bvh_index")
 
 class VIEW3D_MoCap_RemoveTagButton(bpy.types.Operator):
     bl_idname = "glimpse.remove_bvh_tag"
@@ -1541,8 +1585,16 @@ class VIEW3D_MoCap_SaveTagButton(bpy.types.Operator):
         bpy.context.scene.GlimpseMoCapIsMoCapPanelTag = False
         return {"FINISHED"}
 
-class VIEW3D_MoCap_AddTagButton(bpy.types.Operator):
-    bl_idname = "glimpse.add_bvh_tag"
+class VIEW3D_MoCap_CancelTagButton(bpy.types.Operator):
+    bl_idname = "glimpse.cancel_bvh_tag"
+    bl_label = "Cancel"
+
+    def execute(self, context):
+        bpy.context.scene.GlimpseMoCapIsMoCapPanelTag = False
+        return {"FINISHED"}
+
+class VIEW3D_MoCap_AddNewTagButton(bpy.types.Operator):
+    bl_idname = "glimpse.add_new_bvh_tag"
     bl_label = "Add New Tag"
 
     def execute(self, context): 
@@ -1556,6 +1608,54 @@ class VIEW3D_MoCap_SaveNewTagButton(bpy.types.Operator):
     def execute(self, context):
         bvh_index[bvh_index_pos]['tags'][bpy.context.scene.GlimpseMoCapAddTag] = True
         bpy.context.scene.GlimpseMoCapIsMoCapPanelAddTag = False
+        return {"FINISHED"}
+
+class VIEW3D_MoCap_CancelNewTagButton(bpy.types.Operator):
+    bl_idname = "glimpse.cancel_new_bvh_tag"
+    bl_label = "Cancel"
+
+    def execute(self, context):
+        bpy.context.scene.GlimpseMoCapIsMoCapPanelAddTag = False
+        return {"FINISHED"}
+
+class VIEW3D_MoCap_BlacklistButton(bpy.types.Operator):
+    bl_idname = "glimpse.scan_bvh_files"
+    bl_label = "Index BVH Files"
+
+    def execute(self, context):
+        bvh_index[bvh_index_pos]['blacklist': True]
+
+class VIEW3D_MoCap_FilterTag(bpy.types.Operator):
+    bl_idname = "glimpse.filter_tag"
+    bl_label = ""
+    
+    tag = bpy.props.StringProperty()
+
+    def execute(self, context):
+        if self.tag not in filter_tags:
+            filter_tags.append(self.tag)
+        else:
+            filter_tags.remove(self.tag) 
+            
+        return {"FINISHED"}
+
+class VIEW3D_MoCap_SaveBvhIndexButton(bpy.types.Operator):
+    bl_idname = "glimpse.save_bvh_index"
+    bl_label = "Save Index"
+
+    def execute(self, context):
+
+        if len(bvh_index):
+            update_current_bvh_state(self)
+
+            try:
+                with open(bpy.path.abspath(os.path.join(bpy.context.scene.GlimpseBvhRoot, "index.json")), "w", encoding="utf-8") as fp:
+                    json.dump(bvh_index, fp, sort_keys = True, indent = 4)
+            except IOError as e:
+                self.report({'ERROR'}, str(e))
+        else:
+            self.report({'ERROR'}, "No Mo-cap data to save")
+
         return {"FINISHED"}
 
 def register():
@@ -1767,7 +1867,12 @@ def register():
             description="Output statistics after the rendering",
             default=False)
     
-    # For Tags Editing 
+    # For Tags Editing and Tags Filtering while navigating through bvh files 
+    bpy.types.Scene.GlimpseIndexTags = StringProperty(
+            name="IndexTags",
+            description="All tags found in MoCap index file, separated by ,",
+            default="")
+
     bpy.types.Scene.GlimpseMoCapAddTag = StringProperty(
             name="MoCapAddTag",
             description="Add Tag",
@@ -1793,6 +1898,19 @@ def register():
             description="Is Tag Edit Panel Open?",
             default=False)
 
+    bpy.types.Scene.GlimpseTagsFilterWhitelist = BoolProperty(
+            name="Whitelist",
+            description="Browse BVH only containing all checked tags",
+            default=False,
+            update=update_tags_filter_whitelist
+            )
+
+    bpy.types.Scene.GlimpseTagsFilterBlacklist = BoolProperty(
+            name="Blacklist",
+            description="Exclude BVH files with checked tags from browsing",
+            default=False,
+            update=update_tags_filter_blacklist
+            )
 
     bpy.utils.register_module(__name__)
 
