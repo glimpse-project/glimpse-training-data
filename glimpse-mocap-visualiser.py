@@ -98,7 +98,19 @@ def get_bvh_frames(filename):
     bvh_text_file = open(ntpath_to_os(filename), 'r')
     bvh_f_lines = bvh_text_file.readlines()
     bvh_text_file.close()
-    return int(bvh_f_lines[185].split(": ")[1])
+    motion_params_started = False
+    for line in bvh_f_lines:
+        if line.strip() == "MOTION":
+            motion_params_started = True
+            continue
+        if motion_params_started:
+            try:
+                (key, value) = line.split(":")
+                if key == "Frames":
+                    return int(value.strip())
+            except:
+                pass
+    sys.exit("Failed to determine frame count for BVH file %s" % filename)
 
 print("Calculating ratios...")
 
