@@ -21,9 +21,8 @@
 # SOFTWARE.
 #
 
-# This prints out a shell script that can be run to edit our index of mocap
-# data to add tags that are inferred from the human readable descriptions
-# and subjects that are found in cmu-mocap-index-spreadsheet.xls
+# This lets us inspect the distribution of different tags across our indexed
+# mocap sequences.
 
 import os
 import sys
