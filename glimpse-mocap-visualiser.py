@@ -57,7 +57,7 @@ if args.tags_skip is not None:
     for skip_tag in tags_skip:
         tag_data = skip_tag.split("=")
         if int(tag_data[1]) > 100 or int(tag_data[1]) < 0:
-            sys.exit("Skip percetange for '%s' tag out of range [0,100]" % tag_data[0])
+            sys.exit("Skip percentage for '%s' tag out of range [0,100]" % tag_data[0])
         else:
             tags_skipped[tag_data[0]] = tag_data[1]
 
