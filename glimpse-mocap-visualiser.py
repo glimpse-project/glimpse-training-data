@@ -42,6 +42,8 @@ parser.add_argument('--skip-percentage', type=int, default=0, help='(random) per
 parser.add_argument('--tags-skip', nargs='+', action='append', help='(random) tag-based percentage of frames to skip (default \'none\'). The tags and percentages need to be provided in a <tag>=<integer> space separated format.')   
 parser.add_argument("--show-stats", action="store_true", help="Output statistics at the top")
 
+parser.add_argument("index_filename", help="Filename of index.json to parse / edit")
+
 args = parser.parse_args()
 
 hbars = [u"\u0020", u"\u258f", u"\u258e", u"\u258d", u"\u258b", u"\u258a", u"\u2589"]
@@ -114,7 +116,9 @@ def get_bvh_frames(filename):
 
 print("Calculating ratios...")
 
-with open('index.json', 'r') as fp:
+mocaps_topdir = os.path.dirname(args.index_filename)
+
+with open(args.index_filename, 'r') as fp:
     
     json_data = json.load(fp)
     tags = []
@@ -131,8 +135,10 @@ with open('index.json', 'r') as fp:
     total_files = 0
 
     for bvh in json_data[args.start:end]:
-        
-        bvh_frames = get_bvh_frames(bvh['file'])
+
+        bvh_path = os.path.join(mocaps_topdir, ntpath_to_os(bvh['file']))
+
+        bvh_frames = get_bvh_frames(bvh_path)
         tags_blacklist = args.tags_blacklist.split(",")
         tags_whitelist = args.tags_whitelist.split(",")
         
