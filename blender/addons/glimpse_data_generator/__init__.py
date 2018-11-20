@@ -637,16 +637,25 @@ class GeneratorOperator(bpy.types.Operator):
                     else: 
                         body_stats[body] = 1
 
-                    if bpy.context.scene.GlimpseDryRun and not bpy.context.scene.GlimpseShowStats:
+                    if bpy.context.scene.GlimpseDryRun:
                         print("> DRY RUN: Rendering " + bvh_name +
                               " frame " + str(frame) +
                               " with " + body)
+
+                    # If we aren't collecting stats then we don't need to do
+                    # anything else for a dry-run...
+                    if bpy.context.scene.GlimpseDryRun and not bpy.context.scene.GlimpseShowStats:
                         continue
 
                     meta['frame'] = frame
 
-                    bpy.context.scene.frame_set(frame) # XXX: this is very slow!
-                    context.scene.update()
+                    # The scene update and frame_set can be relatively slow
+                    # and since they don't affect the collection of stats
+                    # during a dry-run we can avoid skip them for faster
+                    # results...
+                    if not bpy.context.scene.GlimpseDryRun:
+                        bpy.context.scene.frame_set(frame)
+                        context.scene.update()
 
                     # turn off/on the background (floor and walls) depending
                     # on the set flag
@@ -848,11 +857,11 @@ class GeneratorOperator(bpy.types.Operator):
                             clothes_stats[meta['clothes'][key]] += 1
                         else: 
                             clothes_stats[meta['clothes'][key]] = 1
-                    
+
+                    # We've collected all our per-frame stats at this point
+                    # so we can continue to the next frame if this is a 
+                    # dry run...
                     if bpy.context.scene.GlimpseDryRun and bpy.context.scene.GlimpseShowStats:
-                        print("> DRY RUN: Rendering " + bvh_name +
-                              " frame " + str(frame) +
-                              " with " + body)
                         continue
 
                     # Make sure you render the clothes specified in meta
