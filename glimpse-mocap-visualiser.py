@@ -142,34 +142,33 @@ with open('index.json', 'r') as fp:
         if tags_whitelist[0] != 'all' and not is_tags_whitelisted(bvh['tags'], tags_whitelist):
             print("Skipping not whitelisted %s..." % bvh['name'])
             continue
-        else: 
 
-            for tag in bvh['tags']:
-               tags.append(tag)
-               if tag not in tags_frames:
-                    tags_frames[tag] = 0
+        for tag in bvh['tags']:
+           tags.append(tag)
+           if tag not in tags_frames:
+                tags_frames[tag] = 0
 
-            for bvh_fra in range(0, bvh_frames):
-                
-                total_frames += 1
-                
-                if args.skip_percentage:
-                    if random.randrange(0, 100) < args.skip_percentage:
-                        continue
-                
-                skip = False
-                for skip_tag in tags_skipped:
-                    if skip_tag in bvh['tags'] and random.randrange(0, 100) < int(tags_skipped[skip_tag]):
-                        skip = True
-                        break
+        for bvh_frame in range(0, bvh_frames):
 
-                if skip:
+            total_frames += 1
+
+            if args.skip_percentage:
+                if random.randrange(0, 100) < args.skip_percentage:
                     continue
 
-                for tag in bvh['tags']:
-                    tags_frames[tag] += 1
-                total_frames_filtered += 1
-                    
+            skip = False
+            for skip_tag in tags_skipped:
+                if skip_tag in bvh['tags'] and random.randrange(0, 100) < int(tags_skipped[skip_tag]):
+                    skip = True
+                    break
+
+            if skip:
+                continue
+
+            for tag in bvh['tags']:
+                tags_frames[tag] += 1
+            total_frames_filtered += 1
+
             total_files += 1
                
     if total_files > 0:
@@ -217,7 +216,6 @@ with open('index.json', 'r') as fp:
         print(dash)
 
     else:
-
         print("No files has been included in ratio calculation")
     
     
