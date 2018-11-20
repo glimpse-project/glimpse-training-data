@@ -61,9 +61,9 @@ parser.add_argument('--tags-whitelist', default='all', help='A set of specified 
 parser.add_argument('--tags-blacklist', default='blacklist', help='A set of specified tags for index entries that will not be rendered - needs to be comma separated (default \'blacklist\')')
 parser.add_argument('--tags-skip', nargs='+', action='append', help='(random) tag-based percentage of frames to skip (default \'none\'). The tags and percentages need to be provided in a <tag>=<integer> format.') 
 
-parser.add_argument('--width', default=172, type=int, help='Width, in pixels, of rendered frames (default 172)')
-parser.add_argument('--height', default=224, type=int, help='Height, in pixels, of rendered frames (default 224)')
-parser.add_argument('--vertical-fov', default=54.5, type=float, help='Vertical field of view of camera (degrees, default = 54.5)')
+parser.add_argument('--width', default=320, type=int, help='Width, in pixels, of rendered frames (default 320)')
+parser.add_argument('--height', default=240, type=int, help='Height, in pixels, of rendered frames (default 240)')
+parser.add_argument('--vertical-fov', default=43.940769, type=float, help='Vertical field of view of camera (degrees, default = 43.94)')
 parser.add_argument('--min-camera-distance', default=2, type=float, help='Minimum distance of camera from person (meters, default 2m)')
 parser.add_argument('--max-camera-distance', default=2.5, type=float, help='Maximum distance of camera from person (meters, default 2.5m)')
 parser.add_argument('--min-camera-height', default=1.1, type=float, help='Minimum height of camera (meters, default 1.1m)')
