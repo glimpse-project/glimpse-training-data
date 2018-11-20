@@ -419,9 +419,16 @@ class GeneratorOperator(bpy.types.Operator):
 
         z_forward = mathutils.Vector((0, 0, 1))
 
-        bpy.context.scene.render.resolution_x = bpy.context.scene.GlimpseRenderWidth
-        bpy.context.scene.render.resolution_y = bpy.context.scene.GlimpseRenderHeight
-        bpy.data.cameras['Camera'].angle = math.radians(bpy.context.scene.GlimpseVerticalFOV)
+        res_x = bpy.context.scene.render.resolution_x = bpy.context.scene.GlimpseRenderWidth
+        res_y = bpy.context.scene.render.resolution_y = bpy.context.scene.GlimpseRenderHeight
+
+        # Blender's camera.angle is the horizontal field of view angle, in radians...
+        vfov = math.radians(bpy.context.scene.GlimpseVerticalFOV)
+        focal_dist_px = (res_y/2)/math.tan(vfov/2)
+        tan_half_hfov = (res_x/2)/focal_dist_px
+        hfov = math.atan(tan_half_hfov) * 2
+
+        bpy.data.cameras['Camera'].angle = hfov
 
         camera_meta = {}
         camera_meta['width'] = bpy.context.scene.render.resolution_x
