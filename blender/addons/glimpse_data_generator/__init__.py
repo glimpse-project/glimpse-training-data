@@ -660,42 +660,42 @@ class GeneratorOperator(bpy.types.Operator):
                     # turn off/on the background (floor and walls) depending
                     # on the set flag
                     added_background = bpy.context.scene.GlimpseAddedBackground;
-
                     if added_background:
+                        materials = bpy.data.materials
 
                         print("> Generating background...")
+                        if "Scenery" not in materials:
+                            print("> Scenery material created")
+                            materials.new("Scenery")
+                            materials[("Scenery")].use_shadeless = True
+                            # XXX: this can't conflict with the labels we use
+                            # for the body, but it would obviously be better
+                            # to not just hard code the colour here!
+                            materials[("Scenery")].diffuse_color = (0.3, 0.3, 0.3)
 
                         floor_obj_name = "Background:Floor"
-                        if floor_obj_name in bpy.data.objects:
-                            floor_obj = bpy.data.objects[floor_obj_name]
-                            floor_obj.hide = False
-                            floor_obj.layers[0] = True
+                        if floor_obj_name not in bpy.data.objects:
+                            bpy.ops.mesh.primitive_plane_add(radius=50, location=(0,0,0))
+                            bpy.context.active_object.name = floor_obj_name
 
-                        print("> Background:Floor added")
-                        print("> Generating walls...")
+                            if len(bpy.context.active_object.material_slots) == 0:
+                                bpy.ops.object.material_slot_add()
+                                bpy.context.active_object.material_slots[0].material = materials['Scenery']
+
+                            print("> Background:Floor added")
+
+                        floor_obj = bpy.data.objects[floor_obj_name]
+                        floor_obj.hide = False
+                        floor_obj.layers[0] = True
 
                         wall_obj_name = "Background:Wall"
-                        if wall_obj_name in bpy.data.objects:
-                            wall_obj = bpy.data.objects[wall_obj_name]
-                            for obj in wall_obj.children:
-                                obj.hide = False
-                                obj.layers[0] = True
-                        else:
+                        if wall_obj_name not in bpy.data.objects:
+                            print("> Generating walls...")
                             objects = bpy.data.objects
-                            materials = bpy.data.materials
                             wall_width = 10
                             wall_height = 10
                             room_sides = 3
                             wall_part_size = mathutils.Vector((1.0, 0.5, 0.5))
-
-                            # Create few materials to use for wall parts
-                            for m in range(0, 5):
-                                if ("BrickMat_%s" % m) not in materials:
-                                    materials.new("BrickMat_%s" % m)
-                                    materials[("BrickMat_%s" % m)].use_shadeless = True
-                                    materials[("BrickMat_%s" % m)].diffuse_color = (random.uniform(0.0, 1.0),
-                                                                                    random.uniform(0.0, 1.0),
-                                                                                    random.uniform(0.0, 1.0))
 
                             # Create an empty mesh and the object.
                             wall_start_pos = body_pose.pose.bones['pelvis'].location + mathutils.Vector((-wall_width, wall_width / 3,0))
@@ -720,7 +720,7 @@ class GeneratorOperator(bpy.types.Operator):
 
                                         if len(bpy.context.active_object.material_slots) == 0:
                                             bpy.ops.object.material_slot_add()
-                                            bpy.context.active_object.material_slots[0].material = materials['BrickMat_%s' % random.randrange(0,5)]
+                                            bpy.context.active_object.material_slots[0].material = materials['Scenery']
 
                                         bpy.context.active_object.select = True
                                         wall_side.select = True
@@ -750,6 +750,11 @@ class GeneratorOperator(bpy.types.Operator):
                             side2.rotation_quaternion = wall_rot
 
                             print("> Background:Wall added")
+
+                        wall_obj = bpy.data.objects[wall_obj_name]
+                        for obj in wall_obj.children:
+                            obj.hide = False
+                            obj.layers[0] = True
 
                     # turn off/on the randomization of the clothes in a pool
                     # depending on whether the GlimpseFixedClothes is not "none"
