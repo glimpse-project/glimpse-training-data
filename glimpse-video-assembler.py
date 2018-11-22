@@ -21,10 +21,6 @@
 # SOFTWARE.
 #
 
-# This prints out a shell script that can be run to edit our index of mocap
-# data to add tags that are inferred from the human readable descriptions
-# and subjects that are found in cmu-mocap-index-spreadsheet.xls
-
 import os
 import sys
 import ntpath
@@ -34,6 +30,7 @@ import random
 import shutil
 import math
 import subprocess
+import datetime
 
 parser = argparse.ArgumentParser()
 
@@ -43,11 +40,19 @@ parser.add_argument("--flipped", action="store_true", help='When enabled, the vi
 parser.add_argument("--non-flipped", action="store_true", help='When enabled, the video will be assembled only from non flipped images')
 parser.add_argument("--fps", default="1", help='Desired framerate of the video being assembled defined in fps (default 1)')
 parser.add_argument("--skip-percentage", default="0", type=int, help='Exclude percentage of frames from assembled video')
+parser.add_argument("--resolution", default="640x480", help='The resolution of the output video (default 640x480)')
+parser.add_argument("--fontsize", default="12", help='The font size of the captions (default 12)')
+parser.add_argument("--video-length", default="30", type=int, help='The treshold defining the maximum video length (specified in minutes - default 30)') 
 
 args = parser.parse_args()
 
 MILLIS_HRS = 3600000
 MILLIS_MINS = 60000
+MILLIS_VIDEO_LENGTH = int(args.video_length) * MILLIS_MINS
+
+dt = datetime.datetime.today()
+date_str = "%04u-%02u-%02u-%02u-%02u-%02u" % (dt.year, dt.month, dt.day,
+                                              dt.hour, dt.minute, dt.second)
 
 def getTimeCode(time):
     hrs = int(time / MILLIS_HRS)
@@ -79,13 +84,19 @@ for dirName, subdirList, fileList in os.walk(args.source, topdown=True):
                 if random.randrange(0, 100) < args.skip_percentage:
                     skipped_frames.append(str(i) + '_' + fname)
                     continue
-
+                
+                if (1 / int(args.fps) * 1000) * i > MILLIS_VIDEO_LENGTH:
+                    break
+                
                 i += 1                                 
                 filename = "%04d_%s" % (i, fname)
-                shutil.copyfile(dirName + '/' + fname, args.dest + '/' + filename) 
+                shutil.copyfile(dirName + '/' + fname, args.dest + '/' + filename)
+        else:
+            continue
+        break
 
 print("Assembling captions...")
-subtitles = open(args.dest + "/subtitles.srt","w")
+subtitles = open(args.dest + "/" + date_str + "-subtitles.srt","w")
 for dirName, subdirList, fileList in os.walk(args.source, topdown=True):
     dirPath = os.path.normpath(dirName)
     dirPathList = dirPath.split(os.sep)
@@ -105,7 +116,10 @@ for dirName, subdirList, fileList in os.walk(args.source, topdown=True):
                 image_file = index_file.split('/')
                 if str(i) + '_' + image_file[len(image_file)-1] + '.png' in skipped_frames:
                     continue 
- 
+                
+                if (1 / int(args.fps) * 1000) * i > MILLIS_VIDEO_LENGTH:
+                    break
+
                 time = (1 / int(args.fps) * 1000) * i
                 timecode_from = getTimeCode(time)
                 timecode_to = getTimeCode(time + 1 / int(args.fps) * 1000)
@@ -117,7 +131,7 @@ for dirName, subdirList, fileList in os.walk(args.source, topdown=True):
                                     "Bvh: " + str(bvh_index['bvh']) + "\n" +
                                     "Frame: " + str(bvh_index['frame']) + "\n")
                 subtitles.write("\n")
-                i += 1                                                       
+                i += 1                                            
             subtitles.close() 
             break
 
@@ -125,9 +139,11 @@ for dirName, subdirList, fileList in os.walk(args.source, topdown=True):
 subprocess.call('ffmpeg' 
                 ' -framerate ' + args.fps + 
                 ' -pattern_type glob -i "' + args.dest + '/*.png"' 
-                ' -vf subtitles=' + args.dest + '/subtitles.srt'
-                ':force_style=\'Fontsize=12\''
-                ' -s 640x480 -pix_fmt yuv420p ' + args.dest + '/review.mp4',
+                ' -vf subtitles=' + args.dest + 
+                '/' + date_str + '-subtitles.srt'
+                ':force_style=\'Fontsize=' + args.fontsize + '\''
+                ' -s ' + args.resolution + ' -pix_fmt yuv420p ' + 
+                args.dest + '/' + date_str + '-review.mp4',
                 shell=True)
 
 print("Cleaning up...")
