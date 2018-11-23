@@ -58,6 +58,9 @@ if int(args.fps) < 1 or int(args.fps) > 120:
     print("The FPS cannot be smaller than 1 or greater than 120")
     sys.exit()
 
+if not os.path.exists(args.dest):
+    os.makedirs(args.dest)
+
 MILLIS_HRS = 3600000
 MILLIS_MINS = 60000
 MILLIS_VIDEO_LENGTH = int(args.video_length) * MILLIS_MINS
