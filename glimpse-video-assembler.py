@@ -41,10 +41,22 @@ parser.add_argument("--non-flipped", action="store_true", help='When enabled, th
 parser.add_argument("--fps", default="1", help='Desired framerate of the video being assembled defined in fps (default 1)')
 parser.add_argument("--skip-percentage", default="0", type=int, help='Exclude percentage of frames from assembled video')
 parser.add_argument("--resolution", default="640x480", help='The resolution of the output video (default 640x480)')
-parser.add_argument("--fontsize", default="12", help='The font size of the captions (default 12)')
-parser.add_argument("--video-length", default="30", type=int, help='The treshold defining the maximum video length (specified in minutes - default 30)') 
+parser.add_argument("--fontsize", default="12", help='The font size of the captions (needs to be between 10 and 16, default 12)')
+parser.add_argument("--video-length", default="30", type=int, help='The treshold defining the maximum video length (specified in minutes - max 180 - default 30)') 
 
 args = parser.parse_args()
+
+if int(args.video_length) < 0 or int(args.video_length) > 180:
+    print("Video cannot be less than 0 and longer than 180 minutes")
+    sys.exit()
+
+if int(args.fontsize) < 10 or int(args.fontsize) > 16:
+    print("Fontsize needs to be between 10 and 16")
+    sys.exit()
+
+if int(args.fps) < 1 or int(args.fps) > 120:
+    print("The FPS cannot be smaller than 1 or greater than 120")
+    sys.exit()
 
 MILLIS_HRS = 3600000
 MILLIS_MINS = 60000
