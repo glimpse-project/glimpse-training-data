@@ -112,6 +112,7 @@ except FileNotFoundError as e:
                             (mocap, section, frame_name))
 
     with open(full_filename, 'w+') as fp:
+        full_index.sort()
         for frame in full_index:
             fp.write(frame)
 
