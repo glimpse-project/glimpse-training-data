@@ -4,7 +4,7 @@ tools but this has since been generalized so tools can read these label-map
 .json files instead.
 
 For example when we run the `image-pre-processor` tool then we can use the
-`2018-06-render-to-2018-08-rdt-map.json` to map from the indices Blender writes
+`2018-11-render-to-2018-08-rdt-map.json` to map from the indices Blender writes
 out for labels to the packed indices of labels used while training and stored
 in the decision trees.
 
@@ -69,3 +69,8 @@ the possibility of differentiating toes and ankles doesn't seem realistic.
 The big difference between the unreliability of device data vs training data
 means we're not able to classify feet reliably but hopefully we stand a better
 change of classifying a more general label.
+
+Compared to `2018-06-render-to-2018-08-rdt-map.json`,
+`2018-11-render-to-2018-08-rdt-map.json` considers that background pixels may
+be coloured based on a 'Scenery' material we use when we create floor and
+wall objects for rendering synthetic test videos.
