@@ -1,0 +1,21 @@
+{
+    "properties": {
+        "no_flip": true,
+        "no_bg_depth_clamp": true
+    },
+    "noise": [
+        {
+            "type": "foreground-edge-swizzle"
+        },
+        {
+            "type": "gaussian",
+            "fwtm_range_map_m": 0.02
+        },
+        {
+            "type": "perlin",
+            "freq": 0.05,
+            "amplitude_m": 0.15,
+            "octaves": 4
+        }
+    ]
+}
