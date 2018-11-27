@@ -11,6 +11,9 @@ These configs can be passed to the `image-pre-processor` tool via the
     },
     "noise": [
         {
+            "foreground-edge-swizzle"
+        },
+        {
             "type": "gaussian",
             "fwtm_range_map_m": 0.02
         },
@@ -29,6 +32,13 @@ These configs can be passed to the `image-pre-processor` tool via the
 The noise configuration helps us model different types of sensor noise so that
 our training data is a more realistic representation of the data we will see
 from real cameras.
+
+### Foreground Edge Swizzle
+
+This simply adds noise to the silhouette of our cleanly rendered bodies. This
+is done with a 3x3 sliding window and when the center pixel is an edge between
+the background and the body then one of its 8 neighbours is randomly picked to
+replace the edge pixel.
 
 ### Gaussian
 
