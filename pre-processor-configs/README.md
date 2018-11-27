@@ -4,7 +4,9 @@ These configs can be passed to the `image-pre-processor` tool via the
 ```javascript
 {
     "properties": {
+        "no_flip": false,               // Don't create flipped frames
         "background_depth_m": 32.0,     // The depth of background pixels
+        "no_bg_depth_clamp": false,     // Don't clamp background depth to background_depth_m
         "min_body_size_px": 3000,       // discard frame if body has fewer pixels
         "min_body_change_percent": 0.1, // discard frame if changed less than
                                         // this relative to previous frame
