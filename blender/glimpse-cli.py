@@ -24,7 +24,10 @@
 #
 # The script can be run directly and it will handle the trickery necessary to
 # run itself with the same arguments via Blender.
-
+#
+# The script can also handle spawning multiple instances of Blender to
+# help better parallelize rendering
+#
 
 import os
 import sys
@@ -43,6 +46,12 @@ except:
 if as_blender_addon:
     parser = argparse.ArgumentParser(prog="glimpse-generator", add_help=False)
     parser.add_argument('--help-glimpse', help='Show this help message and exit', action='help')
+    # used to override --name/start/end if we split the user's given start/end
+    # range across multiple Blender instances...
+    parser.add_argument('--instance-overrides', action='store_true', help=argparse.SUPPRESS)
+    parser.add_argument('--instance-name', help=argparse.SUPPRESS)
+    parser.add_argument('--instance-start', type=int, help=argparse.SUPPRESS)
+    parser.add_argument('--instance-end', type=int, help=argparse.SUPPRESS)
 else:
     parser = argparse.ArgumentParser(prog="glimpse-generator")
 
@@ -55,8 +64,11 @@ parser.add_argument('--info', help='Load the mocap index and print summary infor
 parser.add_argument('--preload', help='Preload mocap files as actions before rendering', action='store_true')
 parser.add_argument('--purge', help='Purge mocap actions', action='store_true')
 parser.add_argument('--link', help='Link mocap actions', action='store_true')
+
 parser.add_argument('--start', type=int, default=20, help='Index of first MoCap to render')
 parser.add_argument('--end', default=25, type=int, help='Index of last MoCap to render')
+parser.add_argument('-j', '--num-instances', type=int, default=1, help='Number of Blender instances to run for rendering')
+
 parser.add_argument('--tags-whitelist', default='all', help='A set of specified tags for index entries that will be rendered - needs to be comma separated (default \'all\')')
 parser.add_argument('--tags-blacklist', default='blacklist', help='A set of specified tags for index entries that will not be rendered - needs to be comma separated (default \'blacklist\')')
 parser.add_argument('--tags-skip', nargs='+', action='append', help='(random) tag-based percentage of frames to skip (default \'none\'). The tags and percentages need to be provided in a <tag>=<integer> format.') 
@@ -90,6 +102,8 @@ parser.add_argument("--show-stats", action="store_true", help="Output statistics
 parser.add_argument('training_data', help='Directory with all training data')
 
 def run_cmd(args):
+    global cli_args
+
     if cli_args.debug:
         print("# " + " ".join(map(str, args)), file=sys.stderr)
         returncode = subprocess.call(args)
@@ -98,23 +112,116 @@ def run_cmd(args):
     else:
         return subprocess.call(args)
 
-if as_blender_addon:
-    if "--" in sys.argv:
-        argv = sys.argv
-        argv = argv[argv.index("--") + 1:]
-    else:
-        argv = []
-
-    cli_args = parser.parse_args(argv)
-else:
+# If this script is run from the command line and we're not yet running within
+# Blender's Python environment then we will spawn Blender and tell it to
+# re-evaluate this script.
+#
+# In this case we handle a few extra arguments at this point such as being able
+# to control how many instances of Blender should be run to handle rendering
+#
+if not as_blender_addon:
     cli_args = parser.parse_args()
-    ret = run_cmd(['blender', '-b',
-                   os.path.join(cli_args.training_data, 'blender', 'glimpse-training.blend'),
-                   '-P',
-                   sys.argv[0],
-                   '--'] +
-                   sys.argv[1:])
-    sys.exit(ret)
+
+    training_data = cli_args.training_data
+    name = cli_args.name
+    dest = cli_args.dest
+
+    n_mocaps = cli_args.end - cli_args.start
+    step = int(n_mocaps / cli_args.num_instances)
+
+    print("Rendering %d motion capture sequences with %d instance[s] of Blender" % (n_mocaps, cli_args.num_instances))
+    print("Each instance is rendering %d sequences" % step)
+    print("Path to training data is '%s'" % training_data)
+    print("Destination is '%s'" % dest)
+
+    if step * cli_args.num_instances != n_mocaps:
+        sys.exit("Instance count of %d doesn't factor into count of %d motion capture sequences" %
+                 (cli_args.num_instances, n_mocaps))
+
+    processes = []
+
+    n_frames = 0
+
+    for i in range(cli_args.num_instances):
+        if cli_args.num_instances > 1:
+            part_suffix = '-part-%d' % i
+        else:
+            part_suffix = ""
+
+        part_name = name + part_suffix
+
+        start = cli_args.start + i * step
+        end = start + step
+
+        instance_args = [
+                '--instance-overrides',
+                '--instance-start', str(start),
+                '--instance-end', str(end),
+                '--instance-name', part_name
+        ]
+
+        print("Instance %d name: %s" % (i, part_name))
+
+        instance_cmd = [
+                'blender', '-b',
+                os.path.join(cli_args.training_data, 'blender', 'glimpse-training.blend'),
+                '-P',
+                os.path.abspath(sys.argv[0]),
+                '--'] + sys.argv[1:] + instance_args
+        print("Blender instance " + str(i) + " command:  " + " ".join(instance_cmd))
+
+        # We have some special case handling of dry-run when split across
+        # multiple instances since we really want some extra convenience
+        # for determining a total frame count
+        if cli_args.dry_run:
+            blender_output = subprocess.check_output(instance_cmd).decode('utf-8')
+            blender_lines = blender_output.splitlines()
+            found_frame_count = False
+            for line in blender_lines:
+                if line.startswith("> DRY RUN FRAME COUNT:"):
+                    parts = line.split(":")
+                    frame_count = int(parts[1])
+                    found_frame_count = True
+                    break
+            print(blender_output)
+            if found_frame_count:
+                n_frames += frame_count
+        else:
+            log_filename = os.path.join(dest, part_name, 'render%s.log' % part_suffix)
+            print("Instance %d log: %s" % (i, log_filename))
+            os.makedirs(os.path.join(dest, part_name), exist_ok=True)
+            with open(log_filename, 'w') as fp:
+                p = subprocess.Popen(instance_cmd, stdout=fp, stderr=fp)
+                processes.append(p)
+
+    print("Waiting for all Blender instances to complete...")
+    status = 0
+    for p in processes:
+        if p.wait() != 0:
+            status = 1
+
+    if cli_args.dry_run:
+        if n_frames:
+            print("Total frame count across all instances = %d" % n_frames)
+        print("")
+        print("NB: the frame count should roughly double after running the")
+        print("image-pre-processor since it will create flipped versions of each frame")
+
+    sys.exit(status)
+
+
+##############################################################################
+# From this point on we can assume we are running withing Blender's Python
+# environment...
+
+
+if "--" in sys.argv:
+    argv = sys.argv
+    argv = argv[argv.index("--") + 1:]
+else:
+    argv = []
+
+cli_args = parser.parse_args(argv)
 
 if cli_args.skip_percentage < 0 or cli_args.skip_percentage > 100:
     sys.exit("Skip percetange out of range [0,100]")
@@ -148,10 +255,6 @@ if cli_args.tags_skip is not None:
             tags_skipped += "%s=%s#" % (tag_data[0], tag_data[1])
 else:
     tags_skipped = ""
-
-#
-# XXX: from here on, we know we are running within Blender...
-#
 
 addon_dependencies = [
     'glimpse_data_generator',
@@ -188,8 +291,14 @@ bpy.context.scene.GlimpseMaxCameraHeightMM = int(cli_args.max_camera_height * 10
 bpy.context.scene.GlimpseMinViewingAngle = cli_args.min_camera_angle
 bpy.context.scene.GlimpseMaxViewingAngle= cli_args.max_camera_angle
 bpy.context.scene.GlimpseMocapLibrary = cli_args.mocap_library
-bpy.context.scene.GlimpseBvhGenFrom = cli_args.start
-bpy.context.scene.GlimpseBvhGenTo = cli_args.end
+
+if cli_args.instance_overrides:
+    bpy.context.scene.GlimpseBvhGenFrom = cli_args.instance_start
+    bpy.context.scene.GlimpseBvhGenTo = cli_args.instance_end
+else:
+    bpy.context.scene.GlimpseBvhGenFrom = cli_args.start
+    bpy.context.scene.GlimpseBvhGenTo = cli_args.end
+
 bpy.context.scene.GlimpseBvhTagsWhitelist = cli_args.tags_whitelist
 bpy.context.scene.GlimpseBvhTagsBlacklist = cli_args.tags_blacklist
 bpy.context.scene.GlimpseBvhTagsSkip = tags_skipped
@@ -244,18 +353,27 @@ if cli_args.dest == "":
 bpy.context.scene.GlimpseDataRoot = cli_args.dest
 print("DataRoot: " + cli_args.dest)
 
-if cli_args.name == "":
-    print("--name argument required in this case to find files to preload")
+if cli_args.instance_overrides:
+    render_name = cli_args.instance_name
+else:
+    render_name = cli_args.name
+
+if render_name == "":
+    print("--name argument required in this case to determine where to write results")
     bpy.ops.wm.quit_blender()
-bpy.context.scene.GlimpseGenDir = cli_args.name
+bpy.context.scene.GlimpseGenDir = render_name
 
 print("Rendering Info:")
-print("Name: " + cli_args.name)
+print("Name: " + render_name)
 print("Dest: " + bpy.context.scene.GlimpseDataRoot)
 
-import cProfile
-cProfile.run("bpy.ops.glimpse.generate_data()", "glimpse-" + cli_args.name + ".prof")
 
-import pstats
-p = pstats.Stats("glimpse-" + cli_args.name + ".prof")
-p.sort_stats("cumulative").print_stats(20)
+if not cli_args.dry_run:
+    import cProfile
+    cProfile.run("bpy.ops.glimpse.generate_data()", os.path.join(cli_args.dest, render_name, "glimpse-" + render_name + ".prof"))
+
+    import pstats
+    p = pstats.Stats(os.path.join(cli_args.dest, render_name, "glimpse-" + render_name + ".prof"))
+    p.sort_stats("cumulative").print_stats(20)
+else:
+    bpy.ops.glimpse.generate_data()
