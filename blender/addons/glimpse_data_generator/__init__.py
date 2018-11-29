@@ -612,7 +612,8 @@ class GeneratorOperator(bpy.types.Operator):
 
                     if random.randrange(0, 100) < bpy.context.scene.GlimpseSkipPercentage:
                         frame_skip_count += 1
-                        print("> Skipping (randomized)" + bvh_name + " frame " + str(frame))
+                        if bpy.context.scene.GlimpseDebug and bpy.context.scene.GlimpseVerbose:
+                            print("> Skipping (randomized) " + bvh_name + " frame " + str(frame))
                         continue
                     
                     skip = False
@@ -626,7 +627,8 @@ class GeneratorOperator(bpy.types.Operator):
                     if skip:
                         frame_skip_count += 1
                         tags_frames[tag_name] += 1
-                        print("> Skipping (randomized) by tag '" + tag_name + "' in " + bvh_name + " frame " + str(frame))
+                        if bpy.context.scene.GlimpseDebug and bpy.context.scene.GlimpseVerbose:
+                            print("> Skipping (randomized) by tag '" + tag_name + "' in " + bvh_name + " frame " + str(frame))
                         continue
                      
                     nonlocal frame_count 
@@ -637,7 +639,7 @@ class GeneratorOperator(bpy.types.Operator):
                     else: 
                         body_stats[body] = 1
 
-                    if bpy.context.scene.GlimpseDryRun:
+                    if bpy.context.scene.GlimpseDryRun and bpy.context.scene.GlimpseDebug and bpy.context.scene.GlimpseVerbose:
                         print("> DRY RUN: Rendering " + bvh_name +
                               " frame " + str(frame) +
                               " with " + body)
@@ -1126,8 +1128,8 @@ class GeneratorOperator(bpy.types.Operator):
 
             print(dash)
 
-            if bpy.context.scene.GlimpseDryRun:
-                print("> DRY RUN FRAME COUNT:%d" % frame_count)   
+        if bpy.context.scene.GlimpseDryRun:
+            print("> DRY RUN FRAME COUNT: %d" % frame_count)
 
         return {'FINISHED'}
 
@@ -1706,6 +1708,12 @@ def register():
     bpy.types.Scene.GlimpseDebug = BoolProperty(
             name="Debug",
             description="Enable Debugging",
+            default=False,
+            )
+
+    bpy.types.Scene.GlimpseVerbose = BoolProperty(
+            name="Verbose",
+            description="Enable Verbose Debugging",
             default=False,
             )
 

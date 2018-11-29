@@ -59,7 +59,8 @@ dt = datetime.datetime.today()
 date_str = "%04u-%02u-%02u-%02u-%02u-%02u" % (dt.year,
         dt.month, dt.day, dt.hour, dt.minute, dt.second)
 
-parser.add_argument('--debug', action='store_true', help=argparse.SUPPRESS)
+parser.add_argument('--debug', action='store_true', help="Enable extra debug messages")
+parser.add_argument('--verbose', action='store_true', help="Enable more verbose debug messages")
 parser.add_argument('--info', help='Load the mocap index and print summary information', action='store_true')
 parser.add_argument('--preload', help='Preload mocap files as actions before rendering', action='store_true')
 parser.add_argument('--purge', help='Purge mocap actions', action='store_true')
@@ -100,17 +101,6 @@ parser.add_argument('--added-background', help='Add background in a form of a fl
 parser.add_argument("--show-stats", action="store_true", help="Output statistics after the rendering")
 
 parser.add_argument('training_data', help='Directory with all training data')
-
-def run_cmd(args):
-    global cli_args
-
-    if cli_args.debug:
-        print("# " + " ".join(map(str, args)), file=sys.stderr)
-        returncode = subprocess.call(args)
-        print("# return status = " + str(returncode))
-        return returncode
-    else:
-        return subprocess.call(args)
 
 # If this script is run from the command line and we're not yet running within
 # Blender's Python environment then we will spawn Blender and tell it to
@@ -180,7 +170,7 @@ if not as_blender_addon:
             for line in blender_lines:
                 if line.startswith("> DRY RUN FRAME COUNT:"):
                     parts = line.split(":")
-                    frame_count = int(parts[1])
+                    frame_count = int(parts[1].strip())
                     found_frame_count = True
                     break
             print(blender_output)
@@ -195,6 +185,7 @@ if not as_blender_addon:
                 processes.append(p)
 
     print("Waiting for all Blender instances to complete...")
+    print("")
     status = 0
     for p in processes:
         if p.wait() != 0:
@@ -204,8 +195,9 @@ if not as_blender_addon:
         if n_frames:
             print("Total frame count across all instances = %d" % n_frames)
         print("")
-        print("NB: the frame count should roughly double after running the")
-        print("image-pre-processor since it will create flipped versions of each frame")
+        print("NB: the frame count may double to ~ %d after running the " % (n_frames * 2))
+        print("image-pre-processor if flipping is enabled.")
+        print("")
 
     sys.exit(status)
 
@@ -304,6 +296,8 @@ bpy.context.scene.GlimpseBvhTagsBlacklist = cli_args.tags_blacklist
 bpy.context.scene.GlimpseBvhTagsSkip = tags_skipped
 bpy.context.scene.GlimpseFocusBone = cli_args.focus_bone
 
+bpy.context.scene.GlimpseDebug = cli_args.debug
+bpy.context.scene.GlimpseVerbose = cli_args.verbose
 bpy.context.scene.GlimpseDryRun = cli_args.dry_run
 bpy.context.scene.GlimpseSkipPercentage = cli_args.skip_percentage
 bpy.context.scene.GlimpseClothingStep = cli_args.clothing_step
