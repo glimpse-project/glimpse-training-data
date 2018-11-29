@@ -37,7 +37,7 @@ cd blender
 ```
 Pre-load mocap data:
 ```
-./blender/glimpse-cli.py \
+./glimpse-generator.py \
     --start 20 \
     --end 25 \
     --preload \
@@ -45,7 +45,7 @@ Pre-load mocap data:
 ```
 Render training data:
 ```
-./blender/glimpse-cli.py \
+glimpse-generator.py \
     --start 20 \
     --end 25 \
     --width 320 \
@@ -74,14 +74,14 @@ image-pre-processor \
 
 Create index file for a test set
 ```
-glimpse-data-indexer.py \
+./glimpse-data-indexer.py \
     -i test 20000 \
     /path/to/glimpse-training-data/pre-processed/test-render
 ```
 
 Create index file for each tree to train (excluding test set images)
 ```
-glimpse-data-indexer.py \
+./glimpse-data-indexer.py \
     -e test \
     -i tree0 300000 \
     -i tree1 300000 \
@@ -91,7 +91,7 @@ glimpse-data-indexer.py \
 
 Create an index for joint parameter training:
 ```
-glimpse-data-indexer.py -i joint-param-training 10000 /path/to/glimpse-training-data/pre-processed/test-render
+./glimpse-data-indexer.py -i joint-param-training 10000 /path/to/glimpse-training-data/pre-processed/test-render
 ```
 
 Train each decision tree:
@@ -115,6 +115,63 @@ json-to-rdt tree0.json tree0.rdt
 json-to-rdt tree1.json tree1.rdt
 json-to-rdt tree2.json tree2.rdt
 ```
+
+# Rendering synthetic test recordings TL;DR
+
+First use Blender to render a particular mocap sequence with a fixed camera,
+and fixed choice of body mesh and clothing...
+
+```
+./glimpse-generator.py \
+    --dest ./renders \
+    --name test-recording \
+    --start 20 \
+    --end 21 \
+    --width 640 \
+    --height 480  \
+    --fixed-camera \
+    --min-camera-distance 3 \
+    --min-camera-height 1.1 \
+    --min-camera-angle -30 \
+    --fixed-bodies Man0 \
+    --fixed-clothes "m_trousers_01" \
+    --added-background \
+    --show-stats \
+    .
+```
+
+Then run the pre-processor to apply camera sensor noise:
+
+```
+image-pre-processor \
+    ./renders/test-recording \
+    ./pre-processed/test-recording \
+    ./label-maps/2018-11-render-to-2018-08-rdt-map.json \
+    -c /Users/bob/src/glimpse/glimpse-training-data/pre-processor-configs/iphone-x-synthetic-renders-config.json
+```
+
+_Note: double check you're using the latest 20xx-xx-render-20xx-xx-rdt-map.json_
+_Note: the pre-processor config is different to the one used for processing
+training data considering that we're not typically rendering at the same
+resolution here and we don't want to create flipped frames_
+
+Remove the `index.full` created by the image-pre-processor since it's not
+sorted, and then run `glimpse-data-indexer.py`:
+
+```
+rm ./pre-processed/test-recording/index.full
+./glimpse-data-indexer.py ./pre-processed/test-recording
+```
+
+Create a Glimpse Viewer recording with `index-to-recording`:
+
+```
+index-to-recording \
+    ./pre-processed/test-recording \
+    ../glimpse-assets/ViewerRecording/test-recording \
+    --fps 30
+```
+
 
 # About the CMU Motion captures
 
@@ -200,7 +257,7 @@ required Blender addons as described above.
 You can get some help with running glimpse-cli.py by running like:
 
 ```
-./blender/glimpse-cli.py --help
+./glimpse-generator.py --help
 ```
 
 Here it's good to understand that `mocap/index.json` is an index of all the
@@ -222,7 +279,7 @@ pre-load a subset of the data by specifying a `--start` and `--end` index.
 A small number of motion capture files can be pre-loaded as follows:
 
 ```
-./blender/glimpse-cli.py \
+./glimpse-generator.py \
     --start 20 \
     --end 25 \
     --preload \
@@ -241,7 +298,7 @@ data.
 A small number of images can be rendered as follows:
 
 ```
-./blender/glimpse-cli.py \
+./glimpse-generator.py \
     --start 20 \
     --end 25 \
     --width 320 \
@@ -313,7 +370,7 @@ glimpse-data-indexer.py -i test 10000 /path/to/glimpse-training-data/pre-process
 and then create three tree index files (sampled with replacement, but excluding
 the test set images):
 ```
-glimpse-data-indexer.py \
+./glimpse-data-indexer.py \
     -e test \
     -i tree0 100000 \
     -i tree1 100000 \
