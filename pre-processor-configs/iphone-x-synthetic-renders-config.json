@@ -1,7 +1,7 @@
 {
     "properties": {
         "no_flip": true,
-        "no_bg_depth_clamp": true
+        "bg_far_clamp_mode": true
     },
     "noise": [
         {
