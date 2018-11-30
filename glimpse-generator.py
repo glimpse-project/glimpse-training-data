@@ -59,17 +59,33 @@ dt = datetime.datetime.today()
 date_str = "%04u-%02u-%02u-%02u-%02u-%02u" % (dt.year,
         dt.month, dt.day, dt.hour, dt.minute, dt.second)
 
-parser.add_argument('--debug', action='store_true', help="Enable extra debug messages")
-parser.add_argument('--verbose', action='store_true', help="Enable more verbose debug messages")
-parser.add_argument('--info', help='Load the mocap index and print summary information', action='store_true')
-parser.add_argument('--preload', help='Preload mocap files as actions before rendering', action='store_true')
-parser.add_argument('--purge', help='Purge mocap actions', action='store_true')
-parser.add_argument('--link', help='Link mocap actions', action='store_true')
+parser.add_argument('--dest', default=os.path.join(os.getcwd(), 'renders'), help='Directory to write files too')
+parser.add_argument('--name', default=date_str, help='Unique name for this render run')
 
 parser.add_argument('--start', type=int, default=20, help='Index of first MoCap to render')
 parser.add_argument('--end', default=25, type=int, help='Index of last MoCap to render')
+# TODO: support being able to give an explicit bvh name instead of --start/end
+
 parser.add_argument('-j', '--num-instances', type=int, default=1, help='Number of Blender instances to run for rendering')
 
+parser.add_argument('--config', help='Detailed configuration for the generator addon')
+
+parser.add_argument('--debug', action='store_true', help="Enable extra debug messages")
+parser.add_argument('--verbose', action='store_true', help="Enable more verbose debug messages")
+
+# TODO: turn these into mutually exclusive subcommands (+ add a 'render' command)
+parser.add_argument('--info', help='Load the mocap index and print summary information', action='store_true')
+parser.add_argument('--preload', help='Preload mocap files as actions before rendering', action='store_true')
+parser.add_argument('--purge', help='Purge mocap actions', action='store_true')
+
+parser.add_argument('--link', help='Link mocap actions', action='store_true')
+parser.add_argument('--mocap-library', default="//glimpse-training-mocap-library.blend", help='.blend file library with preloaded mocap actions (default //glimpse-training-mocap-library.blend)')
+
+
+parser.add_argument('--dry-run', help='Just print information without rendering', action='store_true')
+
+
+# TODO: Move all of these into a .json config
 parser.add_argument('--tags-whitelist', default='all', help='A set of specified tags for index entries that will be rendered - needs to be comma separated (default \'all\')')
 parser.add_argument('--tags-blacklist', default='blacklist', help='A set of specified tags for index entries that will not be rendered - needs to be comma separated (default \'blacklist\')')
 parser.add_argument('--tags-skip', nargs='+', action='append', help='(random) tag-based percentage of frames to skip (default \'none\'). The tags and percentages need to be provided in a <tag>=<integer> format.') 
@@ -89,17 +105,14 @@ parser.add_argument('--smooth-camera-movement', help='Smooth camera movement (di
 parser.add_argument('--smooth-camera-frequency', default=1, type=int, help='Period at which data is sampled when --smooth-camera-movement is enabled (frequency, default=1)')
 parser.add_argument('--focus-bone', default='pelvis', help='Bone in the armature the camera will focus on during renders (bone name in the armature, default=pelvis)')
 
-parser.add_argument('--dest', default=os.path.join(os.getcwd(), 'renders'), help='Directory to write files too')
-parser.add_argument('--name', default=date_str, help='Unique name for this render run')
-parser.add_argument('--mocap-library', default="//glimpse-training-mocap-library.blend", help='.blend file library with preloaded mocap actions (default //glimpse-training-mocap-library.blend)')
-parser.add_argument('--dry-run', help='Just print information without rendering', action='store_true')
 parser.add_argument('--skip-percentage', type=int, default=0, help='(random) percentage of frames to skip (default 0)')
 parser.add_argument('--clothing-step', type=int, default=5, help='randomize the clothing items every N frames (default 5)')
 parser.add_argument('--fixed-bodies', default='none', help='A set specified bodies to be used in all renders - needs to be comma separated (default \'none\')')
 parser.add_argument('--fixed-clothes', default='none', help='A set of specified clothes to be used in all renders - needs to be comma separated (default \'none\')')
 parser.add_argument('--added-background', help='Add background in a form of a floor and walls', action='store_true')
-parser.add_argument("--show-stats", action="store_true", help="Output statistics after the rendering")
 
+
+# TODO: add a --training-data argument that defaults to `os.path.getcwd()` or find path of script itself
 parser.add_argument('training_data', help='Directory with all training data')
 
 # If this script is run from the command line and we're not yet running within
@@ -308,7 +321,7 @@ bpy.context.scene.GlimpseFixedClothes = cli_args.fixed_clothes
 bpy.context.scene.GlimpseSmoothCameraMovement = cli_args.smooth_camera_movement
 bpy.context.scene.GlimpseSmoothCameraFrequency = cli_args.smooth_camera_frequency
 bpy.context.scene.GlimpseAddedBackground = cli_args.added_background
-bpy.context.scene.GlimpseShowStats = cli_args.show_stats
+bpy.context.scene.GlimpseShowStats = True
 
 
 mocaps_dir = os.path.join(cli_args.training_data, 'mocap')
