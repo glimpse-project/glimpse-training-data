@@ -55,65 +55,75 @@ if as_blender_addon:
 else:
     parser = argparse.ArgumentParser(prog="glimpse-generator")
 
+subparsers = parser.add_subparsers(dest='subcommand')
+
 dt = datetime.datetime.today()
 date_str = "%04u-%02u-%02u-%02u-%02u-%02u" % (dt.year,
         dt.month, dt.day, dt.hour, dt.minute, dt.second)
 
-parser.add_argument('--dest', default=os.path.join(os.getcwd(), 'renders'), help='Directory to write files too')
-parser.add_argument('--name', default=date_str, help='Unique name for this render run')
-
-parser.add_argument('--start', type=int, default=20, help='Index of first MoCap to render')
-parser.add_argument('--end', default=25, type=int, help='Index of last MoCap to render')
-# TODO: support being able to give an explicit bvh name instead of --start/end
-
-parser.add_argument('-j', '--num-instances', type=int, default=1, help='Number of Blender instances to run for rendering')
-
-parser.add_argument('--config', help='Detailed configuration for the generator addon')
-
 parser.add_argument('--debug', action='store_true', help="Enable extra debug messages")
 parser.add_argument('--verbose', action='store_true', help="Enable more verbose debug messages")
 
-# TODO: turn these into mutually exclusive subcommands (+ add a 'render' command)
-parser.add_argument('--info', help='Load the mocap index and print summary information', action='store_true')
-parser.add_argument('--preload', help='Preload mocap files as actions before rendering', action='store_true')
-parser.add_argument('--purge', help='Purge mocap actions', action='store_true')
+parser.add_argument('--training-data', default=os.path.dirname(os.path.realpath(__file__)), help="Path to training data")
 
-parser.add_argument('--link', help='Link mocap actions', action='store_true')
-parser.add_argument('--mocap-library', default="//glimpse-training-mocap-library.blend", help='.blend file library with preloaded mocap actions (default //glimpse-training-mocap-library.blend)')
+parser_info = subparsers.add_parser('info', help='Load the mocap index and print summary information')
+parser_info.add_argument('--start', type=int, default=20, help='Index of first MoCap to render')
+parser_info.add_argument('--end', default=25, type=int, help='Index of last MoCap to render')
+
+parser_preload = subparsers.add_parser('preload', help='Preload mocap files as actions before rendering')
+parser_preload.add_argument('--start', type=int, default=20, help='Index of first MoCap to render')
+parser_preload.add_argument('--end', default=25, type=int, help='Index of last MoCap to render')
+
+parser_purge = subparsers.add_parser('purge', help='Purge mocap actions')
+parser_purge.add_argument('--start', type=int, default=20, help='Index of first MoCap to render')
+parser_purge.add_argument('--end', default=25, type=int, help='Index of last MoCap to render')
+
+parser_link = subparsers.add_parser('link', help='Link mocap actions')
+parser_link.add_argument('--mocap-library', default="//glimpse-training-mocap-library.blend", help='.blend file library with preloaded mocap actions (default //glimpse-training-mocap-library.blend)')
+parser_link.add_argument('--start', type=int, default=20, help='Index of first MoCap to render')
+parser_link.add_argument('--end', default=25, type=int, help='Index of last MoCap to render')
+
+parser_render = subparsers.add_parser('render', help='Render data')
+
+parser_render.add_argument('--dest', default=os.path.join(os.getcwd(), 'renders'), help='Directory to write files too')
+parser_render.add_argument('--name', default=date_str, help='Unique name for this render run')
+
+parser_render.add_argument('--config', help='Detailed configuration for the generator addon')
+parser_render.add_argument('--dry-run', help='Just print information without rendering', action='store_true')
 
 
-parser.add_argument('--dry-run', help='Just print information without rendering', action='store_true')
+parser_render.add_argument('--start', type=int, default=20, help='Index of first MoCap to render')
+parser_render.add_argument('--end', default=25, type=int, help='Index of last MoCap to render')
+# TODO: support being able to give an explicit bvh name instead of --start/end
 
+parser_render.add_argument('-j', '--num-instances', type=int, default=1, help='Number of Blender instances to run for rendering')
 
 # TODO: Move all of these into a .json config
-parser.add_argument('--tags-whitelist', default='all', help='A set of specified tags for index entries that will be rendered - needs to be comma separated (default \'all\')')
-parser.add_argument('--tags-blacklist', default='blacklist', help='A set of specified tags for index entries that will not be rendered - needs to be comma separated (default \'blacklist\')')
-parser.add_argument('--tags-skip', nargs='+', action='append', help='(random) tag-based percentage of frames to skip (default \'none\'). The tags and percentages need to be provided in a <tag>=<integer> format.') 
+parser_render.add_argument('--tags-whitelist', default='all', help='A set of specified tags for index entries that will be rendered - needs to be comma separated (default \'all\')')
+parser_render.add_argument('--tags-blacklist', default='blacklist', help='A set of specified tags for index entries that will not be rendered - needs to be comma separated (default \'blacklist\')')
+parser_render.add_argument('--tags-skip', nargs='+', action='append', help='(random) tag-based percentage of frames to skip (default \'none\'). The tags and percentages need to be provided in a <tag>=<integer> format.') 
 
-parser.add_argument('--width', default=320, type=int, help='Width, in pixels, of rendered frames (default 320)')
-parser.add_argument('--height', default=240, type=int, help='Height, in pixels, of rendered frames (default 240)')
-parser.add_argument('--vertical-fov', default=43.940769, type=float, help='Vertical field of view of camera (degrees, default = 43.94)')
-parser.add_argument('--min-camera-distance', default=2, type=float, help='Minimum distance of camera from person (meters, default 2m)')
-parser.add_argument('--max-camera-distance', default=2.5, type=float, help='Maximum distance of camera from person (meters, default 2.5m)')
-parser.add_argument('--min-camera-height', default=1.1, type=float, help='Minimum height of camera (meters, default 1.1m)')
-parser.add_argument('--max-camera-height', default=1.4, type=float, help='Maximum height of camera (meters, default 1.4m)')
-parser.add_argument('--min-camera-angle', default=-30, type=int, help='Min viewing angle deviation (measured from face-on direction, default=-30)')
-parser.add_argument('--max-camera-angle', default=0, type=int, help='Max viewing angle deviation (measured from face-on direction, default=0)')
-parser.add_argument('--fixed-camera', help='Lock camera in a fixed position using the specified min parameters', action='store_true')
-parser.add_argument('--debug-camera', help='Lock camera straight in front of a model in order to debug glimpse viewer', action='store_true')
-parser.add_argument('--smooth-camera-movement', help='Smooth camera movement (disable randomization of the camera position and orientation)', action='store_true')
-parser.add_argument('--smooth-camera-frequency', default=1, type=int, help='Period at which data is sampled when --smooth-camera-movement is enabled (frequency, default=1)')
-parser.add_argument('--focus-bone', default='pelvis', help='Bone in the armature the camera will focus on during renders (bone name in the armature, default=pelvis)')
+parser_render.add_argument('--width', default=320, type=int, help='Width, in pixels, of rendered frames (default 320)')
+parser_render.add_argument('--height', default=240, type=int, help='Height, in pixels, of rendered frames (default 240)')
+parser_render.add_argument('--vertical-fov', default=43.940769, type=float, help='Vertical field of view of camera (degrees, default = 43.94)')
+parser_render.add_argument('--min-camera-distance', default=2, type=float, help='Minimum distance of camera from person (meters, default 2m)')
+parser_render.add_argument('--max-camera-distance', default=2.5, type=float, help='Maximum distance of camera from person (meters, default 2.5m)')
+parser_render.add_argument('--min-camera-height', default=1.1, type=float, help='Minimum height of camera (meters, default 1.1m)')
+parser_render.add_argument('--max-camera-height', default=1.4, type=float, help='Maximum height of camera (meters, default 1.4m)')
+parser_render.add_argument('--min-camera-angle', default=-30, type=int, help='Min viewing angle deviation (measured from face-on direction, default=-30)')
+parser_render.add_argument('--max-camera-angle', default=0, type=int, help='Max viewing angle deviation (measured from face-on direction, default=0)')
+parser_render.add_argument('--fixed-camera', help='Lock camera in a fixed position using the specified min parameters', action='store_true')
+parser_render.add_argument('--debug-camera', help='Lock camera straight in front of a model in order to debug glimpse viewer', action='store_true')
+parser_render.add_argument('--smooth-camera-movement', help='Smooth camera movement (disable randomization of the camera position and orientation)', action='store_true')
+parser_render.add_argument('--smooth-camera-frequency', default=1, type=int, help='Period at which data is sampled when --smooth-camera-movement is enabled (frequency, default=1)')
+parser_render.add_argument('--focus-bone', default='pelvis', help='Bone in the armature the camera will focus on during renders (bone name in the armature, default=pelvis)')
 
-parser.add_argument('--skip-percentage', type=int, default=0, help='(random) percentage of frames to skip (default 0)')
-parser.add_argument('--clothing-step', type=int, default=5, help='randomize the clothing items every N frames (default 5)')
-parser.add_argument('--fixed-bodies', default='none', help='A set specified bodies to be used in all renders - needs to be comma separated (default \'none\')')
-parser.add_argument('--fixed-clothes', default='none', help='A set of specified clothes to be used in all renders - needs to be comma separated (default \'none\')')
-parser.add_argument('--added-background', help='Add background in a form of a floor and walls', action='store_true')
+parser_render.add_argument('--skip-percentage', type=int, default=0, help='(random) percentage of frames to skip (default 0)')
+parser_render.add_argument('--clothing-step', type=int, default=5, help='randomize the clothing items every N frames (default 5)')
+parser_render.add_argument('--fixed-bodies', default='none', help='A set specified bodies to be used in all renders - needs to be comma separated (default \'none\')')
+parser_render.add_argument('--fixed-clothes', default='none', help='A set of specified clothes to be used in all renders - needs to be comma separated (default \'none\')')
+parser_render.add_argument('--added-background', help='Add background in a form of a floor and walls', action='store_true')
 
-
-# TODO: add a --training-data argument that defaults to `os.path.getcwd()` or find path of script itself
-parser.add_argument('training_data', help='Directory with all training data')
 
 # If this script is run from the command line and we're not yet running within
 # Blender's Python environment then we will spawn Blender and tell it to
@@ -125,95 +135,136 @@ parser.add_argument('training_data', help='Directory with all training data')
 if not as_blender_addon:
     cli_args = parser.parse_args()
 
-    training_data = cli_args.training_data
-    name = cli_args.name
-    dest = cli_args.dest
+    blender_cmd = [
+            'blender', '-b',
+            os.path.join(cli_args.training_data, 'blender', 'glimpse-training.blend'),
+            '-P',
+            os.path.abspath(sys.argv[0]),
+            '--'] + sys.argv[1:]
 
-    n_mocaps = cli_args.end - cli_args.start
-    step = int(n_mocaps / cli_args.num_instances)
+    if cli_args.subcommand == 'render':
 
-    print("Rendering %d motion capture sequences with %d instance[s] of Blender" % (n_mocaps, cli_args.num_instances))
-    print("Each instance is rendering %d sequences" % step)
-    print("Path to training data is '%s'" % training_data)
-    print("Destination is '%s'" % dest)
+        if cli_args.dest == "":
+            sys.exit("--dest argument required in this case to find files to preload")
 
-    if step * cli_args.num_instances != n_mocaps:
-        sys.exit("Instance count of %d doesn't factor into count of %d motion capture sequences" %
-                 (cli_args.num_instances, n_mocaps))
+        if cli_args.skip_percentage < 0 or cli_args.skip_percentage > 100:
+            sys.exit("Skip percetange out of range [0,100]")
 
-    processes = []
-
-    n_frames = 0
-
-    for i in range(cli_args.num_instances):
-        if cli_args.num_instances > 1:
-            part_suffix = '-part-%d' % i
+        if cli_args.tags_skip is not None:
+            tags_skip = cli_args.tags_skip[0]
+            tags_skipped = ""
+            for skip_tag in tags_skip:
+                tag_data = skip_tag.split("=")
+                if int(tag_data[1]) > 100 or int(tag_data[1]) < 0:
+                    sys.exit("Skip percetange for '%s' tag out of range [0,100]" % tag_data[0])
+                else:
+                    tags_skipped += "%s=%s#" % (tag_data[0], tag_data[1])
         else:
-            part_suffix = ""
+            tags_skipped = ""
 
-        part_name = name + part_suffix
+        if cli_args.clothing_step <= 0 or cli_args.clothing_step > 1000:
+            sys.exit("Clothing step out of range [1,1000]")
 
-        start = cli_args.start + i * step
-        end = start + step
+        if cli_args.min_camera_angle < -180 or cli_args.min_camera_angle > 180:
+            sys.exit("Min viewing angle out of range [-180,180]]")
+        if cli_args.max_camera_angle < -180 or cli_args.max_camera_angle > 180:
+            sys.exit("Max viewing angle out of range [-180,180]]")
+        if not cli_args.fixed_camera and (cli_args.min_camera_angle >= cli_args.max_camera_angle):
+            sys.exit("Min viewing angle is higher than or equal to max viewing angle")
+        if not cli_args.fixed_camera and (cli_args.max_camera_angle <= cli_args.min_camera_angle):
+            sys.exit("Max viewing angle is less than or equal to min viewing angle")
+        if not cli_args.fixed_camera and (cli_args.max_camera_distance <= cli_args.min_camera_distance):
+            sys.exit("Maximum camera distance must be >= minimum camera distance")
+        if not cli_args.fixed_camera and (cli_args.max_camera_height <= cli_args.min_camera_height):
+            sys.exit("Maximum camera height must be >= minimum camera height")
 
-        instance_args = [
-                '--instance-overrides',
-                '--instance-start', str(start),
-                '--instance-end', str(end),
-                '--instance-name', part_name
-        ]
+        training_data = cli_args.training_data
+        name = cli_args.name
+        dest = cli_args.dest
 
-        print("Instance %d name: %s" % (i, part_name))
+        n_mocaps = cli_args.end - cli_args.start
+        step = int(n_mocaps / cli_args.num_instances)
 
-        instance_cmd = [
-                'blender', '-b',
-                os.path.join(cli_args.training_data, 'blender', 'glimpse-training.blend'),
-                '-P',
-                os.path.abspath(sys.argv[0]),
-                '--'] + sys.argv[1:] + instance_args
-        print("Blender instance " + str(i) + " command:  " + " ".join(instance_cmd))
+        print("Rendering %d motion capture sequences with %d instance[s] of Blender" % (n_mocaps, cli_args.num_instances))
+        print("Each instance is rendering %d sequences" % step)
+        print("Path to training data is '%s'" % training_data)
+        print("Destination is '%s'" % dest)
 
-        # We have some special case handling of dry-run when split across
-        # multiple instances since we really want some extra convenience
-        # for determining a total frame count
+        if step * cli_args.num_instances != n_mocaps:
+            sys.exit("Instance count of %d doesn't factor into count of %d motion capture sequences" %
+                     (cli_args.num_instances, n_mocaps))
+
+        processes = []
+
+        n_frames = 0
+
+        for i in range(cli_args.num_instances):
+            if cli_args.num_instances > 1:
+                part_suffix = '-part-%d' % i
+            else:
+                part_suffix = ""
+
+            part_name = name + part_suffix
+
+            start = cli_args.start + i * step
+            end = start + step
+
+            instance_args = [
+                    '--instance-overrides',
+                    '--instance-start', str(start),
+                    '--instance-end', str(end),
+                    '--instance-name', part_name
+            ]
+
+            print("Instance %d name: %s" % (i, part_name))
+
+            instance_cmd = blender_cmd + instance_args
+            print("Blender instance " + str(i) + " command:  " + " ".join(instance_cmd))
+
+            # We have some special case handling of dry-run when split across
+            # multiple instances since we really want some extra convenience
+            # for determining a total frame count
+            if cli_args.dry_run:
+                blender_output = subprocess.check_output(instance_cmd).decode('utf-8')
+                blender_lines = blender_output.splitlines()
+                found_frame_count = False
+                for line in blender_lines:
+                    if line.startswith("> DRY RUN FRAME COUNT:"):
+                        parts = line.split(":")
+                        frame_count = int(parts[1].strip())
+                        found_frame_count = True
+                        break
+                print(blender_output)
+                if found_frame_count:
+                    n_frames += frame_count
+            else:
+                log_filename = os.path.join(dest, part_name, 'render%s.log' % part_suffix)
+                print("Instance %d log: %s" % (i, log_filename))
+                os.makedirs(os.path.join(dest, part_name), exist_ok=True)
+                with open(log_filename, 'w') as fp:
+                    p = subprocess.Popen(instance_cmd, stdout=fp, stderr=fp)
+                    processes.append(p)
+
+        print("Waiting for all Blender instances to complete...")
+        print("")
+        status = 0
+        for p in processes:
+            if p.wait() != 0:
+                status = 1
+
         if cli_args.dry_run:
-            blender_output = subprocess.check_output(instance_cmd).decode('utf-8')
-            blender_lines = blender_output.splitlines()
-            found_frame_count = False
-            for line in blender_lines:
-                if line.startswith("> DRY RUN FRAME COUNT:"):
-                    parts = line.split(":")
-                    frame_count = int(parts[1].strip())
-                    found_frame_count = True
-                    break
-            print(blender_output)
-            if found_frame_count:
-                n_frames += frame_count
-        else:
-            log_filename = os.path.join(dest, part_name, 'render%s.log' % part_suffix)
-            print("Instance %d log: %s" % (i, log_filename))
-            os.makedirs(os.path.join(dest, part_name), exist_ok=True)
-            with open(log_filename, 'w') as fp:
-                p = subprocess.Popen(instance_cmd, stdout=fp, stderr=fp)
-                processes.append(p)
+            if n_frames:
+                print("Total frame count across all instances = %d" % n_frames)
+            print("")
+            print("NB: the frame count may double to ~ %d after running the " % (n_frames * 2))
+            print("image-pre-processor if flipping is enabled.")
+            print("")
 
-    print("Waiting for all Blender instances to complete...")
-    print("")
-    status = 0
-    for p in processes:
-        if p.wait() != 0:
-            status = 1
+        sys.exit(status)
 
-    if cli_args.dry_run:
-        if n_frames:
-            print("Total frame count across all instances = %d" % n_frames)
-        print("")
-        print("NB: the frame count may double to ~ %d after running the " % (n_frames * 2))
-        print("image-pre-processor if flipping is enabled.")
-        print("")
-
-    sys.exit(status)
-
+    elif not as_blender_addon:
+        status = subprocess.call(blender_cmd)
+        sys.exit(status)
 
 ##############################################################################
 # From this point on we can assume we are running withing Blender's Python
@@ -227,39 +278,6 @@ else:
     argv = []
 
 cli_args = parser.parse_args(argv)
-
-if cli_args.skip_percentage < 0 or cli_args.skip_percentage > 100:
-    sys.exit("Skip percetange out of range [0,100]")
-
-if cli_args.clothing_step <= 0 or cli_args.clothing_step > 1000:
-    sys.exit("Clothing step out of range [1,1000]")
-
-if cli_args.min_camera_angle < -180 or cli_args.min_camera_angle > 180:
-    sys.exit("Min viewing angle out of range [-180,180]]")
-if cli_args.max_camera_angle < -180 or cli_args.max_camera_angle > 180:
-    sys.exit("Max viewing angle out of range [-180,180]]")
-if not cli_args.fixed_camera and (cli_args.min_camera_angle >= cli_args.max_camera_angle):
-    sys.exit("Min viewing angle is higher than or equal to max viewing angle")
-if not cli_args.fixed_camera and (cli_args.max_camera_angle <= cli_args.min_camera_angle):
-    sys.exit("Max viewing angle is less than or equal to min viewing angle")
-if not cli_args.fixed_camera and (cli_args.max_camera_distance <= cli_args.min_camera_distance):
-    sys.exit("Maximum camera distance must be >= minimum camera distance")
-if not cli_args.fixed_camera and (cli_args.max_camera_height <= cli_args.min_camera_height):
-    sys.exit("Maximum camera height must be >= minimum camera height")
-
-tags_skipped = cli_args.tags_skip
-
-if cli_args.tags_skip is not None:
-    tags_skip = cli_args.tags_skip[0]
-    tags_skipped = ""
-    for skip_tag in tags_skip:
-        tag_data = skip_tag.split("=")
-        if int(tag_data[1]) > 100 or int(tag_data[1]) < 0:
-            sys.exit("Skip percetange for '%s' tag out of range [0,100]" % tag_data[0])
-        else:
-            tags_skipped += "%s=%s#" % (tag_data[0], tag_data[1])
-else:
-    tags_skipped = ""
 
 addon_dependencies = [
     'glimpse_data_generator',
@@ -285,18 +303,6 @@ if dep_error != "":
     print("\n")
     sys.exit(1)
 
-bpy.context.scene.GlimpseRenderWidth = cli_args.width
-bpy.context.scene.GlimpseRenderHeight = cli_args.height
-bpy.context.scene.GlimpseVerticalFOV = cli_args.vertical_fov
-
-bpy.context.scene.GlimpseMinCameraDistanceMM = int(cli_args.min_camera_distance * 1000)
-bpy.context.scene.GlimpseMaxCameraDistanceMM = int(cli_args.max_camera_distance * 1000)
-bpy.context.scene.GlimpseMinCameraHeightMM = int(cli_args.min_camera_height * 1000)
-bpy.context.scene.GlimpseMaxCameraHeightMM = int(cli_args.max_camera_height * 1000)
-bpy.context.scene.GlimpseMinViewingAngle = cli_args.min_camera_angle
-bpy.context.scene.GlimpseMaxViewingAngle= cli_args.max_camera_angle
-bpy.context.scene.GlimpseMocapLibrary = cli_args.mocap_library
-
 if cli_args.instance_overrides:
     bpy.context.scene.GlimpseBvhGenFrom = cli_args.instance_start
     bpy.context.scene.GlimpseBvhGenTo = cli_args.instance_end
@@ -304,25 +310,8 @@ else:
     bpy.context.scene.GlimpseBvhGenFrom = cli_args.start
     bpy.context.scene.GlimpseBvhGenTo = cli_args.end
 
-bpy.context.scene.GlimpseBvhTagsWhitelist = cli_args.tags_whitelist
-bpy.context.scene.GlimpseBvhTagsBlacklist = cli_args.tags_blacklist
-bpy.context.scene.GlimpseBvhTagsSkip = tags_skipped
-bpy.context.scene.GlimpseFocusBone = cli_args.focus_bone
-
 bpy.context.scene.GlimpseDebug = cli_args.debug
 bpy.context.scene.GlimpseVerbose = cli_args.verbose
-bpy.context.scene.GlimpseDryRun = cli_args.dry_run
-bpy.context.scene.GlimpseSkipPercentage = cli_args.skip_percentage
-bpy.context.scene.GlimpseClothingStep = cli_args.clothing_step
-bpy.context.scene.GlimpseFixedCamera = cli_args.fixed_camera
-bpy.context.scene.GlimpseDebugCamera = cli_args.debug_camera
-bpy.context.scene.GlimpseFixedBodies = cli_args.fixed_bodies
-bpy.context.scene.GlimpseFixedClothes = cli_args.fixed_clothes
-bpy.context.scene.GlimpseSmoothCameraMovement = cli_args.smooth_camera_movement
-bpy.context.scene.GlimpseSmoothCameraFrequency = cli_args.smooth_camera_frequency
-bpy.context.scene.GlimpseAddedBackground = cli_args.added_background
-bpy.context.scene.GlimpseShowStats = True
-
 
 mocaps_dir = os.path.join(cli_args.training_data, 'mocap')
 if not os.path.isdir(mocaps_dir):
@@ -333,54 +322,83 @@ bpy.context.scene.GlimpseBvhRoot = mocaps_dir
 
 bpy.ops.glimpse.open_bvh_index()
 
-if cli_args.info:
+if cli_args.subcommand == 'info':
     bpy.ops.glimpse.generator_info()
     bpy.ops.wm.quit_blender()
-
-if cli_args.preload:
+elif cli_args.subcommand == 'preload':
     bpy.ops.glimpse.generator_preload()
     print("Saving to %s" % bpy.context.blend_data.filepath)
     bpy.ops.wm.save_as_mainfile(filepath=bpy.context.blend_data.filepath)
     bpy.ops.wm.quit_blender()
-elif cli_args.link:
+elif cli_args.subcommand == 'link':
+    bpy.context.scene.GlimpseMocapLibrary = cli_args.mocap_library
+
     bpy.ops.glimpse.generator_link()
     print("Saving to %s" % bpy.context.blend_data.filepath)
     bpy.ops.wm.save_as_mainfile(filepath=bpy.context.blend_data.filepath)
     bpy.ops.wm.quit_blender()
-elif cli_args.purge:
+elif cli_args.subcommand == 'purge':
     bpy.ops.glimpse.purge_mocap_actions()
     print("Saving to %s" % bpy.context.blend_data.filepath)
     bpy.ops.wm.save_as_mainfile(filepath=bpy.context.blend_data.filepath)
     bpy.ops.wm.quit_blender()
+elif cli_args.subcommand == 'render':
 
-if cli_args.dest == "":
-    print("--dest argument required in this case to find files to preload")
-    bpy.ops.wm.quit_blender()
+    bpy.context.scene.GlimpseDataRoot = cli_args.dest
+    print("DataRoot: " + cli_args.dest)
 
-bpy.context.scene.GlimpseDataRoot = cli_args.dest
-print("DataRoot: " + cli_args.dest)
+    bpy.context.scene.GlimpseDryRun = cli_args.dry_run
 
-if cli_args.instance_overrides:
-    render_name = cli_args.instance_name
-else:
-    render_name = cli_args.name
+    bpy.context.scene.GlimpseSkipPercentage = cli_args.skip_percentage
+    bpy.context.scene.GlimpseBvhTagsWhitelist = cli_args.tags_whitelist
+    bpy.context.scene.GlimpseBvhTagsBlacklist = cli_args.tags_blacklist
+    bpy.context.scene.GlimpseBvhTagsSkip = tags_skipped
 
-if render_name == "":
-    print("--name argument required in this case to determine where to write results")
-    bpy.ops.wm.quit_blender()
-bpy.context.scene.GlimpseGenDir = render_name
+    bpy.context.scene.GlimpseRenderWidth = cli_args.width
+    bpy.context.scene.GlimpseRenderHeight = cli_args.height
+    bpy.context.scene.GlimpseVerticalFOV = cli_args.vertical_fov
 
-print("Rendering Info:")
-print("Name: " + render_name)
-print("Dest: " + bpy.context.scene.GlimpseDataRoot)
+    bpy.context.scene.GlimpseMinCameraDistanceMM = int(cli_args.min_camera_distance * 1000)
+    bpy.context.scene.GlimpseMaxCameraDistanceMM = int(cli_args.max_camera_distance * 1000)
+    bpy.context.scene.GlimpseMinCameraHeightMM = int(cli_args.min_camera_height * 1000)
+    bpy.context.scene.GlimpseMaxCameraHeightMM = int(cli_args.max_camera_height * 1000)
+    bpy.context.scene.GlimpseMinViewingAngle = cli_args.min_camera_angle
+    bpy.context.scene.GlimpseMaxViewingAngle= cli_args.max_camera_angle
 
+    bpy.context.scene.GlimpseFixedCamera = cli_args.fixed_camera
+    bpy.context.scene.GlimpseDebugCamera = cli_args.debug_camera
+    bpy.context.scene.GlimpseSmoothCameraMovement = cli_args.smooth_camera_movement
+    bpy.context.scene.GlimpseSmoothCameraFrequency = cli_args.smooth_camera_frequency
+    bpy.context.scene.GlimpseFocusBone = cli_args.focus_bone
 
-if not cli_args.dry_run:
-    import cProfile
-    cProfile.run("bpy.ops.glimpse.generate_data()", os.path.join(cli_args.dest, render_name, "glimpse-" + render_name + ".prof"))
+    bpy.context.scene.GlimpseClothingStep = cli_args.clothing_step
+    bpy.context.scene.GlimpseFixedBodies = cli_args.fixed_bodies
+    bpy.context.scene.GlimpseFixedClothes = cli_args.fixed_clothes
 
-    import pstats
-    p = pstats.Stats(os.path.join(cli_args.dest, render_name, "glimpse-" + render_name + ".prof"))
-    p.sort_stats("cumulative").print_stats(20)
-else:
-    bpy.ops.glimpse.generate_data()
+    bpy.context.scene.GlimpseAddedBackground = cli_args.added_background
+
+    bpy.context.scene.GlimpseShowStats = True
+
+    if cli_args.instance_overrides:
+        render_name = cli_args.instance_name
+    else:
+        render_name = cli_args.name
+
+    if render_name == "":
+        print("--name argument required in this case to determine where to write results")
+        bpy.ops.wm.quit_blender()
+    bpy.context.scene.GlimpseGenDir = render_name
+
+    print("Rendering Info:")
+    print("Name: " + render_name)
+    print("Dest: " + bpy.context.scene.GlimpseDataRoot)
+
+    if not cli_args.dry_run:
+        import cProfile
+        cProfile.run("bpy.ops.glimpse.generate_data()", os.path.join(cli_args.dest, render_name, "glimpse-" + render_name + ".prof"))
+
+        import pstats
+        p = pstats.Stats(os.path.join(cli_args.dest, render_name, "glimpse-" + render_name + ".prof"))
+        p.sort_stats("cumulative").print_stats(20)
+    else:
+        bpy.ops.glimpse.generate_data()
