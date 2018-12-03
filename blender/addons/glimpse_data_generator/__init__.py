@@ -1226,13 +1226,11 @@ def load_mocap_index(optional_op=None):
 
             if 'tags' not in bvh:
                 bvh['tags'] = { 'unknown' }
-            else:
-                for tag in bvh['tags']:
-                    if tag not in bvh_index_tags:
-                        bvh_index_tags[tag] = 1
-                    else:
-                        bvh_index_tags[tag] += 1
-                        
+                                    
+            # So we can start to just use tag-based blacklisting...
+            if bvh['blacklist'] and 'blacklist' not in bvh['tags']:
+                bvh['tags']['blacklist'] = 1
+
             if 'start' not in bvh:
                 bvh['start'] = 1
 
@@ -1253,6 +1251,14 @@ def load_mocap_index(optional_op=None):
                 else:
                     #print("WARNING: just assuming mocap has < 1000 frames since action wasn't preloaded")
                     bvh['end'] = 1000
+
+            # Collect some stats about the bvh tags as we build the
+            # index...
+            for tag in bvh['tags']:
+                if tag not in bvh_index_tags:
+                    bvh_index_tags[tag] = 1
+                else:
+                    bvh_index_tags[tag] += 1
 
     except IOError as e:
         if optional_op != None:
