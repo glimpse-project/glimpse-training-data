@@ -1203,7 +1203,7 @@ def ntpath_to_os(path):
     elems = path.split('\\')
     return os.path.join(*elems)
 
-def load_mocap_index():
+def load_mocap_index(optional_op=None):
 
     bvh_index = []
 
@@ -1255,7 +1255,8 @@ def load_mocap_index():
                     bvh['end'] = 1000
 
     except IOError as e:
-        self.report({'INFO'}, str(e))
+        if optional_op != None:
+            optional_op.report({'INFO'}, str(e))
 
     return bvh_index
 
@@ -1448,7 +1449,7 @@ class VIEW3D_MoCap_OpenBvhIndexButton(bpy.types.Operator):
         context.scene.layers = pose_obj.layers
         context.scene.objects.active = pose_obj
 
-        bvh_index = load_mocap_index()
+        bvh_index = load_mocap_index(self)
 
         if len(bvh_index) > 0:
             if bvh_index[0]['blacklist']:
