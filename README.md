@@ -38,14 +38,16 @@ cd blender
 Pre-load mocap data:
 ```
 ./glimpse-generator.py \
+    preload \
     --start 20 \
-    --end 25 \
-    --preload \
-    .
+    --end 25
 ```
 Render training data:
 ```
 glimpse-generator.py \
+    render \
+    --dest ./renders \
+    --name "test-render"
     --start 20 \
     --end 25 \
     --width 320 \
@@ -56,10 +58,7 @@ glimpse-generator.py \
     --min-camera-distance 2 \
     --max-camera-distance 2.5 \
     --min-camera-angle -30 \
-    --max-camera-angle 0 \
-    --dest ./renders \
-    --name "test-render" \
-    .
+    --max-camera-angle 0
 ```
 Note: `--min-camera-angle` and `--max-camera-angle` accept values within range [-180, 180].
 
@@ -123,6 +122,7 @@ and fixed choice of body mesh and clothing...
 
 ```
 ./glimpse-generator.py \
+    render \
     --dest ./renders \
     --name test-recording \
     --start 20 \
@@ -135,9 +135,7 @@ and fixed choice of body mesh and clothing...
     --min-camera-angle -30 \
     --fixed-bodies Man0 \
     --fixed-clothes "m_trousers_01" \
-    --added-background \
-    --show-stats \
-    .
+    --added-background
 ```
 
 Then run the pre-processor to apply camera sensor noise:
@@ -254,7 +252,7 @@ Under User Preferences -> Addons now enable these Addons:
 First, you need to have unpacked the mocap data via `./unpack.sh` and installed the
 required Blender addons as described above.
 
-You can get some help with running glimpse-cli.py by running like:
+You can get some help with running glimpse-generator.py by running like:
 
 ```
 ./glimpse-generator.py --help
@@ -262,8 +260,8 @@ You can get some help with running glimpse-cli.py by running like:
 
 Here it's good to understand that `mocap/index.json` is an index of all the
 different `.bvh` mocap files under the `mocap/` directory. The file lets us
-blacklist certain files or specify overrides for how they should be handled when
-rendering.
+blacklist certain files, tag files for filtering or specify overrides for
+how they should be handled when rendering.
 
 Before the `glimpse_data_generator` addon can be used to render, it requires
 there to be some number of pre-loaded motion capture animations. We pre-load
@@ -280,10 +278,9 @@ A small number of motion capture files can be pre-loaded as follows:
 
 ```
 ./glimpse-generator.py \
+    preload \
     --start 20 \
-    --end 25 \
-    --preload \
-    .
+    --end 25
 ```
 
 # Render Training Images
@@ -299,6 +296,9 @@ A small number of images can be rendered as follows:
 
 ```
 ./glimpse-generator.py \
+    render \
+    --dest ./renders \
+    --name "test-render" \
     --start 20 \
     --end 25 \
     --width 320 \
@@ -309,10 +309,7 @@ A small number of images can be rendered as follows:
     --min-camera-distance 2 \
     --max-camera-distance 2.5 \
     --min-camera-angle -30 \
-    --max-camera-angle 0 \
-    --dest ./renders \
-    --name "test-render" \
-    .
+    --max-camera-angle 0
 ```
 Note: `--min-camera-angle` and `--max-camera-angle` accept values within range [-180, 180].
 
