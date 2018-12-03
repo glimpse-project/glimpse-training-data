@@ -315,8 +315,6 @@ if not os.path.isdir(mocaps_dir):
     sys.exit(1)
 bpy.context.scene.GlimpseBvhRoot = mocaps_dir
 
-bpy.ops.glimpse.open_bvh_index()
-
 if cli_args.subcommand == 'info':
     bpy.ops.glimpse.generator_info()
     bpy.ops.wm.quit_blender()
