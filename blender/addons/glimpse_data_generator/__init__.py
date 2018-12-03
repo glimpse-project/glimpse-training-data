@@ -501,7 +501,7 @@ class GeneratorOperator(bpy.types.Operator):
                 self.report({'INFO'}, "skipping blacklisted")
                 return 
             
-            if bvh['tags'] != 'unknown':    
+            if bvh['tags'] != 'unknown':
                 tags_blacklist = bpy.context.scene.GlimpseBvhTagsBlacklist
                 tags_blacklist = tags_blacklist.split(",")            
                 
