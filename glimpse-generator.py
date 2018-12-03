@@ -152,15 +152,10 @@ if not as_blender_addon:
 
         if cli_args.tags_skip is not None:
             tags_skip = cli_args.tags_skip[0]
-            tags_skipped = ""
             for skip_tag in tags_skip:
                 tag_data = skip_tag.split("=")
                 if int(tag_data[1]) > 100 or int(tag_data[1]) < 0:
                     sys.exit("Skip percetange for '%s' tag out of range [0,100]" % tag_data[0])
-                else:
-                    tags_skipped += "%s=%s#" % (tag_data[0], tag_data[1])
-        else:
-            tags_skipped = ""
 
         if cli_args.clothing_step <= 0 or cli_args.clothing_step > 1000:
             sys.exit("Clothing step out of range [1,1000]")
@@ -352,6 +347,16 @@ elif cli_args.subcommand == 'render':
     bpy.context.scene.GlimpseSkipPercentage = cli_args.skip_percentage
     bpy.context.scene.GlimpseBvhTagsWhitelist = cli_args.tags_whitelist
     bpy.context.scene.GlimpseBvhTagsBlacklist = cli_args.tags_blacklist
+
+    if cli_args.tags_skip is not None:
+        tags_skip = cli_args.tags_skip[0]
+        tags_skipped = ""
+        for skip_tag in tags_skip:
+            tag_data = skip_tag.split("=")
+            tags_skipped += "%s=%s#" % (tag_data[0], tag_data[1])
+    else:
+        tags_skipped = ""
+
     bpy.context.scene.GlimpseBvhTagsSkip = tags_skipped
 
     bpy.context.scene.GlimpseRenderWidth = cli_args.width
