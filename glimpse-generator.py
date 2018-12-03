@@ -140,7 +140,7 @@ if not as_blender_addon:
             os.path.join(cli_args.training_data, 'blender', 'glimpse-training.blend'),
             '-P',
             os.path.abspath(sys.argv[0]),
-            '--'] + sys.argv[1:]
+            '--']
 
     if cli_args.subcommand == 'render':
 
@@ -218,7 +218,7 @@ if not as_blender_addon:
 
             print("Instance %d name: %s" % (i, part_name))
 
-            instance_cmd = blender_cmd + instance_args
+            instance_cmd = blender_cmd + instance_args + sys.argv[1:]
             print("Blender instance " + str(i) + " command:  " + " ".join(instance_cmd))
 
             # We have some special case handling of dry-run when split across
@@ -263,7 +263,7 @@ if not as_blender_addon:
         sys.exit(status)
 
     elif not as_blender_addon:
-        status = subprocess.call(blender_cmd)
+        status = subprocess.call(blender_cmd + sys.argv[1:])
         sys.exit(status)
 
 ##############################################################################
