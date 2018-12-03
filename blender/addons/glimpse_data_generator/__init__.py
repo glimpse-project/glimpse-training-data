@@ -1371,7 +1371,6 @@ class VIEW3D_MoCap_MainPanel(bpy.types.Panel):
         scn = context.scene
 
         layout.prop(scn, "GlimpseBvhRoot", text="Root Dir")
-        #layout.operator("glimpse.scan_bvh_files")
         layout.operator("glimpse.open_bvh_index")
         layout.separator()        
         row = layout.row()
@@ -1461,35 +1460,6 @@ class VIEW3D_MoCap_OpenBvhIndexButton(bpy.types.Operator):
             if bvh_index[0]['blacklist']:
                 skip_to_next_bvh(self)
             switch_current_bvh_state(self)
-
-        return {"FINISHED"}
-
-class VIEW3D_MoCap_BvhScanButton(bpy.types.Operator):
-    bl_idname = "glimpse.scan_bvh_files"
-    bl_label = "Scan for un-indexed .bvh files"
-
-    def execute(self, context):
-        global bvh_index
-        global bvh_index_pos
-
-        for root, dirs, files in os.walk(bpy.path.abspath(bpy.context.scene.GlimpseBvhRoot)):
-            relroot = os.path.relpath(root, bpy.path.abspath(bpy.context.scene.GlimpseBvhRoot))
-            for file in files:
-                if file[-4:] != ".bvh":
-                    continue
-
-                filename = os.path.join(relroot, file)
-
-                # no matter what OS we're using we want consistent filename
-                # indexing conventions
-                filename = ntpath.normpath(filename)
-                filename = ntpath.normcase(filename)
-                if filename not in bvh_file_index:
-                    new_bvh_state = { 'file': filename, 'start': 1 }
-                    bvh_index.append(new_bvh_state)
-                    bvh_file_index[filename] = new_bvh_state
-
-                    self.report({'INFO'}, "ADD: " + filename)
 
         return {"FINISHED"}
 
@@ -1638,7 +1608,7 @@ class VIEW3D_MoCap_CancelNewTagButton(bpy.types.Operator):
         return {"FINISHED"}
 
 class VIEW3D_MoCap_BlacklistButton(bpy.types.Operator):
-    bl_idname = "glimpse.scan_bvh_files"
+    bl_idname = "glimpse.blacklist_bvh"
     bl_label = "Index BVH Files"
 
     def execute(self, context):
