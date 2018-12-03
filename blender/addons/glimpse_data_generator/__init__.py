@@ -1211,10 +1211,6 @@ def load_mocap_index():
         with open(bpy.path.abspath(os.path.join(bpy.context.scene.GlimpseBvhRoot, "index.json"))) as fp:
             bvh_index = json.load(fp)
 
-        # early version might have indexed non-bvh files...
-        keep = [bvh for bvh in bvh_index if bvh['file'][-4:] == '.bvh']
-        bvh_index = keep
-
         bpy.types.Scene.GlimpseBvhIndexPos[1]['max'] = max(0, len(bvh_index) - 1)
        
         # we want to clear all index tags on load 
