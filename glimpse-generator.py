@@ -298,15 +298,15 @@ if dep_error != "":
     print("\n")
     sys.exit(1)
 
+bpy.context.scene.GlimpseDebug = cli_args.debug
+bpy.context.scene.GlimpseVerbose = cli_args.verbose
+
 if cli_args.instance_overrides:
     bpy.context.scene.GlimpseBvhGenFrom = cli_args.instance_start
     bpy.context.scene.GlimpseBvhGenTo = cli_args.instance_end
 else:
     bpy.context.scene.GlimpseBvhGenFrom = cli_args.start
     bpy.context.scene.GlimpseBvhGenTo = cli_args.end
-
-bpy.context.scene.GlimpseDebug = cli_args.debug
-bpy.context.scene.GlimpseVerbose = cli_args.verbose
 
 mocaps_dir = os.path.join(cli_args.training_data, 'mocap')
 if not os.path.isdir(mocaps_dir):
