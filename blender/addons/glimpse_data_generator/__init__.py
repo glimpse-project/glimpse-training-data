@@ -1613,6 +1613,7 @@ class VIEW3D_MoCap_BlacklistButton(bpy.types.Operator):
 
     def execute(self, context):
         bvh_index[bvh_index_pos]['blacklist': True]
+        bvh_index[bvh_index_pos]['tags']['blacklist'] = 1
 
 class VIEW3D_MoCap_FilterTag(bpy.types.Operator):
     bl_idname = "glimpse.filter_tag"
