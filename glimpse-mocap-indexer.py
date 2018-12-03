@@ -257,11 +257,14 @@ with open(args.index_filename, 'r+') as fp:
         if end == 0:
             end = len(index)
 
-        i = 0
-        for entry in index[args.start:end]:
+        for i in range(args.start, end):
+            entry = index[i]
+
             blacklisted=False
             if 'blacklist' in entry:
-                blacklisted=entry['blacklist']
+                blacklisted = entry['blacklist']
+            if 'blacklist' in entry['tags']:
+                blacklisted = True
 
             if args.blacklisted and not blacklisted:
                 continue
@@ -269,51 +272,50 @@ with open(args.index_filename, 'r+') as fp:
             if args.non_blacklisted and blacklisted:
                 continue
 
-            if args.with_tag:
-                tags_match=True
-                for with_tag in args.with_tag:
-                    if with_tag not in entry['tags']:
-                        tags_match=False
-                        break
-                if not tags_match:
+            tags_whitelist = args.with_tag
+            if tags_whitelist:
+                matched_whitelist=False
+                if 'tags' in entry:
+                    for tag in tags_whitelist:
+                        if tag in entry['tags']:
+                            matched_whitelist=True
+                            break
+                if not matched_whitelist:
                     continue
 
-            if args.without_tag:
-                tags_match=True
-                for without_tag in args.without_tag:
-                    if without_tag in entry['tags']:
-                        tags_match=False
-                        break
-                if not tags_match:
+            tags_blacklist = args.without_tag
+            if tags_blacklist:
+                matched_blacklist=False
+                if 'tags' in entry:
+                    for tag in tags_blacklist:
+                        if tag in entry['tags']:
+                            matched_blacklist=True
+                            break
+                if matched_blacklist:
                     continue
-
-            if 'name' in entry:
-                match_name=entry['name']
-            else:
-                match_name=entry['file']
-
-            if args.match == None and args.file_match == None:
-                matched = True
-            else:
-                matched = False
 
             if args.match:
                 if 'name' not in entry:
                     continue
+                matched_name=False
                 for match in args.match:
                     if fnmatch.fnmatch(entry['name'], match):
-                        matched = True
+                        matched_name = True
                         break
-            if args.file_match and matched == False:
+                if not matched_name:
+                    continue
+
+            if args.file_match:
+                matched_filename=False
                 for match in args.file_match:
                     norm_match = normalize_path(match)
                     if fnmatch.fnmatch(entry['file'], norm_match):
-                        matched = True
+                        matched_filename = True
                         break
+                if not matched_filename:
+                    continue
 
-            if matched:
-                process_entry(entry, args.start + i)
-
+            process_entry(entry, args.start + i)
             i+=1
 
     if not args.dry_run:
