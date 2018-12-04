@@ -66,22 +66,30 @@ parser.add_argument('--verbose', action='store_true', help="Enable more verbose 
 
 parser.add_argument('--training-data', default=os.path.dirname(os.path.realpath(__file__)), help="Path to training data")
 
+
 parser_info = subparsers.add_parser('info', help='Load the mocap index and print summary information')
 parser_info.add_argument('--start', type=int, default=20, help='Index of first MoCap to render')
 parser_info.add_argument('--end', default=25, type=int, help='Index of last MoCap to render')
 
+
 parser_preload = subparsers.add_parser('preload', help='Preload mocap files as actions before rendering')
 parser_preload.add_argument('--start', type=int, default=20, help='Index of first MoCap to render')
 parser_preload.add_argument('--end', default=25, type=int, help='Index of last MoCap to render')
+parser_preload.add_argument('--dry-run', help="Don't save the results", action='store_true')
+
 
 parser_purge = subparsers.add_parser('purge', help='Purge mocap actions')
 parser_purge.add_argument('--start', type=int, default=20, help='Index of first MoCap to render')
 parser_purge.add_argument('--end', default=25, type=int, help='Index of last MoCap to render')
+parser_purge.add_argument('--dry-run', help="Don't save the results", action='store_true')
+
 
 parser_link = subparsers.add_parser('link', help='Link mocap actions')
 parser_link.add_argument('--mocap-library', default="//glimpse-training-mocap-library.blend", help='.blend file library with preloaded mocap actions (default //glimpse-training-mocap-library.blend)')
 parser_link.add_argument('--start', type=int, default=20, help='Index of first MoCap to render')
 parser_link.add_argument('--end', default=25, type=int, help='Index of last MoCap to render')
+parser_link.add_argument('--dry-run', help="Don't save the results", action='store_true')
+
 
 parser_render = subparsers.add_parser('render', help='Render data')
 
@@ -320,20 +328,22 @@ if cli_args.subcommand == 'info':
     bpy.ops.wm.quit_blender()
 elif cli_args.subcommand == 'preload':
     bpy.ops.glimpse.generator_preload()
-    print("Saving to %s" % bpy.context.blend_data.filepath)
-    bpy.ops.wm.save_as_mainfile(filepath=bpy.context.blend_data.filepath)
+    if not cli_args.dry_run:
+        print("Saving to %s" % bpy.context.blend_data.filepath)
+        bpy.ops.wm.save_as_mainfile(filepath=bpy.context.blend_data.filepath)
     bpy.ops.wm.quit_blender()
 elif cli_args.subcommand == 'link':
     bpy.context.scene.GlimpseMocapLibrary = cli_args.mocap_library
-
     bpy.ops.glimpse.generator_link()
-    print("Saving to %s" % bpy.context.blend_data.filepath)
-    bpy.ops.wm.save_as_mainfile(filepath=bpy.context.blend_data.filepath)
+    if not cli_args.dry_run:
+        print("Saving to %s" % bpy.context.blend_data.filepath)
+        bpy.ops.wm.save_as_mainfile(filepath=bpy.context.blend_data.filepath)
     bpy.ops.wm.quit_blender()
 elif cli_args.subcommand == 'purge':
     bpy.ops.glimpse.purge_mocap_actions()
-    print("Saving to %s" % bpy.context.blend_data.filepath)
-    bpy.ops.wm.save_as_mainfile(filepath=bpy.context.blend_data.filepath)
+    if not cli_args.dry_run:
+        print("Saving to %s" % bpy.context.blend_data.filepath)
+        bpy.ops.wm.save_as_mainfile(filepath=bpy.context.blend_data.filepath)
     bpy.ops.wm.quit_blender()
 elif cli_args.subcommand == 'render':
 
