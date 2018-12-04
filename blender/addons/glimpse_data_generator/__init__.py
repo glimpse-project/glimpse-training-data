@@ -467,16 +467,12 @@ class GeneratorPurgeActionsOperator(bpy.types.Operator):
 
     def execute(self, context):
 
-        print("Number of indexed motion capture files = %d" % len(bvh_index))
+        filtered_index = load_filtered_mocap_index(self, force_filter_blacklisted=True)
 
-        start = bpy.context.scene.GlimpseBvhGenFrom
-        end = bpy.context.scene.GlimpseBvhGenTo
+        for bvh_state in filtered_index:
+            bvh_name = bvh_state['name']
 
-        for i in range(start, end):
-            bvh = bvh_index[i]
-            bvh_name = bvh['name']
             action_name = 'Base%s' % bvh_name
-
             if action_name in bpy.data.actions:
                 action = bpy.data.actions[action_name]
                 action.use_fake_user = False
