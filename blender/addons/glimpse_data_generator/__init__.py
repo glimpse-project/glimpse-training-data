@@ -505,7 +505,7 @@ class GeneratorPreLoadOperator(bpy.types.Operator):
                 base_pose_obj = bpy.data.objects['BasePoseObject']
                 bpy.context.scene.objects.active = base_pose_obj
 
-                load_bvh_file(bvh)
+                load_bvh_file(bvh_state)
 
         return {'FINISHED'}
 
