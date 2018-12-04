@@ -91,7 +91,7 @@ class BvhIndex:
     filename_map = {}
     tag_count = {}
 
-    def __init__(self, filename):
+    def __init__(self, optional_op, filename):
         self.index = []
         self.filename_map = {}
         self.tag_count = {}
@@ -168,7 +168,7 @@ class BvhIndex:
 
 def load_mocap_index(optional_op=None):
     index_filename = bpy.path.abspath(os.path.join(bpy.context.scene.GlimpseBvhRoot, "index.json"))
-    return BvhIndex(index_filename)
+    return BvhIndex(optional_op, index_filename)
 
 
 class BvhFilteredIndex:
@@ -494,6 +494,7 @@ class GeneratorLinkMocapsOperator(bpy.types.Operator):
 
         filtered_index = load_filtered_mocap_index(self, force_filter_blacklisted=True)
 
+        filepath = bpy.context.scene.GlimpseMocapLibrary
         with bpy.data.libraries.load(filepath, link=True) as (data_from, data_to):
             names = []
 
