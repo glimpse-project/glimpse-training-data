@@ -40,15 +40,17 @@ try:
     import bpy
     import addon_utils
     as_blender_addon = True
-except:
+except ModuleNotFoundError:
     as_blender_addon = False
 
 if as_blender_addon:
     parser = argparse.ArgumentParser(prog="glimpse-generator", add_help=False)
-    parser.add_argument('--help-glimpse', help='Show this help message and exit', action='help')
+    parser.add_argument('--help-glimpse',
+                        help='Show this help message and exit', action='help')
     # used to override --name/start/end if we split the user's given start/end
     # range across multiple Blender instances...
-    parser.add_argument('--instance-overrides', action='store_true', help=argparse.SUPPRESS)
+    parser.add_argument('--instance-overrides',
+                        action='store_true', help=argparse.SUPPRESS)
     parser.add_argument('--instance-name', help=argparse.SUPPRESS)
     parser.add_argument('--instance-start', type=int, help=argparse.SUPPRESS)
     parser.add_argument('--instance-end', type=int, help=argparse.SUPPRESS)
@@ -58,58 +60,86 @@ else:
 subparsers = parser.add_subparsers(dest='subcommand')
 
 dt = datetime.datetime.today()
-date_str = "%04u-%02u-%02u-%02u-%02u-%02u" % (dt.year,
-        dt.month, dt.day, dt.hour, dt.minute, dt.second)
+date_str = "%04u-%02u-%02u-%02u-%02u-%02u" % (dt.year, dt.month, dt.day,
+                                              dt.hour, dt.minute, dt.second)
 
-parser.add_argument('--debug', action='store_true', help="Enable extra debug messages")
-parser.add_argument('--verbose', action='store_true', help="Enable more verbose debug messages")
+parser.add_argument('--debug', action='store_true',
+                    help="Enable extra debug messages")
+parser.add_argument('--verbose', action='store_true',
+                    help="Enable more verbose debug messages")
 
-parser.add_argument('--training-data', default=os.path.dirname(os.path.realpath(__file__)), help="Path to training data")
+parser.add_argument('--training-data',
+                    default=os.path.dirname(os.path.realpath(__file__)),
+                    help="Path to training data")
 
 
-parser_info = subparsers.add_parser('info', help='Load the mocap index and print summary information')
-parser_info.add_argument('--start', type=int, default=20, help='Index of first MoCap to render')
-parser_info.add_argument('--end', default=25, type=int, help='Index of last MoCap to render')
+parser_info = subparsers.add_parser(
+    'info', help='Load the mocap index and print summary information')
+parser_info.add_argument('--start', type=int, default=20,
+                         help='Index of first MoCap to render')
+parser_info.add_argument('--end', default=25, type=int,
+                         help='Index of last MoCap to render')
 
 
-parser_preload = subparsers.add_parser('preload', help='Preload mocap files as actions before rendering')
-parser_preload.add_argument('--start', type=int, default=20, help='Index of first MoCap to render')
-parser_preload.add_argument('--end', default=25, type=int, help='Index of last MoCap to render')
-parser_preload.add_argument('--dry-run', help="Don't save the results", action='store_true')
+parser_preload = subparsers.add_parser(
+    'preload', help='Preload mocap files as actions before rendering')
+parser_preload.add_argument('--start', type=int, default=20,
+                            help='Index of first MoCap to render')
+parser_preload.add_argument('--end', default=25, type=int,
+                            help='Index of last MoCap to render')
+parser_preload.add_argument('--dry-run',
+                            help="Don't save the results", action='store_true')
 
 
 parser_purge = subparsers.add_parser('purge', help='Purge mocap actions')
-parser_purge.add_argument('--start', type=int, default=20, help='Index of first MoCap to render')
-parser_purge.add_argument('--end', default=25, type=int, help='Index of last MoCap to render')
-parser_purge.add_argument('--dry-run', help="Don't save the results", action='store_true')
+parser_purge.add_argument('--start', type=int, default=20,
+                          help='Index of first MoCap to render')
+parser_purge.add_argument('--end', default=25, type=int,
+                          help='Index of last MoCap to render')
+parser_purge.add_argument('--dry-run',
+                          help="Don't save the results", action='store_true')
 
 
 parser_link = subparsers.add_parser('link', help='Link mocap actions')
-parser_link.add_argument('--mocap-library', default="//glimpse-training-mocap-library.blend", help='.blend file library with preloaded mocap actions (default //glimpse-training-mocap-library.blend)')
-parser_link.add_argument('--start', type=int, default=20, help='Index of first MoCap to render')
-parser_link.add_argument('--end', default=25, type=int, help='Index of last MoCap to render')
-parser_link.add_argument('--dry-run', help="Don't save the results", action='store_true')
+parser_link.add_argument('--mocap-library',
+                         default="//glimpse-training-mocap-library.blend",
+                         help='.blend file library with preloaded mocap actions'
+                              ' (default //glimpse-training-mocap-library.blend)')
+parser_link.add_argument('--start', type=int, default=20,
+                         help='Index of first MoCap to render')
+parser_link.add_argument('--end', default=25, type=int,
+                         help='Index of last MoCap to render')
+parser_link.add_argument('--dry-run',
+                         help="Don't save the results", action='store_true')
 
 
 parser_render = subparsers.add_parser('render', help='Render data')
 
-parser_render.add_argument('--dest', default=os.path.join(os.getcwd(), 'renders'), help='Directory to write files too')
-parser_render.add_argument('--name', default=date_str, help='Unique name for this render run')
+parser_render.add_argument('--dest', default=os.path.join(os.getcwd(), 'renders'),
+                           help='Directory to write files too')
+parser_render.add_argument('--name', default=date_str,
+                           help='Unique name for this render run')
 
-parser_render.add_argument('--config', help='Detailed configuration for the generator addon')
-parser_render.add_argument('--dry-run', help='Just print information without rendering', action='store_true')
+parser_render.add_argument('--config',
+                           help='Detailed configuration for the generator addon')
+parser_render.add_argument('--dry-run',
+                           help='Just print information without rendering',
+                           action='store_true')
 
 
-parser_render.add_argument('--start', type=int, default=20, help='Index of first MoCap to render')
-parser_render.add_argument('--end', default=25, type=int, help='Index of last MoCap to render')
+parser_render.add_argument('--start', type=int, default=20,
+                           help='Index of first MoCap to render')
+parser_render.add_argument('--end', default=25, type=int,
+                           help='Index of last MoCap to render')
 # TODO: support being able to give an explicit bvh name instead of --start/end
 
-parser_render.add_argument('-j', '--num-instances', type=int, default=1, help='Number of Blender instances to run for rendering')
+parser_render.add_argument('-j', '--num-instances', type=int, default=1,
+                           help='Number of Blender instances to run for rendering')
 
 # TODO: Move all of these into a .json config
 parser_render.add_argument('--tags-whitelist', default='all', help='A set of specified tags for index entries that will be rendered - needs to be comma separated (default \'all\')')
 parser_render.add_argument('--tags-blacklist', default='blacklist', help='A set of specified tags for index entries that will not be rendered - needs to be comma separated (default \'blacklist\')')
-parser_render.add_argument('--tags-skip', nargs='+', action='append', help='(random) tag-based percentage of frames to skip (default \'none\'). The tags and percentages need to be provided in a <tag>=<integer> format.') 
+parser_render.add_argument('--tags-skip', nargs='+', action='append', help='(random) tag-based percentage of frames to skip (default \'none\'). The tags and percentages need to be provided in a <tag>=<integer> format.')
 
 parser_render.add_argument('--width', default=320, type=int, help='Width, in pixels, of rendered frames (default 320)')
 parser_render.add_argument('--height', default=240, type=int, help='Height, in pixels, of rendered frames (default 240)')
@@ -172,13 +202,17 @@ if not as_blender_addon:
             sys.exit("Min viewing angle out of range [-180,180]]")
         if cli_args.max_camera_angle < -180 or cli_args.max_camera_angle > 180:
             sys.exit("Max viewing angle out of range [-180,180]]")
-        if not cli_args.fixed_camera and (cli_args.min_camera_angle >= cli_args.max_camera_angle):
+        if not cli_args.fixed_camera and (cli_args.min_camera_angle >=
+                                          cli_args.max_camera_angle):
             sys.exit("Min viewing angle is higher than or equal to max viewing angle")
-        if not cli_args.fixed_camera and (cli_args.max_camera_angle <= cli_args.min_camera_angle):
+        if not cli_args.fixed_camera and (cli_args.max_camera_angle <=
+                                          cli_args.min_camera_angle):
             sys.exit("Max viewing angle is less than or equal to min viewing angle")
-        if not cli_args.fixed_camera and (cli_args.max_camera_distance <= cli_args.min_camera_distance):
+        if not cli_args.fixed_camera and (cli_args.max_camera_distance <=
+                                          cli_args.min_camera_distance):
             sys.exit("Maximum camera distance must be >= minimum camera distance")
-        if not cli_args.fixed_camera and (cli_args.max_camera_height <= cli_args.min_camera_height):
+        if not cli_args.fixed_camera and (cli_args.max_camera_height <=
+                                          cli_args.min_camera_height):
             sys.exit("Maximum camera height must be >= minimum camera height")
 
         training_data = cli_args.training_data
@@ -188,13 +222,15 @@ if not as_blender_addon:
         n_mocaps = cli_args.end - cli_args.start
         step = int(n_mocaps / cli_args.num_instances)
 
-        print("Rendering %d motion capture sequences with %d instance[s] of Blender" % (n_mocaps, cli_args.num_instances))
+        print("Rendering %d mocap sequences with %d instance[s] of Blender" %
+              (n_mocaps, cli_args.num_instances))
         print("Each instance is rendering %d sequences" % step)
         print("Path to training data is '%s'" % training_data)
         print("Destination is '%s'" % dest)
 
         if step * cli_args.num_instances != n_mocaps:
-            sys.exit("Instance count of %d doesn't factor into count of %d motion capture sequences" %
+            sys.exit("Instance count of %d doesn't factor into count of %d "
+                     "motion capture sequences" %
                      (cli_args.num_instances, n_mocaps))
 
         processes = []
@@ -222,7 +258,8 @@ if not as_blender_addon:
             print("Instance %d name: %s" % (i, part_name))
 
             instance_cmd = blender_cmd + instance_args + sys.argv[1:]
-            print("Blender instance " + str(i) + " command:  " + " ".join(instance_cmd))
+            print("Blender instance %d command:  %s" %
+                  (i, " ".join(instance_cmd)))
 
             # We have some special case handling of dry-run when split across
             # multiple instances since we really want some extra convenience
@@ -241,7 +278,8 @@ if not as_blender_addon:
                 if found_frame_count:
                     n_frames += frame_count
             else:
-                log_filename = os.path.join(dest, part_name, 'render%s.log' % part_suffix)
+                log_filename = os.path.join(dest, part_name,
+                                            'render%s.log' % part_suffix)
                 print("Instance %d log: %s" % (i, log_filename))
                 os.makedirs(os.path.join(dest, part_name), exist_ok=True)
                 with open(log_filename, 'w') as fp:
@@ -293,7 +331,7 @@ addon_dependencies = [
 dep_error = ""
 for dep in addon_dependencies:
     addon_status = addon_utils.check(dep)
-    if addon_status[0] != True or addon_status[1] != True:
+    if not addon_status[0] or not addon_status[1]:
         dep_error += "Addon '" + dep + "' has not been enabled through Blender's User Preferences\n"
 
 if dep_error != "":
@@ -376,7 +414,7 @@ elif cli_args.subcommand == 'render':
     bpy.context.scene.GlimpseMinCameraHeightMM = int(cli_args.min_camera_height * 1000)
     bpy.context.scene.GlimpseMaxCameraHeightMM = int(cli_args.max_camera_height * 1000)
     bpy.context.scene.GlimpseMinViewingAngle = cli_args.min_camera_angle
-    bpy.context.scene.GlimpseMaxViewingAngle= cli_args.max_camera_angle
+    bpy.context.scene.GlimpseMaxViewingAngle = cli_args.max_camera_angle
 
     bpy.context.scene.GlimpseFixedCamera = cli_args.fixed_camera
     bpy.context.scene.GlimpseDebugCamera = cli_args.debug_camera
@@ -408,10 +446,15 @@ elif cli_args.subcommand == 'render':
 
     if not cli_args.dry_run:
         import cProfile
-        cProfile.run("bpy.ops.glimpse.generate_data()", os.path.join(cli_args.dest, render_name, "glimpse-" + render_name + ".prof"))
+        cProfile.run("bpy.ops.glimpse.generate_data()",
+                     os.path.join(cli_args.dest,
+                                  render_name,
+                                  "glimpse-" + render_name + ".prof"))
 
         import pstats
-        p = pstats.Stats(os.path.join(cli_args.dest, render_name, "glimpse-" + render_name + ".prof"))
+        p = pstats.Stats(os.path.join(cli_args.dest,
+                                      render_name,
+                                      "glimpse-" + render_name + ".prof"))
         p.sort_stats("cumulative").print_stats(20)
     else:
         bpy.ops.glimpse.generate_data()
