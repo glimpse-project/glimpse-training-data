@@ -921,8 +921,8 @@ class GeneratorOperator(bpy.types.Operator):
 
                     # turn off/on the background (floor and walls) depending
                     # on the set flag
-                    added_background = bpy.context.scene.GlimpseAddedBackground
-                    if added_background:
+                    add_background = bpy.context.scene.GlimpseAddBackground
+                    if add_background:
                         materials = bpy.data.materials
 
                         if bpy.context.scene.GlimpseDebug and bpy.context.scene.GlimpseVerbose:
@@ -2043,8 +2043,8 @@ def register():
             description="Limit rendering to these body models",
             default='all')
 
-    bpy.types.Scene.GlimpseAddedBackground = BoolProperty(
-            name="AddedBackground",
+    bpy.types.Scene.GlimpseAddBackground = BoolProperty(
+            name="AddBackground",
             description="Add background in a form of a floor and walls",
             default=False)
 

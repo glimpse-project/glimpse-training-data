@@ -530,7 +530,7 @@ elif cli_args.subcommand == 'render':
                              ' "smooth", "fixed" or "debug")')
 
             if 'add_background' in config:
-                bpy.context.scene.GlimpseAddedBackground = config['add_background']
+                bpy.context.scene.GlimpseAddBackground = config['add_background']
             if 'clothing_step' in config:
                 bpy.context.scene.GlimpseClothingStep = config['clothing_step']
 
