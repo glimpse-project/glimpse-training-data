@@ -76,6 +76,10 @@ parser.add_argument('--training-data',
 
 # TODO: support being able to give an explicit bvh name instead of --start/end
 def add_filter_options(parser):
+    parser.add_argument("-n", "--name-match", action='append',
+                        help="Only look at entries whose name matches this "
+                             "wildcard pattern")
+
     parser.add_argument('--start', type=int, default=20,
                         help='Index of first MoCap to filter')
     parser.add_argument('--end', default=25, type=int,
@@ -333,6 +337,9 @@ else:
 
 bpy.context.scene.GlimpseBvhTagsWhitelist = cli_args.tags_whitelist
 bpy.context.scene.GlimpseBvhTagsBlacklist = cli_args.tags_blacklist
+
+if cli_args.name_match:
+    bpy.context.scene.GlimpseBvhNamePatterns = ','.join(cli_args.name_match)
 
 
 mocaps_dir = os.path.join(cli_args.training_data, 'mocap')

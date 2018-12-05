@@ -359,7 +359,14 @@ def load_filtered_mocap_index(optional_op=None, force_filter_blacklisted=False):
     end = bpy.context.scene.GlimpseBvhGenTo
     # print("start =  %d end = %d" % (start, end))
 
+    name_patterns = None
+    if (bpy.context.scene.GlimpseBvhNamePatterns and
+            bpy.context.scene.GlimpseBvhNamePatterns is not ""):
+        name_patterns = bpy.context.scene.GlimpseBvhNamePatterns.split(',')
+        print("Name patterns: '%s'" % ",".join(name_patterns))
+
     return BvhFilteredIndex(full_index,
+                            name_patterns=name_patterns,
                             start=start,
                             end=end,
                             tags_whitelist=whitelist,
@@ -1302,7 +1309,8 @@ class GeneratorOperator(bpy.types.Operator):
                 stats_header += " - DRY RUN"
             print(stats_header)
             print(dash)
-            print('{:<25s}{:<10d}'.format("Total Rendered Frames:", frame_count))
+            print('{:<25s}{:<10d}'.format("Total Sequences:", len(filtered_index)))
+            print('{:<25s}{:<10d}'.format("Total Frames:", frame_count))
             # print('{:<25s}{:<10d}'.format("Total Skipped Frames:", frame_skip_count))
             print("")
 
@@ -2032,6 +2040,12 @@ def register():
             default=1,
             min=1,
             max=100)
+
+    bpy.types.Scene.GlimpseBvhNamePatterns = StringProperty(
+            name="BvhNamePatterns",
+            description="Limit rendering to only use those sequences matching "
+                        "these (comma separated) name patterns",
+            default='')
 
     bpy.types.Scene.GlimpseClothesWhitelist = StringProperty(
             name="ClothesWhitelist",

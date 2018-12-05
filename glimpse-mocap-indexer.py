@@ -37,7 +37,7 @@ parser.add_argument("-r", "--remove", action='append', help="Remove BVH file")
 # Select entries to view/edit (overridden when adding new entries)
 parser.add_argument("-s", "--start", type=int, default=0, help="Start range (negative values are relative to end of index)")
 parser.add_argument("-e", "--end", type=int, default=0, help="End range (zero means to go to the end of the index, negative values are relative to end of index)")
-parser.add_argument("-m", "--match", action='append', help="Only look at entries whose name matches this wildcard pattern")
+parser.add_argument("-n", "--name-match", action='append', help="Only look at entries whose name matches this wildcard pattern")
 parser.add_argument("--file-match", action='append', help="Only look at entries whose relative filename matches this wildcard pattern")
 parser.add_argument("--blacklisted", action='store_true', help="Only look at blacklisted entries")
 parser.add_argument("--non-blacklisted", action='store_true', help="Only look at non-blacklisted entries")
@@ -232,8 +232,8 @@ with open(args.index_filename, 'r+') as fp:
                 sys.exit("ERROR: %s has duplicate entries for name: '%s'" % (args.index_filename, entry['name']))
             name_map[entry['name']] = entry
 
-    # All filtering options (--start, --end, --match, --with[out]-tag etc) are
-    # ignored when adding new entries and instead it's as if all the new
+    # All filtering options (--start, --end, --name-match, --with[out]-tag etc)
+    # are ignored when adding new entries and instead it's as if all the new
     # entries were selected for any edit operations...
     if args.add:
         i = len(index)
@@ -294,11 +294,11 @@ with open(args.index_filename, 'r+') as fp:
                 if matched_blacklist:
                     continue
 
-            if args.match:
+            if args.name_match:
                 if 'name' not in entry:
                     continue
                 matched_name=False
-                for match in args.match:
+                for match in args.name_match:
                     if fnmatch.fnmatch(entry['name'], match):
                         matched_name = True
                         break
