@@ -636,7 +636,8 @@ class GeneratorOperator(bpy.types.Operator):
         # stats
         clothes_stats = {}
         body_stats = {}
-        tags_frames = {}
+        tag_skip_stats = {}
+        tag_render_stats = {}
 
         dt = datetime.datetime.today()
         date_str = ("%04u-%02u-%02u-%02u-%02u-%02u" %
@@ -774,10 +775,6 @@ class GeneratorOperator(bpy.types.Operator):
 
             print("> Rendering " + bvh_name)
 
-            for tag in bvh['tags']:
-                if tag not in tags_frames:
-                    tags_frames[tag] = 0
-
             numpy.random.seed(0)
             random.seed(0)
 
@@ -869,21 +866,22 @@ class GeneratorOperator(bpy.types.Operator):
 
                     if random.randrange(0, 100) < bpy.context.scene.GlimpseSkipPercentage:
                         frame_skip_count += 1
+                        for tag in bvh['tags']:
+                            tag_skip_stats[tag] = tag_skip_stats.get(tag, 0) + 1
                         if bpy.context.scene.GlimpseDebug and bpy.context.scene.GlimpseVerbose:
                             print("> Skipping (randomized) " + bvh_name + " frame " + str(frame))
                         continue
 
                     skip = False
                     tag_name = ""
-                    for skip_tag in tags_skipped:
-                        if skip_tag in bvh['tags'] and random.randrange(0, 100) < int(tags_skipped[skip_tag]):
+                    for tag in tags_skipped:
+                        if tag in bvh['tags'] and random.randrange(0, 100) < int(tags_skipped[tag]):
                             skip = True
-                            tag_name = skip_tag
                             break
-
                     if skip:
                         frame_skip_count += 1
-                        tags_frames[tag_name] += 1
+                        for tag in bvh['tags']:
+                            tag_skip_stats[tag] = tag_skip_stats.get(tag, 0) + 1
                         if bpy.context.scene.GlimpseDebug and bpy.context.scene.GlimpseVerbose:
                             print("> Skipping (randomized) by tag '%s' in %s frame %d"
                                   % (tag_name, bvh_name, frame))
@@ -891,6 +889,8 @@ class GeneratorOperator(bpy.types.Operator):
 
                     nonlocal frame_count
                     frame_count += 1
+                    for tag in bvh['tags']:
+                        tag_render_stats[tag] = tag_render_stats.get(tag, 0) + 1
 
                     if body in body_stats:
                         body_stats[body] += 1
@@ -1294,61 +1294,81 @@ class GeneratorOperator(bpy.types.Operator):
         if bpy.context.scene.GlimpseShowStats and frame_count:
 
             dash = '-' * 80
-            stats_header = "RENDERING STATS"
+
+            print("")
             print(dash)
+            stats_header = "RENDERING STATS"
             if bpy.context.scene.GlimpseDryRun:
                 stats_header += " - DRY RUN"
-
-            print('{:^85}'.format(stats_header))
+            print(stats_header)
             print(dash)
-            print('{:<30s}{:<10d}'.format("Total Rendered Frames:", frame_count))
-            print('{:<30s}{:<10d}'.format("Total Skipped Frames:", frame_skip_count))
+            print('{:<25s}{:<10d}'.format("Total Rendered Frames:", frame_count))
+            # print('{:<25s}{:<10d}'.format("Total Skipped Frames:", frame_skip_count))
+            print("")
 
-            tag_skip_frames_total = 0
-            for tag in tags_frames:
-                tag_skip_frames_total += tags_frames[tag]
+            # We don't show these stats atm becuase they only relate to frames
+            # skipped due to [tag] skip percentages and not e.g. skipped due
+            # to white/black list filtering; so it's potentially a very
+            # incomplete summary...
+            #
+            # if frame_skip_count:
+            #     print(dash)
+            #     print("TAGS IN SKIPPED FRAMES:")
+            #     print(dash)
+            #     print('{:<25s}{:<10s}{:<10s}|{:<10s}|'.format("TAG NAME", "FRAMES", "FRAMES(%)", " "))
+            #     print(dash)
+            #
+            #     for tag, val in sorted(tag_skip_stats.items(), key=lambda kv: (-kv[1], kv[0])):
+            #         percentage = val / frame_skip_count * 100
+            #         ratio = get_percentage_bar(val, frame_skip_count)
+            #         print('{:<25s}{:<10d}{:<10.2f}|{:<10s}|'.format(tag, val, percentage, ratio))
+            #     print("")
 
-            print('{:<30s}{:<10d}'.format("Total Skipped Frames by Tags:", tag_skip_frames_total))
-
-            if tag_skip_frames_total:
+            if frame_count:
                 print(dash)
-                print('{:^85}'.format("TAGS IN SKIPPED FRAMES"))
+                print("TAGS IN RENDERED FRAMES:")
                 print(dash)
                 print('{:<25s}{:<10s}{:<10s}|{:<10s}|'.format("TAG NAME", "FRAMES", "FRAMES(%)", " "))
                 print(dash)
 
-                for tag, val in sorted(tags_frames.items(), key=lambda kv: (-kv[1], kv[0])):
+                for tag, val in sorted(tag_render_stats.items(), key=lambda kv: (-kv[1], kv[0])):
                     percentage = val / frame_count * 100
                     ratio = get_percentage_bar(val, frame_count)
                     print('{:<25s}{:<10d}{:<10.2f}|{:<10s}|'.format(tag, val, percentage, ratio))
+                print("")
+
+                print(dash)
+                print("BODIES IN RENDERED FRAMES:")
+                print(dash)
+                print('{:<25s}{:<10s}{:<10s}|{:<10s}|'.format("NAME", "FRAMES", "FRAMES(%)", " "))
+                print(dash)
+
+                for body, val in sorted(body_stats.items(), key=lambda kv: (-kv[1], kv[0])):
+                    percentage = val / frame_count * 100
+                    ratio = get_percentage_bar(val, frame_count)
+                    print('{:<25s}{:<10d}{:<10.2f}|{:<10s}|'.format(body, val, percentage, ratio))
+                print("")
+
+                print(dash)
+                print("CLOTHES IN RENDERED FRAMES:")
+                print(dash)
+                print('{:<25s}{:<10s}{:<10s}|{:<10s}|'.format("NAME", "FRAMES", "FRAMES(%)", " "))
+                print(dash)
+
+                for clothing, val in sorted(clothes_stats.items(), key=lambda kv: (-kv[1], kv[0])):
+                    percentage = val / frame_count * 100
+                    ratio = get_percentage_bar(val, frame_count)
+
+                    print('{:<25s}{:<10d}{:<10.2f}|{:<10s}|'.format(clothing, val, percentage, ratio))
+                print("")
 
             print(dash)
-            print('{:^85}'.format("BODIES IN FRAMES"))
-            print(dash)
-            print('{:<25s}{:<10s}{:<10s}|{:<10s}|'.format("NAME", "FRAMES", "FRAMES(%)", " "))
-            print(dash)
-
-            for body, val in sorted(body_stats.items(), key=lambda kv: (-kv[1], kv[0])):
-                percentage = val / frame_count * 100
-                ratio = get_percentage_bar(val, frame_count)
-                print('{:<25s}{:<10d}{:<10.2f}|{:<10s}|'.format(body, val, percentage, ratio))
-
-            print(dash)
-            print('{:^85}'.format("CLOTHES IN FRAMES"))
-            print(dash)
-            print('{:<25s}{:<10s}{:<10s}|{:<10s}|'.format("NAME", "FRAMES", "FRAMES(%)", " "))
-            print(dash)
-
-            for clothing, val in sorted(clothes_stats.items(), key=lambda kv: (-kv[1], kv[0])):
-                percentage = val / frame_count * 100
-                ratio = get_percentage_bar(val, frame_count)
-
-                print('{:<25s}{:<10d}{:<10.2f}|{:<10s}|'.format(clothing, val, percentage, ratio))
-
-            print(dash)
+            print("")
 
         if bpy.context.scene.GlimpseDryRun:
+            print("")
             print("> DRY RUN FRAME COUNT: %d" % frame_count)
+            print("")
 
         return {'FINISHED'}
 
