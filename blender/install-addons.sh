@@ -47,7 +47,7 @@ else
     tools_ver="1.1.0"
     tools_zip=blendertools-$tools_ver-all.zip
     if ! test -f $tools_zip; then
-        wget http://download.tuxfamily.org/makehuman/releases/$tools_ver/$tools_zip
+        wget http://files.jwp.se/archive/releases/$tools_ver/$tools_zip
     fi
     unzip $tools_zip
 fi
