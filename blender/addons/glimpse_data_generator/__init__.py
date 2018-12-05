@@ -2054,11 +2054,6 @@ def register():
             default=True)
 
     # For Tags Editing and Tags Filtering while navigating through bvh files
-    bpy.types.Scene.GlimpseIndexTags = StringProperty(
-            name="IndexTags",
-            description="All tags found in MoCap index file, separated by ,",
-            default="")
-
     bpy.types.Scene.GlimpseMoCapAddTag = StringProperty(
             name="MoCapAddTag",
             description="Add Tag",
