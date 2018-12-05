@@ -1,0 +1,22 @@
+{
+    "filters": {
+        "tag_blacklist": ["backflip"]
+    },
+    "clothing_step": 5,
+    "camera": {
+        "type": "iPhone X Training",
+        "width": 320,
+        "height": 240,
+        "vertical_fov": 43.940769,
+        "position": {
+            "mode": "randomized",
+            "min_distance": 2,
+            "max_distance": 2.5,
+            "min_height": 1.1,
+            "max_height": 1.4,
+            "focus_bone": "pelvis",
+            "min_horizontal_rotation": -30,
+            "max_horizontal_rotation": 0
+        }
+    }
+}

@@ -29,6 +29,7 @@ import numpy
 import datetime
 import random
 import fnmatch
+import copy
 
 import bpy
 from bpy.props import (
@@ -59,23 +60,66 @@ bl_info = {
 # affect our labeling / training
 all_bodies = ['Man0', 'Woman0', 'Man1', 'Man2', 'Woman2']
 
-hat_choices = ['none', 'knitted_hat_01', 'newsboy_cap', 'patrol_cap']
-hat_probabilities = [0.4, 0.2, 0.2, 0.2]
+default_clothing_sets = {
+    "hat": [
+        {
+            "name": "none",
+            "probability": 0.4,
+        },
+        {
+            "name": "knitted_hat_01",
+            "probability": 0.2,
+        },
+        {
+            "name": "newsboy_cap",
+            "probability": 0.2,
+        },
+        {
+            "name": "patrol_cap",
+            "probability": 0.2,
+        },
+    ],
+    "glasses": [
+        {
+            "name": "none",
+            "probability": 0.7,
+        },
+        {
+            "name": "glasses",
+            "probability": 0.3,
+        },
+    ],
+    "top": [
+        {
+            "name": "none",
+            "probability": 0.8,
+        },
+        {
+            "name": "hooded_cardigan",
+            "probability": 0.2,
+        },
 
-glasses_choices = ['none', 'glasses']
-glasses_probabilities = [0.7, 0.3]
-
-# XXX: start fleet uniform black listed for now because hands may intersect it too much
-# resulting in labelling the hips as hands/wrists.
-# top_choices = [ 'none', 'hooded_cardigan', 'star_fleet_uniform_female_gold_reference' ]
-top_choices = ['none', 'hooded_cardigan']
-top_probabilities = [0.8, 0.2]
-
-trouser_choices = ['none', 'm_trousers_01']
-trouser_probabilities = [0.5, 0.5]
-
-shoe_choices = []
-shoe_probabilities = []
+        # XXX: start fleet uniform black listed for now because hands may
+        # intersect it too much resulting in labelling the hips as
+        # hands/wrists.
+        # {
+        #     "name": "star_fleet_uniform_female_gold_reference",
+        #     "probability": ,
+        # },
+    ],
+    "trousers": [
+        {
+            "name": "none",
+            "probability": 0.5,
+        },
+        {
+            "name": "m_trousers_01",
+            "probability": 0.5,
+        },
+    ],
+    # "shoes": [
+    # ],
+}
 
 hbars = [u"\u0020", u"\u258f", u"\u258e", u"\u258d", u"\u258b", u"\u258a", u"\u2589"]
 max_bar_width = 10
@@ -131,7 +175,8 @@ class BvhIndex:
                         if action_name in bpy.data.actions:
                             action = bpy.data.actions[action_name]
                             bvh['end'] = action.frame_range[1]
-                            print("WARNING: determined %s frame range based on action since 'end' not found in index" % bvh['name'])
+                            print("WARNING: determined %s frame range based on action since "
+                                  "'end' not found in index" % bvh['name'])
                         else:
                             # print("WARNING: just assuming mocap has < 1000 frames since action wasn't preloaded")
                             bvh['end'] = 1000
@@ -350,7 +395,8 @@ class AddClothingOperator(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.active_object is not None and "BodyHelperMeshObject" in context.active_object.name
+        return (context.active_object is not None and
+                "BodyHelperMeshObject" in context.active_object.name)
 
     def execute(self, context):
         if self.clothing_name + "_reference" not in bpy.data.objects:
@@ -373,19 +419,16 @@ class AddClothingLibraryOperator(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.mode == 'OBJECT' and context.active_object is not None and "PoseObject" in context.active_object.name
+        return (context.mode == 'OBJECT' and
+                context.active_object is not None and
+                "PoseObject" in context.active_object.name)
 
     def execute(self, context):
 
         all_clothes = []
-        all_clothes.extend(hat_choices)
-        all_clothes.extend(glasses_choices)
-        all_clothes.extend(top_choices)
-        all_clothes.extend(trouser_choices)
-        all_clothes.extend(shoe_choices)
-
-        # The clothing sub-lists have 'none' entries we want to ignore here
-        all_clothes = [clothing for clothing in all_clothes if clothing != 'none']
+        for key in default_clothing_sets:
+            all_clothes += [entry['name'] for entry in default_clothing_sets[key]
+                            if key is not 'none']
 
         body = context.active_object.name[:-len("PoseObject")]
 
@@ -431,7 +474,7 @@ class GeneratorInfoOperator(bpy.types.Operator):
     bl_label = "Print Glimpse Generator Info"
 
     def execute(self, context):
-        filtered_index = load_filtered_mocap_index(self, force_filter_blacklisted=True)
+        filtered_index = load_filtered_mocap_index(self, force_filter_blacklisted=False)
         print("Number of indexed motion capture files = %d" % len(filtered_index.full_index))
 
         print("Number of indexed motion capture files matching filter = %d" % len(filtered_index))
@@ -443,14 +486,20 @@ class GeneratorInfoOperator(bpy.types.Operator):
         for bvh_state in filtered_index:
             bvh_name = bvh_state['name']
 
+            if 'blacklist' in bvh_state['tags']:
+                suffix = " (BLACKLISTED)"
+            else:
+                suffix = ""
+
             if 'Base' + bvh_name in bpy.data.actions:
                 action = bpy.data.actions['Base' + bvh_name]
                 if action.library is None:
-                    print(" > %s: Cached" % bvh_name)
+                    print(" > %s: Cached%s" % (bvh_name, suffix))
                 else:
-                    print(" > %s: Linked from %s" % (bvh_name, action.library.filepath))
+                    print(" > %s: Linked from %s%s" %
+                          (bvh_name, action.library.filepath, suffix))
             else:
-                print(" > %s: Uncached" % bvh_name)
+                print(" > %s: Uncached%s" % (bvh_name, suffix))
 
         return {'FINISHED'}
 
@@ -463,7 +512,7 @@ class GeneratorPreLoadOperator(bpy.types.Operator):
 
     def execute(self, context):
 
-        filtered_index = load_filtered_mocap_index(self, force_filter_blacklisted=True)
+        filtered_index = load_filtered_mocap_index(self, force_filter_blacklisted=False)
 
         for bvh_state in filtered_index:
             bvh_name = bvh_state['name']
@@ -492,7 +541,7 @@ class GeneratorLinkMocapsOperator(bpy.types.Operator):
 
     def execute(self, context):
 
-        filtered_index = load_filtered_mocap_index(self, force_filter_blacklisted=True)
+        filtered_index = load_filtered_mocap_index(self, force_filter_blacklisted=False)
 
         filepath = bpy.context.scene.GlimpseMocapLibrary
         with bpy.data.libraries.load(filepath, link=True) as (data_from, data_to):
@@ -506,7 +555,8 @@ class GeneratorLinkMocapsOperator(bpy.types.Operator):
                     if action.library is None:
                         print(" > %s: Cached" % bvh_name)
                     else:
-                        print(" > %s: Already linked from %s" % (bvh_name, action.library.filepath))
+                        print(" > %s: Already linked from %s" %
+                              (bvh_name, action.library.filepath))
                 else:
                     print(" > %s: Linking" % bvh_name)
                     names += ['Base' + bvh_name]
@@ -524,7 +574,7 @@ class GeneratorPurgeActionsOperator(bpy.types.Operator):
 
     def execute(self, context):
 
-        filtered_index = load_filtered_mocap_index(self, force_filter_blacklisted=True)
+        filtered_index = load_filtered_mocap_index(self, force_filter_blacklisted=False)
 
         for bvh_state in filtered_index:
             bvh_name = bvh_state['name']
@@ -650,13 +700,35 @@ class GeneratorOperator(bpy.types.Operator):
             top_meta['min_camera_height'] = min_height_mm
             top_meta['max_camera_height'] = max_height_mm
 
-        tags_skip = bpy.context.scene.GlimpseBvhTagsSkip.split("#")
-        tags_skip.pop()
+        if bpy.context.scene.GlimpseDebug:
+            print("Parsing GlimpseBvhTagsSkip='%s'" %
+                  bpy.context.scene.GlimpseBvhTagsSkip)
         tags_skipped = {}
-        if tags_skip != 'none':
-            for skip_tag in tags_skip:
+        if bpy.context.scene.GlimpseBvhTagsSkip != 'none':
+            for skip_tag in bpy.context.scene.GlimpseBvhTagsSkip.split(","):
                 tag_data = skip_tag.split("=")
                 tags_skipped[tag_data[0]] = tag_data[1]
+
+        if bpy.context.scene.GlimpseClothesWhitelist != 'all':
+            clothing_sets = copy.deepcopy(default_clothing_sets)
+
+            clothes_whitelist = bpy.context.scene.GlimpseClothesWhitelist.split(',')
+            whitelist_as_set = set(clothes_whitelist)
+            for key in clothing_sets:
+                clothing_sets[key] = [entry for entry in clothing_sets[key]
+                                      if entry['name'] in whitelist_as_set]
+                # probabilities may no longer add up to 1.0 so
+                # re-normalize...
+                total = 0
+                for entry in clothing_sets[key]:
+                    total += entry['probability']
+                for entry in clothing_sets[key]:
+                    entry['probability'] = entry['probability'] / total
+        else:
+            clothing_sets = default_clothing_sets
+
+        if bpy.context.scene.GlimpseDebug:
+            print("Available clothing sets = %s" % str(clothing_sets))
 
         top_meta_filename = os.path.join(abs_gen_dir, 'meta.json')
 
@@ -691,7 +763,8 @@ class GeneratorOperator(bpy.types.Operator):
             numpy.random.seed(0)
             random.seed(0)
 
-            print("Setting %s action on all body meshes" % action_name)
+            if bpy.context.scene.GlimpseDebug and bpy.context.scene.GlimpseVerbose:
+                print("> Setting %s action on all body meshes" % action_name)
             assign_body_poses(action_name)
 
             meta['bvh'] = bvh_name
@@ -738,7 +811,8 @@ class GeneratorOperator(bpy.types.Operator):
                 # random seed when smooth_camera_movement is true
                 height_seed = 1
 
-                print("> Rendering with " + body)
+                if bpy.context.scene.GlimpseDebug:
+                    print("> Rendering with " + body)
 
                 meta['body'] = body
 
@@ -751,6 +825,8 @@ class GeneratorOperator(bpy.types.Operator):
 
                 if is_camera_debug:
                     hide_bodies_from_render()
+
+                # bpy.data.objects['Camera'].constraints['Track To'].target = body_pose
 
                 # Hit some errors with the range bounds not being integer and I
                 # guess that comes from the json library loading our mocap
@@ -778,7 +854,8 @@ class GeneratorOperator(bpy.types.Operator):
                         frame_skip_count += 1
                         tags_frames[tag_name] += 1
                         if bpy.context.scene.GlimpseDebug and bpy.context.scene.GlimpseVerbose:
-                            print("> Skipping (randomized) by tag '" + tag_name + "' in " + bvh_name + " frame " + str(frame))
+                            print("> Skipping (randomized) by tag '%s' in %s frame %d"
+                                  % (tag_name, bvh_name, frame))
                         continue
 
                     nonlocal frame_count
@@ -789,7 +866,9 @@ class GeneratorOperator(bpy.types.Operator):
                     else:
                         body_stats[body] = 1
 
-                    if bpy.context.scene.GlimpseDryRun and bpy.context.scene.GlimpseDebug and bpy.context.scene.GlimpseVerbose:
+                    if (bpy.context.scene.GlimpseDryRun and
+                            bpy.context.scene.GlimpseDebug and
+                            bpy.context.scene.GlimpseVerbose):
                         print("> DRY RUN: Rendering " + bvh_name +
                               " frame " + str(frame) +
                               " with " + body)
@@ -815,9 +894,11 @@ class GeneratorOperator(bpy.types.Operator):
                     if added_background:
                         materials = bpy.data.materials
 
-                        print("> Generating background...")
+                        if bpy.context.scene.GlimpseDebug and bpy.context.scene.GlimpseVerbose:
+                            print("> Generating background...")
                         if "Scenery" not in materials:
-                            print("> Scenery material created")
+                            if bpy.context.scene.GlimpseDebug:
+                                print("> Scenery material created")
                             materials.new("Scenery")
                             materials[("Scenery")].use_shadeless = True
                             # XXX: this can't conflict with the labels we use
@@ -834,7 +915,8 @@ class GeneratorOperator(bpy.types.Operator):
                                 bpy.ops.object.material_slot_add()
                                 bpy.context.active_object.material_slots[0].material = materials['Scenery']
 
-                            print("> Background:Floor added")
+                            if bpy.context.scene.GlimpseDebug:
+                                print("> Background:Floor added")
 
                         floor_obj = bpy.data.objects[floor_obj_name]
                         floor_obj.hide = False
@@ -842,7 +924,8 @@ class GeneratorOperator(bpy.types.Operator):
 
                         wall_obj_name = "Background:Wall"
                         if wall_obj_name not in bpy.data.objects:
-                            print("> Generating walls...")
+                            if bpy.context.scene.GlimpseDebug:
+                                print("> Generating walls...")
                             objects = bpy.data.objects
                             wall_width = 10
                             wall_height = 10
@@ -850,7 +933,8 @@ class GeneratorOperator(bpy.types.Operator):
                             wall_part_size = mathutils.Vector((1.0, 0.5, 0.5))
 
                             # Create an empty mesh and the object.
-                            wall_start_pos = body_pose.pose.bones['pelvis'].location + mathutils.Vector((-wall_width, wall_width / 3, 0))
+                            wall_start_pos = (body_pose.pose.bones['pelvis'].location +
+                                              mathutils.Vector((-wall_width, wall_width / 3, 0)))
                             wall_empty = bpy.data.objects.new("Background:Wall", None)
                             bpy.context.scene.objects.link(wall_empty)
                             wall_empty.location = wall_start_pos
@@ -864,10 +948,14 @@ class GeneratorOperator(bpy.types.Operator):
                                 for i in range(0, wall_height):
                                     for j in range(0, wall_width):
                                         wall_depth = random.randrange(-1, 1)
-                                        bpy.ops.mesh.primitive_cube_add(location=(wall_start_pos.x + (j * (wall_part_size.x * 2)),
-                                                                                  wall_start_pos.y + wall_depth,
-                                                                                  wall_start_pos.z + i))
-                                        bpy.ops.transform.resize(value=(wall_part_size.x, wall_part_size.y, wall_part_size.z))
+                                        bpy.ops.mesh.primitive_cube_add(
+                                            location=(wall_start_pos.x + (j * (wall_part_size.x * 2)),
+                                                      wall_start_pos.y + wall_depth,
+                                                      wall_start_pos.z + i))
+                                        bpy.ops.transform.resize(
+                                            value=(wall_part_size.x,
+                                                   wall_part_size.y,
+                                                   wall_part_size.z))
                                         bpy.context.active_object.name = ("WallSide_%s_Part_%s_%s" % (k, i, j))
 
                                         if len(bpy.context.active_object.material_slots) == 0:
@@ -889,127 +977,71 @@ class GeneratorOperator(bpy.types.Operator):
                             side1 = objects["Wall:Side_1"]
                             side2 = objects["Wall:Side_2"]
 
-                            wall_rot = mathutils.Quaternion(mathutils.Vector((0, 0, 1)), math.radians(-90))
+                            wall_rot = mathutils.Quaternion(mathutils.Vector((0, 0, 1)),
+                                                            math.radians(-90))
 
-                            side1_pos = mathutils.Vector((wall_part_size.x * wall_width, wall_part_size.y * 5, 0))
+                            side1_pos = mathutils.Vector((wall_part_size.x * wall_width,
+                                                          wall_part_size.y * 5,
+                                                          0))
                             side1.location = side1_pos
                             side1.rotation_mode = 'QUATERNION'
                             side1.rotation_quaternion = wall_rot
 
-                            side2_pos = mathutils.Vector((wall_start_pos.x, wall_part_size.y * 5, wall_start_pos.z))
+                            side2_pos = mathutils.Vector((wall_start_pos.x,
+                                                          wall_part_size.y * 5,
+                                                          wall_start_pos.z))
                             side2.location = side2_pos
                             side2.rotation_mode = 'QUATERNION'
                             side2.rotation_quaternion = wall_rot
 
-                            print("> Background:Wall added")
+                            if bpy.context.scene.GlimpseDebug:
+                                print("> Background:Wall added")
 
                         wall_obj = bpy.data.objects[wall_obj_name]
                         for obj in wall_obj.children:
                             obj.hide = False
                             obj.layers[0] = True
 
-                    # turn off/on the randomization of the clothes in a pool
-                    # depending on whether the GlimpseFixedClothes is not "none"
-                    fixed_clothes = bpy.context.scene.GlimpseFixedClothes
+                    if ('clothes' not in meta or
+                            (bpy.context.scene.GlimpseClothingStep > 0 and
+                             frame % bpy.context.scene.GlimpseClothingStep == 0)):
 
-                    if fixed_clothes != 'none':
-
-                        if 'clothes' not in meta:
-
-                            print("> Randomization of clothes is off - setting to fixed set")
-                            bpy.data.objects['Camera'].constraints['Track To'].target = body_pose
-                            clothes_meta = {}
-
-                            fixed_clothes = fixed_clothes.split(",")
-
-                            for wear in fixed_clothes:
-                                if wear in hat_choices:
-                                    hat_obj_name = "%sClothes:%s" % (body, wear)
-                                    if hat_obj_name in bpy.data.objects:
-                                        hat_obj = bpy.data.objects[hat_obj_name]
-                                        hat_obj.hide = False
-                                        hat_obj.layers[0] = True
-                                        clothes_meta['hat'] = wear
-
-                                if wear in trouser_choices:
-                                    trouser_obj_name = "%sClothes:%s" % (body, wear)
-                                    if trouser_obj_name in bpy.data.objects:
-                                        trouser_obj = bpy.data.objects[trouser_obj_name]
-                                        trouser_obj.hide = False
-                                        trouser_obj.layers[0] = True
-                                        clothes_meta['trousers'] = wear
-
-                                if wear in top_choices:
-                                    top_obj_name = "%sClothes:%s" % (body, wear)
-                                    if top_obj_name in bpy.data.objects:
-                                        top_obj = bpy.data.objects[top_obj_name]
-                                        top_obj.hide = False
-                                        top_obj.layers[0] = True
-                                        clothes_meta['top'] = wear
-
-                                if wear in glasses_choices:
-                                    glasses_obj_name = "%sClothes:%s" % (body, wear)
-                                    if glasses_obj_name in bpy.data.objects:
-                                        glasses_obj = bpy.data.objects[glasses_obj_name]
-                                        glasses_obj.hide = False
-                                        glasses_obj.layers[0] = True
-                                        clothes_meta['glasses'] = wear
-
-                            context.scene.layers = render_layers
-                            meta['clothes'] = clothes_meta
-
-                    else:
-
-                        if 'clothes' not in meta or frame % bpy.context.scene.GlimpseClothingStep == 0:
+                        if bpy.context.scene.GlimpseDebug and bpy.context.scene.GlimpseVerbose:
                             print("> Randomizing clothing")
 
-                            # randomize the model
-                            # body = numpy.random.choice(all_bodies)
-                            hat = numpy.random.choice(hat_choices, p=hat_probabilities)
-                            trousers = numpy.random.choice(trouser_choices, p=trouser_probabilities)
-                            top = numpy.random.choice(top_choices, p=top_probabilities)
-                            glasses = numpy.random.choice(glasses_choices, p=glasses_probabilities)
+                        clothes_meta = {}
 
-                            bpy.data.objects['Camera'].constraints['Track To'].target = body_pose
+                        for key in clothing_sets:
+                            if bpy.context.scene.GlimpseDebug and bpy.context.scene.GlimpseVerbose:
+                                print(" > picking %s" % key)
+                            clothing_set = clothing_sets[key]
+                            set_choices = [entry['name'] for entry in clothing_set]
+                            set_probabilities = [entry['probability'] for entry in clothing_set]
 
-                            clothes_meta = {}
+                            if not len(set_choices):
+                                if bpy.context.scene.GlimpseDebug and bpy.context.scene.GlimpseVerbose:
+                                    print("  > no choice found for %s" % key)
+                                continue
 
-                            if hat != 'none':
-                                hat_obj_name = "%sClothes:%s" % (body, hat)
-                                if hat_obj_name in bpy.data.objects:
-                                    hat_obj = bpy.data.objects[hat_obj_name]
-                                    hat_obj.hide = False
-                                    hat_obj.layers[0] = True
-                                    clothes_meta['hat'] = hat
+                            set_choice = numpy.random.choice(set_choices, p=set_probabilities)
+                            if set_choices == 'none':
+                                if bpy.context.scene.GlimpseDebug and bpy.context.scene.GlimpseVerbose:
+                                    print("  > %s = none" % key)
+                                continue
 
-                            if trousers != 'none':
-                                trouser_obj_name = "%sClothes:%s" % (body, trousers)
-                                if trouser_obj_name in bpy.data.objects:
-                                    trouser_obj = bpy.data.objects[trouser_obj_name]
-                                    trouser_obj.hide = False
-                                    trouser_obj.layers[0] = True
-                                    clothes_meta['trousers'] = trousers
+                            if bpy.context.scene.GlimpseDebug and bpy.context.scene.GlimpseVerbose:
+                                print("  > %s = %s" % (key, set_choice))
 
-                            if top != 'none':
-                                top_obj_name = "%sClothes:%s" % (body, top)
-                                if top_obj_name in bpy.data.objects:
-                                    top_obj = bpy.data.objects[top_obj_name]
-                                    top_obj.hide = False
-                                    top_obj.layers[0] = True
-                                    clothes_meta['top'] = top
+                            choice_obj_name = "%sClothes:%s" % (body, set_choice)
+                            if choice_obj_name in bpy.data.objects:
+                                clothes_meta[key] = set_choice
+                            else:
+                                if bpy.context.scene.GlimpseDebug and bpy.context.scene.GlimpseVerbose:
+                                    print("  > %s not available for %s" % (key, body))
 
-                            if glasses != 'none':
-                                glasses_obj_name = "%sClothes:%s" % (body, glasses)
-                                if glasses_obj_name in bpy.data.objects:
-                                    glasses_obj = bpy.data.objects[glasses_obj_name]
-                                    glasses_obj.hide = False
-                                    glasses_obj.layers[0] = True
-                                    clothes_meta['glasses'] = glasses
+                        meta['clothes'] = clothes_meta
 
-                            context.scene.layers = render_layers
-                            meta['clothes'] = clothes_meta
-
-                    for key, val in sorted(meta['clothes'].items()):
+                    for key in meta['clothes']:
                         if meta['clothes'][key] in clothes_stats:
                             clothes_stats[meta['clothes'][key]] += 1
                         else:
@@ -1018,26 +1050,28 @@ class GeneratorOperator(bpy.types.Operator):
                     # We've collected all our per-frame stats at this point
                     # so we can continue to the next frame if this is a
                     # dry run...
-                    if bpy.context.scene.GlimpseDryRun and bpy.context.scene.GlimpseShowStats:
+                    if (bpy.context.scene.GlimpseDryRun and
+                            bpy.context.scene.GlimpseShowStats):
                         continue
 
-                    # Make sure you render the clothes specified in meta
                     hide_body_clothes(body)
-                    if not is_camera_debug:
-                        show_body_clothes_from_meta(body)
+                    show_body_clothes_from_meta(body)
 
                     # Randomize the placement of the camera...
                     #
-                    # See RandomizedCamView script embedded in glimpse-training.blend
-                    # for an experimental copy of this code where it's easy
-                    # to get interactive feedback / test that it's working
-                    # (Alt-P to run)
+                    # See RandomizedCamView script embedded in
+                    # glimpse-training.blend for an experimental copy of this
+                    # code where it's easy to get interactive feedback / test
+                    # that it's working (Alt-P to run)
                     focus_bone_name = bpy.context.scene.GlimpseFocusBone
                     focus = body_pose.pose.bones[focus_bone_name]
-                    person_forward_2d = (focus.matrix.to_3x3() * z_forward).xy.normalized()
+                    person_forward_2d = (focus.matrix.to_3x3() *
+                                         z_forward).xy.normalized()
 
                     # Vector.rotate doesn't work for 2D vectors...
-                    person_forward = mathutils.Vector((person_forward_2d.x, person_forward_2d.y, 0))
+                    person_forward = mathutils.Vector((person_forward_2d.x,
+                                                       person_forward_2d.y,
+                                                       0))
 
                     if is_camera_debug:
                         rot = mathutils.Quaternion((0.707, 0.707, 0, 0))
@@ -1196,7 +1230,10 @@ class GeneratorOperator(bpy.types.Operator):
                     context.scene.node_tree.nodes['LabelOutput'].base_path = os.path.join(abs_gen_dir, "labels", bvh_name, section_name)
                     # context.scene.node_tree.nodes['DepthOutput'].base_path = os.path.join(abs_gen_dir, "depth", bvh_name[:-4], section_name)
 
-                    context.scene.render.filepath = os.path.join(abs_gen_dir, "depth", bvh_name, section_name, "Image%04u" % frame)
+                    context.scene.render.filepath = \
+                        os.path.join(abs_gen_dir, "depth", bvh_name,
+                                     section_name, "Image%04u" % frame)
+
                     print("> Rendering " + bvh_name +
                           " frame " + str(frame) +
                           " to " + bpy.context.scene.node_tree.nodes['LabelOutput'].base_path)
@@ -1207,14 +1244,14 @@ class GeneratorOperator(bpy.types.Operator):
                     with open(meta_filename, 'w') as fp:
                         json.dump(meta, fp, indent=2)
 
-            # For now we unconditionally render each mocap using all the body
-            # meshes we have, just randomizing the clothing
-            fixed_bodies = bpy.context.scene.GlimpseFixedBodies
-            if fixed_bodies != 'none':
-                fixed_bodies = fixed_bodies.split(",")
-                for fixed_body in fixed_bodies:
-                    if fixed_body in all_bodies:
-                        render_body(fixed_body)
+            # For now we render each mocap using all the body meshes we have,
+            # just randomizing the clothing
+            body_whitelist = bpy.context.scene.GlimpseBodyWhitelist
+            if body_whitelist != 'all':
+                body_whitelist = body_whitelist.split(",")
+                for whitelist_body in body_whitelist:
+                    if whitelist_body in all_bodies:
+                        render_body(whitelist_body)
             else:
                 for body in all_bodies:
                     render_body(body)
@@ -1223,7 +1260,7 @@ class GeneratorOperator(bpy.types.Operator):
         for bvh in filtered_index:
             render_bvh(bvh)
 
-        if bpy.context.scene.GlimpseShowStats:
+        if bpy.context.scene.GlimpseShowStats and frame_count:
 
             dash = '-' * 85
             stats_header = "RENDERING STATS"
@@ -1590,7 +1627,7 @@ class VIEW3D_MoCap_Preload(bpy.types.Operator):
     bl_label = "Preload"
 
     def execute(self, context):
-        filtered_index = load_filtered_mocap_index(self, force_filter_blacklisted=True)
+        filtered_index = load_filtered_mocap_index(self, force_filter_blacklisted=False)
 
         for bvh_state in filtered_index:
             load_bvh_file(bvh_state)
@@ -1858,21 +1895,21 @@ def register():
     bpy.types.Scene.GlimpseRenderWidth = IntProperty(
             name="RenderWidth",
             description="Width, in pixels, of rendered frames",
-            default=0,
+            default=320,
             min=10,
             max=4096)
 
     bpy.types.Scene.GlimpseRenderHeight = IntProperty(
             name="RenderHeight",
             description="Height, in pixels, of rendered frames",
-            default=0,
+            default=240,
             min=10,
             max=4096)
 
     bpy.types.Scene.GlimpseVerticalFOV = FloatProperty(
             name="VerticalFOV",
             description="Vertical field of view of camera",
-            default=54.5,
+            default=43.940769,
             min=1,
             max=180)
 
@@ -1957,15 +1994,15 @@ def register():
             min=1,
             max=100)
 
-    bpy.types.Scene.GlimpseFixedClothes = StringProperty(
-            name="FixedClothes",
-            description="A set of specified clothes to be used in all renders",
-            default='none')
+    bpy.types.Scene.GlimpseClothesWhitelist = StringProperty(
+            name="ClothesWhitelist",
+            description="Limit rendering to only use these clothes",
+            default='all')
 
-    bpy.types.Scene.GlimpseFixedBodies = StringProperty(
-            name="FixedBodies",
-            description="A specified body to use during the rendering",
-            default='none')
+    bpy.types.Scene.GlimpseBodyWhitelist = StringProperty(
+            name="BodyWhitelist",
+            description="Limit rendering to these body models",
+            default='all')
 
     bpy.types.Scene.GlimpseAddedBackground = BoolProperty(
             name="AddedBackground",
@@ -1975,7 +2012,7 @@ def register():
     bpy.types.Scene.GlimpseShowStats = BoolProperty(
             name="ShowStats",
             description="Output statistics after the rendering",
-            default=False)
+            default=True)
 
     # For Tags Editing and Tags Filtering while navigating through bvh files
     bpy.types.Scene.GlimpseIndexTags = StringProperty(
