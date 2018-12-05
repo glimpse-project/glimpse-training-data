@@ -125,6 +125,20 @@ hbars = [u"\u0020", u"\u258f", u"\u258e", u"\u258d", u"\u258b", u"\u258a", u"\u2
 max_bar_width = 10
 
 
+# outputs the percentage bar (made from hbars) calculated from provided values
+def get_percentage_bar(value, max_entries):
+    bar_len = int(max_bar_width * 6 * value / max_entries)
+    bar_output = ""
+    for i in range(0, max_bar_width):
+        if bar_len > 6:
+            bar_output += hbars[6]
+            bar_len -= 6
+        else:
+            bar_output += hbars[bar_len]
+            bar_len = 0
+    return bar_output
+
+
 def mkdir_p(path):
     os.makedirs(path, exist_ok=True)
 
@@ -188,6 +202,16 @@ class BvhIndex:
                             self.tag_count[tag] = 1
                         else:
                             self.tag_count[tag] += 1
+
+                full_len = len(self.index)
+                print("Opened mocap index with %d sequences" % full_len)
+                print("Index tags:")
+                for (key, val) in sorted(self.tag_count.items(),
+                                         key=lambda kv: (-kv[1], kv[0])):
+                    count = self.tag_count[key]
+                    percentage = count / full_len * 100
+                    bar = get_percentage_bar(count, full_len)
+                    print('  {:<15s}{:<10d}{:<8.2f}|{:<10s}|'.format(key, count, percentage, bar))
 
         except IOError as e:
             if optional_op is not None:
@@ -284,6 +308,18 @@ class BvhFilteredIndex:
             self.filtered_indices.append(i)
             self.filtered_index.append(bvh)
 
+        filtered_len = len(self.filtered_index)
+        print("Filtered full index of %d sequences down to %d" %
+              (len(self.full_index), filtered_len))
+        print("Filtered tags:")
+
+        for (key, val) in sorted(self.filtered_tag_count.items(),
+                                 key=lambda kv: (-kv[1], kv[0])):
+            count = self.filtered_tag_count[key]
+            percentage = count / filtered_len * 100
+            bar = get_percentage_bar(count, filtered_len)
+            print('  {:<15s}{:<10d}{:<8.2f}|{:<10s}|'.format(key, count, percentage, bar))
+
     def __iter__(self):
         self.pos = 0
         return self
@@ -304,7 +340,6 @@ class BvhFilteredIndex:
 
 def load_filtered_mocap_index(optional_op=None, force_filter_blacklisted=False):
     full_index = load_mocap_index(optional_op)
-    # print("Number of indexed motion capture files = %d" % len(full_index))
 
     whitelist = bpy.context.scene.GlimpseBvhTagsWhitelist
     if whitelist == 'all':
@@ -475,9 +510,6 @@ class GeneratorInfoOperator(bpy.types.Operator):
 
     def execute(self, context):
         filtered_index = load_filtered_mocap_index(self, force_filter_blacklisted=False)
-        print("Number of indexed motion capture files = %d" % len(filtered_index.full_index))
-
-        print("Number of indexed motion capture files matching filter = %d" % len(filtered_index))
 
         print("Pre-loaded actions:")
         for action in bpy.data.actions:
@@ -611,7 +643,6 @@ class GeneratorOperator(bpy.types.Operator):
                     (dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second))
 
         filtered_index = load_filtered_mocap_index(self, force_filter_blacklisted=True)
-        print("Number of indexed motion capture files = %d" % len(filtered_index.full_index))
 
         if bpy.context.scene.GlimpseGenDir and bpy.context.scene.GlimpseGenDir != "":
             gen_dir = bpy.context.scene.GlimpseGenDir
@@ -1262,7 +1293,7 @@ class GeneratorOperator(bpy.types.Operator):
 
         if bpy.context.scene.GlimpseShowStats and frame_count:
 
-            dash = '-' * 85
+            dash = '-' * 80
             stats_header = "RENDERING STATS"
             print(dash)
             if bpy.context.scene.GlimpseDryRun:
@@ -1270,47 +1301,49 @@ class GeneratorOperator(bpy.types.Operator):
 
             print('{:^85}'.format(stats_header))
             print(dash)
-            print('{:<15s}{:<10d}'.format("Total Rendered Frames:", frame_count))
-            print('{:<15s}{:<10d}'.format("Total Skipped Frames:", frame_skip_count))
+            print('{:<30s}{:<10d}'.format("Total Rendered Frames:", frame_count))
+            print('{:<30s}{:<10d}'.format("Total Skipped Frames:", frame_skip_count))
 
-            tags_frames_total = 0
+            tag_skip_frames_total = 0
             for tag in tags_frames:
-                tags_frames_total += tags_frames[tag]
+                tag_skip_frames_total += tags_frames[tag]
 
-            print('{:<15s}{:<10d}'.format("Total Skipped Frames by Tags:", tags_frames_total))
-            print(dash)
-            print('{:^85}'.format("SKIPPED FRAMES BY TAGS"))
-            print(dash)
-            print('{:<15s}{:<10s}{:<8s}{:<8s}'.format("TAG NAME", "FRAMES", "RATIO FRA(%)", " "))
-            print(dash)
+            print('{:<30s}{:<10d}'.format("Total Skipped Frames by Tags:", tag_skip_frames_total))
 
-            for tag, val in sorted(tags_frames.items(), key=lambda kv: (-kv[1], kv[0])):
-                percentage = val / frame_count * 100
-                ratio = get_percentage_bar(val, frame_count)
-                print('{:<15s}{:<10d}{:<8.2f}{:<8s}'.format(tag, val, percentage, ratio))
+            if tag_skip_frames_total:
+                print(dash)
+                print('{:^85}'.format("TAGS IN SKIPPED FRAMES"))
+                print(dash)
+                print('{:<25s}{:<10s}{:<10s}|{:<10s}|'.format("TAG NAME", "FRAMES", "FRAMES(%)", " "))
+                print(dash)
+
+                for tag, val in sorted(tags_frames.items(), key=lambda kv: (-kv[1], kv[0])):
+                    percentage = val / frame_count * 100
+                    ratio = get_percentage_bar(val, frame_count)
+                    print('{:<25s}{:<10d}{:<10.2f}|{:<10s}|'.format(tag, val, percentage, ratio))
 
             print(dash)
             print('{:^85}'.format("BODIES IN FRAMES"))
             print(dash)
-            print('{:<15s}{:<10s}{:<8s}{:<8s}'.format("NAME", "FRAMES", "RATIO FRA(%)", " "))
+            print('{:<25s}{:<10s}{:<10s}|{:<10s}|'.format("NAME", "FRAMES", "FRAMES(%)", " "))
             print(dash)
 
             for body, val in sorted(body_stats.items(), key=lambda kv: (-kv[1], kv[0])):
                 percentage = val / frame_count * 100
                 ratio = get_percentage_bar(val, frame_count)
-                print('{:<15s}{:<10d}{:<8.2f}{:<8s}'.format(body, val, percentage, ratio))
+                print('{:<25s}{:<10d}{:<10.2f}|{:<10s}|'.format(body, val, percentage, ratio))
 
             print(dash)
             print('{:^85}'.format("CLOTHES IN FRAMES"))
             print(dash)
-            print('{:<25s}{:<10s}{:<8s}{:<8s}'.format("NAME", "FRAMES", "RATIO FRA(%)", " "))
+            print('{:<25s}{:<10s}{:<10s}|{:<10s}|'.format("NAME", "FRAMES", "FRAMES(%)", " "))
             print(dash)
 
             for clothing, val in sorted(clothes_stats.items(), key=lambda kv: (-kv[1], kv[0])):
                 percentage = val / frame_count * 100
                 ratio = get_percentage_bar(val, frame_count)
 
-                print('{:<25s}{:<10d}{:<8.2f}{:<8s}'.format(clothing, val, percentage, ratio))
+                print('{:<25s}{:<10d}{:<10.2f}|{:<10s}|'.format(clothing, val, percentage, ratio))
 
             print(dash)
 
@@ -1426,20 +1459,6 @@ def update_tags_filter_blacklist(self, context):
 
     if blacklist:
         context.scene.GlimpseTagsFilterWhitelist = False
-
-
-# outputs the percentage bar (made from hbars) calculated from provided values
-def get_percentage_bar(value, max_entries):
-    bar_len = int(max_bar_width * 6 * value / max_entries)
-    bar_output = ""
-    for i in range(0, max_bar_width):
-        if bar_len > 6:
-            bar_output += hbars[6]
-            bar_len -= 6
-        else:
-            bar_output += hbars[bar_len]
-            bar_len = 0
-    return bar_output
 
 
 # NB: sometimes called with no op
