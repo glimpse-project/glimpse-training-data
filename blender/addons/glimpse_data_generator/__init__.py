@@ -267,6 +267,10 @@ class BvhFilteredIndex:
         self.filtered_tag_count = {}
         self.pos = 0
 
+        if bpy.context.scene.GlimpseDebug and bpy.context.scene.GlimpseVerbose:
+            print("Filtering index:")
+            print("> filtering from index %d to %d" % (start, end))
+
         for i in range(start, end):
             bvh = full_index[i]
 
@@ -277,6 +281,8 @@ class BvhFilteredIndex:
                         matched_whitelist = True
                         break
                 if not matched_whitelist:
+                    if bpy.context.scene.GlimpseDebug and bpy.context.scene.GlimpseVerbose:
+                        print("> filtered out %s: tags didn't match whitelist" % bvh['name'])
                     continue
 
             if tags_blacklist:
@@ -286,6 +292,8 @@ class BvhFilteredIndex:
                         matched_blacklist = True
                         break
                 if matched_blacklist:
+                    if bpy.context.scene.GlimpseDebug and bpy.context.scene.GlimpseVerbose:
+                        print("> filtered out %s: tags matched blacklist" % bvh['name'])
                     continue
 
             if name_patterns is not None:
@@ -295,6 +303,8 @@ class BvhFilteredIndex:
                         matched_name = True
                         break
                 if not matched_name:
+                    if bpy.context.scene.GlimpseDebug and bpy.context.scene.GlimpseVerbose:
+                        print("> filtered out %s: didn't match name patterns" % bvh['name'])
                     continue
 
             # Collect some stats about the bvh tags as we build the
@@ -780,6 +790,11 @@ class GeneratorOperator(bpy.types.Operator):
 
             bvh_name = bvh['name']
 
+            action_name = "Base" + bvh_name
+            if action_name not in bpy.data.actions:
+                print("WARNING: Skipping %s (not preloaded)" % bvh_name)
+                return
+
             print("> Rendering " + bvh_name)
 
             numpy.random.seed(0)
@@ -789,14 +804,6 @@ class GeneratorOperator(bpy.types.Operator):
             bpy.context.scene.frame_end = bvh['end']
 
             bvh_fps = bvh['fps']
-
-            action_name = "Base" + bvh_name
-            if action_name not in bpy.data.actions:
-                print("WARNING: Skipping %s (not preloaded)" % bvh_name)
-                return
-
-            numpy.random.seed(0)
-            random.seed(0)
 
             if bpy.context.scene.GlimpseDebug and bpy.context.scene.GlimpseVerbose:
                 print("> Setting %s action on all body meshes" % action_name)

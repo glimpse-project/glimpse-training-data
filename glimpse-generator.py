@@ -80,9 +80,9 @@ def add_filter_options(parser):
                         help="Only look at entries whose name matches this "
                              "wildcard pattern")
 
-    parser.add_argument('--start', type=int, default=20,
+    parser.add_argument('--start', type=int, default=0,
                         help='Index of first MoCap to filter')
-    parser.add_argument('--end', default=25, type=int,
+    parser.add_argument('--end', type=int, default=-1,
                         help='Index of last MoCap to filter (exclusive)')
 
     # XXX: Note that any value other than 'all' may override a
@@ -100,7 +100,6 @@ def add_filter_options(parser):
                         help='Index entires whose tags match this'
                              ' (comma separated) blacklist will not be'
                              ' processed. (default \'none\')')
-
 
 
 parser_info = subparsers.add_parser(
@@ -154,13 +153,21 @@ parser_render.add_argument('--dry-run',
 parser_render.add_argument('-j', '--num-instances', type=int, default=1,
                            help='Number of Blender instances to run')
 
-
 # If this script is run from the command line and we're not yet running within
 # Blender's Python environment then we will spawn Blender and tell it to
 # re-evaluate this script.
 #
 if not as_blender_addon:
     cli_args = parser.parse_args()
+
+    if cli_args.end < 0:
+        mocaps_dir = os.path.join(cli_args.training_data, 'mocap')
+        index_filename = os.path.join(mocaps_dir, "index.json")
+        with open(index_filename, 'r') as fp:
+            full_index = json.load(fp)
+            cli_args.end = len(full_index) - cli_args.end
+            if cli_args.debug:
+                print("Inferred --end=%d" % cli_args.end)
 
     blender_cmd = [
             'blender', '-b',
@@ -182,18 +189,20 @@ if not as_blender_addon:
         dest = cli_args.dest
 
         n_mocaps = cli_args.end - cli_args.start
+        if cli_args.num_instances > n_mocaps:
+            cli_args.num_instances = n_mocaps
+
         step = int(n_mocaps / cli_args.num_instances)
 
         print("Rendering %d mocap sequences with %d instance[s] of Blender" %
               (n_mocaps, cli_args.num_instances))
         print("Each instance is rendering %d sequences" % step)
+        if step * cli_args.num_instances != n_mocaps:
+            print("Except last instance is rendering %d sequences" %
+                  (n_mocaps - (cli_args.num_instances * step)))
+
         print("Path to training data is '%s'" % training_data)
         print("Destination is '%s'" % dest)
-
-        if step * cli_args.num_instances != n_mocaps:
-            sys.exit("Instance count of %d doesn't factor into count of %d "
-                     "motion capture sequences" %
-                     (cli_args.num_instances, n_mocaps))
 
         processes = []
 
@@ -210,7 +219,12 @@ if not as_blender_addon:
             part_name = name + part_suffix
 
             start = cli_args.start + i * step
-            end = start + step
+            # The last instance may have to do some extra work if the step
+            # doesn't factor neatly...
+            if i is not cli_args.num_instances - 1:
+                end = start + step
+            else:
+                end = cli_args.end
 
             # So we don't have to fiddle around with trying to edit
             # the user's given options to change the start/end range
@@ -277,8 +291,21 @@ if not as_blender_addon:
         sys.exit(status)
 
     elif not as_blender_addon:
-        status = subprocess.call(blender_cmd + sys.argv[1:])
+        # So we don't have to fiddle around with trying to edit
+        # the user's given options to change the start/end range
+        # for each instance we have some hidden override options
+        # instead...
+        instance_args = [
+                '--instance-overrides',
+                '--instance-start', str(cli_args.start),
+                '--instance-end', str(cli_args.end)
+        ]
+
+        instance_cmd = blender_cmd + instance_args + sys.argv[1:]
+        print("Blender command:  %s" % " ".join(instance_cmd))
+        status = subprocess.call(instance_cmd)
         sys.exit(status)
+
 
 ##############################################################################
 # From this point on we can assume we are running withing Blender's Python
@@ -288,7 +315,8 @@ def blender_exit(ret=0):
     if ret:
         print("ERROR: %s" % str(ret), flush=True)
     bpy.ops.wm.quit_blender()
-    sys.exit("wm.quite_blender() not synchronous") # Not expected
+    sys.exit("wm.quite_blender() not synchronous")  # Not expected
+
 
 if "--" in sys.argv:
     argv = sys.argv
@@ -512,8 +540,8 @@ elif cli_args.subcommand == 'render':
                         bpy.context.scene.GlimpseMinViewingAngle):
                     blender_exit("Min viewing angle is higher than or equal to max viewing angle")
 
-                if 'focus_bone' in camera_position:
-                    bpy.context.scene.GlimpseFocusBone = camera_position['focus_bone']
+                if 'focus_bone' in camera_pos:
+                    bpy.context.scene.GlimpseFocusBone = camera_pos['focus_bone']
             elif camera_mode == 'fixed':
                 bpy.context.scene.GlimpseFixedCamera = True
 
@@ -527,8 +555,8 @@ elif cli_args.subcommand == 'render':
                     check_scalar(camera_pos, 'camera.position', 'horizontal_rotation',
                                  -180, 180, 1)
 
-                if 'focus_bone' in camera_position:
-                    bpy.context.scene.GlimpseFocusBone = camera_position['focus_bone']
+                if 'focus_bone' in camera_pos:
+                    bpy.context.scene.GlimpseFocusBone = camera_pos['focus_bone']
 
             elif camera_mode == 'debug':
                 bpy.context.scene.GlimpseDebugCamera = True
@@ -560,7 +588,7 @@ elif cli_args.subcommand == 'render':
 
     bpy.context.scene.GlimpseSkipPercentage = skip_percentage
 
-    if cli_args.instance_overrides:
+    if cli_args.instance_overrides and cli_args.instance_name:
         render_name = cli_args.instance_name
     else:
         render_name = cli_args.name
