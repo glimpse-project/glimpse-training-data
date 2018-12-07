@@ -110,6 +110,10 @@ add_filter_options(parser_info)
 parser_preload = subparsers.add_parser(
     'preload', help='Preload mocap files as actions before rendering')
 add_filter_options(parser_preload)
+parser_preload.add_argument('--blend-file',
+                            help='Override .blend file to preload mocap actions '
+                                 'within (default '
+                                 '<training_data>/blender/glimpse-training.blend)')
 parser_preload.add_argument('--dry-run',
                             help="Don't save the results", action='store_true')
 
@@ -169,9 +173,14 @@ if not as_blender_addon:
             if cli_args.debug:
                 print("Inferred --end=%d" % cli_args.end)
 
+    blend_filename = os.path.join(cli_args.training_data,
+                                  'blender', 'glimpse-training.blend')
+    if cli_args.subcommand == 'preload' and cli_args.blend_file:
+        blend_filename = cli_args.blend_file
+
     blender_cmd = [
             'blender', '-b',
-            os.path.join(cli_args.training_data, 'blender', 'glimpse-training.blend'),
+            blend_filename,
             '-P',
             os.path.abspath(sys.argv[0]),
             '--']
@@ -290,7 +299,7 @@ if not as_blender_addon:
 
         sys.exit(status)
 
-    elif not as_blender_addon:
+    else:
         # So we don't have to fiddle around with trying to edit
         # the user's given options to change the start/end range
         # for each instance we have some hidden override options
