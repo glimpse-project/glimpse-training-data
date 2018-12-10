@@ -450,12 +450,12 @@ elif cli_args.subcommand == 'render':
                 tag_whitelist = filters.get('tag_whitelist', None)
                 if tag_whitelist is not None:
                     tag_whitelist = list(set(tag_whitelist))
-                    bpy.context.scene.GlimpseBodyWhitelist = ','.join(tag_whitelist)
+                    bpy.context.scene.GlimpseBvhTagsWhitelist = ','.join(tag_whitelist)
 
                 tag_blacklist = filters.get('tag_blacklist', None)
                 if tag_blacklist is not None:
                     tag_blacklist = list(set(tag_blacklist))
-                    bpy.context.scene.GlimpseBodyBlacklist = ','.join(tag_blacklist)
+                    bpy.context.scene.GlimpseBvhTagsBlacklist = ','.join(tag_blacklist)
 
                 if 'tag_skip_percentages' in filters:
                     tag_skip_percentages = filters['tag_skip_percentages']
