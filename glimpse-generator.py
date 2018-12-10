@@ -447,6 +447,16 @@ elif cli_args.subcommand == 'render':
                 if clothes_whitelist is not 'all':
                     bpy.context.scene.GlimpseClothesWhitelist = ','.join(clothes_whitelist)
 
+                tag_whitelist = filters.get('tag_whitelist', None)
+                if tag_whitelist is not None:
+                    tag_whitelist = list(set(tag_whitelist))
+                    bpy.context.scene.GlimpseBodyWhitelist = ','.join(tag_whitelist)
+
+                tag_blacklist = filters.get('tag_blacklist', None)
+                if tag_blacklist is not None:
+                    tag_blacklist = list(set(tag_blacklist))
+                    bpy.context.scene.GlimpseBodyBlacklist = ','.join(tag_blacklist)
+
                 if 'tag_skip_percentages' in filters:
                     tag_skip_percentages = filters['tag_skip_percentages']
                     tag_skip_strings = []
@@ -582,14 +592,19 @@ elif cli_args.subcommand == 'render':
 
     # Note: some command line options may override the given --config
 
-    if cli_args.tags_whitelist != 'all':
-        # XXX: maybe it would be better to union with whatever is in the
-        # config?
+    if cli_args.tags_whitelist == 'all':
+        bpy.context.scene.GlimpseBvhTagsWhitelist = 'all'
+    else:
+        whitelist_set = set(cli_args.tags_whitelist.split(','))
+        if bpy.context.scene.GlimpseBvhTagsWhitelist:
+            whitelist_set.union(set(bpy.context.scene.GlimpseBvhTagsWhitelist.split(',')))
         bpy.context.scene.GlimpseBvhTagsWhitelist = cli_args.tags_whitelist
+
     if cli_args.tags_blacklist != 'none':
-        # XXX: maybe it would be better to union with whatever is in the
-        # config?
-        bpy.context.scene.GlimpseBvhTagsBlacklist = cli_args.tags_blacklist
+        blacklist_set = set(cli_args.tags_blacklist.split(','))
+        if bpy.context.scene.GlimpseBvhTagsBlacklist:
+            blacklist_set.union(set(bpy.context.scene.GlimpseBvhTagsBlacklist.split(',')))
+        bpy.context.scene.GlimpseBvhTagsBlacklist = list(blacklist_set).join(',')
 
     if cli_args.skip_percentage:
         skip_percentage = cli_args.skip_percentage
