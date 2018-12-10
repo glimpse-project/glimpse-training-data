@@ -180,6 +180,7 @@ if not as_blender_addon:
 
     blender_cmd = [
             'blender', '-b',
+            '-noaudio',  # work around failure to quit blender
             blend_filename,
             '-P',
             os.path.abspath(sys.argv[0]),
@@ -321,6 +322,7 @@ if not as_blender_addon:
 # environment...
 
 def blender_exit(ret=0):
+    print("Blender exiting")
     if ret:
         print("ERROR: %s" % str(ret), flush=True)
     bpy.ops.wm.quit_blender()
