@@ -337,7 +337,7 @@ class BvhFilteredIndex:
     def __next__(self):
         if self.pos >= len(self.filtered_index):
             raise StopIteration
-        ret = self.filtered_index[self.pos]
+        ret = (self.filtered_indices[self.pos], self.filtered_index[self.pos])
         self.pos += 1
         return ret
 
@@ -532,7 +532,7 @@ class GeneratorInfoOperator(bpy.types.Operator):
         for action in bpy.data.actions:
             print("> %s" % action.name)
 
-        for bvh_state in filtered_index:
+        for (i, bvh_state) in filtered_index:
             bvh_name = bvh_state['name']
 
             if 'blacklist' in bvh_state['tags']:
@@ -543,12 +543,12 @@ class GeneratorInfoOperator(bpy.types.Operator):
             if 'Base' + bvh_name in bpy.data.actions:
                 action = bpy.data.actions['Base' + bvh_name]
                 if action.library is None:
-                    print(" > %s: Cached%s" % (bvh_name, suffix))
+                    print(" %d> %s: Cached%s" % (i, bvh_name, suffix))
                 else:
-                    print(" > %s: Linked from %s%s" %
-                          (bvh_name, action.library.filepath, suffix))
+                    print(" %d> %s: Linked from %s%s" %
+                          (i, bvh_name, action.library.filepath, suffix))
             else:
-                print(" > %s: Uncached%s" % (bvh_name, suffix))
+                print(" %d> %s: Uncached%s" % (i, bvh_name, suffix))
 
         return {'FINISHED'}
 
@@ -563,13 +563,13 @@ class GeneratorPreLoadOperator(bpy.types.Operator):
 
         filtered_index = load_filtered_mocap_index(self, force_filter_blacklisted=False)
 
-        for bvh_state in filtered_index:
+        for (i, bvh_state) in filtered_index:
             bvh_name = bvh_state['name']
 
             if 'Base' + bvh_name in bpy.data.actions:
-                print(" > %s: Cached" % bvh_name)
+                print(" %d> %s: Cached" % (i, bvh_name))
             else:
-                print(" > %s: Loading" % bvh_name)
+                print(" %d> %s: Loading" % (i, bvh_name))
 
                 # Note we always load the mocap animations with the base the
                 # base mesh, and then associate the animation_data.action with
@@ -596,18 +596,18 @@ class GeneratorLinkMocapsOperator(bpy.types.Operator):
         with bpy.data.libraries.load(filepath, link=True) as (data_from, data_to):
             names = []
 
-            for bvh_state in filtered_index:
+            for (i, bvh_state) in filtered_index:
                 bvh_name = bvh_state['name']
 
                 if 'Base' + bvh_name in bpy.data.actions:
                     action = bpy.data.actions['Base' + bvh_name]
                     if action.library is None:
-                        print(" > %s: Cached" % bvh_name)
+                        print(" %d> %s: Cached" % (i, bvh_name))
                     else:
-                        print(" > %s: Already linked from %s" %
-                              (bvh_name, action.library.filepath))
+                        print(" %d> %s: Already linked from %s" %
+                              (i, bvh_name, action.library.filepath))
                 else:
-                    print(" > %s: Linking" % bvh_name)
+                    print(" %d> %s: Linking" % (i, bvh_name))
                     names += ['Base' + bvh_name]
 
             data_to.actions = names
@@ -625,14 +625,14 @@ class GeneratorPurgeActionsOperator(bpy.types.Operator):
 
         filtered_index = load_filtered_mocap_index(self, force_filter_blacklisted=False)
 
-        for bvh_state in filtered_index:
+        for (i, bvh_state) in filtered_index:
             bvh_name = bvh_state['name']
 
             action_name = 'Base%s' % bvh_name
             if action_name in bpy.data.actions:
                 action = bpy.data.actions[action_name]
                 action.use_fake_user = False
-                print(" > Purging %s" % bvh_name)
+                print(" %d> Purging %s" % (i, bvh_name))
 
         return {'FINISHED'}
 
@@ -1302,7 +1302,7 @@ class GeneratorOperator(bpy.types.Operator):
                     render_body(body)
 
         print("Rendering %d filtered mocap sequences" % (len(filtered_index)))
-        for bvh in filtered_index:
+        for (i, bvh) in filtered_index:
             render_bvh(bvh)
 
         if bpy.context.scene.GlimpseShowStats and frame_count:
@@ -1426,7 +1426,9 @@ def get_bvh_index_pos(self):
 def set_bvh_index_pos(self, value):
     global ui_filtered_bvh_index_pos
 
-    if value >= 0 and value < len(ui_filtered_bvh_index_obj) and value != ui_filtered_bvh_index_pos:
+    if (value >= 0 and
+            value < len(ui_filtered_bvh_index_obj) and
+            value != ui_filtered_bvh_index_pos):
         update_current_bvh_state(None)
         ui_filtered_bvh_index_pos = value
         switch_current_bvh_state(None)
@@ -1586,7 +1588,8 @@ class VIEW3D_MoCap_MainPanel(bpy.types.Panel):
         row.operator("glimpse.switch_bvh_next")
 
         pos = ui_filtered_bvh_index_pos
-        if ui_filtered_bvh_index_obj is not None and pos < len(ui_filtered_bvh_index_obj):
+        if (ui_filtered_bvh_index_obj is not None and
+                pos < len(ui_filtered_bvh_index_obj)):
             bvh_state = ui_filtered_bvh_index_obj[pos]
 
             row = layout.row()
@@ -1683,7 +1686,7 @@ class VIEW3D_MoCap_Preload(bpy.types.Operator):
     def execute(self, context):
         filtered_index = load_filtered_mocap_index(self, force_filter_blacklisted=False)
 
-        for bvh_state in filtered_index:
+        for (i, bvh_state) in filtered_index:
             load_bvh_file(bvh_state)
 
         return {"FINISHED"}
