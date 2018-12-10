@@ -1,6 +1,6 @@
 {
     "filters": {
-        "tag_blacklist": ["backflip"]
+        "tag_blacklist": ["backflip", "cartwheel", "jump"]
     },
     "clothing_step": 5,
     "camera": {
