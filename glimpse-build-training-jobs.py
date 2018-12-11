@@ -3,6 +3,7 @@
 import argparse
 import json
 import copy
+import datetime
 
 
 def linspace(min, max, n_values):
@@ -78,19 +79,6 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument('-t', '--template',
                     help='A template job description with default values')
-parser.add_argument('-i', '--index-template', type=str,
-                    default='tree-{job}',
-                    help='Name of the training data index to load. '
-                         '"{job}" will be replace with the unique index of '
-                         'the job. '
-                         '(default=tree-{job})')
-parser.add_argument('-o', '--out-file-template', type=str,
-                    default='{index}.json',
-                    help='Name for output trees. "{index}" will be '
-                         'replaced with the name of the data index associated '
-                         'with the job. "{job}" will be replace with the '
-                         'unique index of the job. '
-                         '(default={index}.json)')
 parser.add_argument('-s', '--param-set', action='append',
                     default=[], type=parse_param,
                     help='Set a named parameter')
@@ -112,9 +100,17 @@ args = parser.parse_args()
 #   [(prop0, [val0, val1, val2]), (prop1, [val0, val1])]
 #
 props = args.param_set + args.param_list + args.param_range
-out_file_template = args.out_file_template
-index_template = args.index_template
 job_id = 0
+
+dt = datetime.datetime.today()
+date_str = "%04u-%02u-%02u" % (dt.year, dt.month, dt.day)
+
+
+def expand_vars(job, value):
+    return value.format(
+        job=job_id,
+        index=job['index'],
+        date=date_str)
 
 
 def build_jobs_recursive(job, prop_index=0):
@@ -122,9 +118,8 @@ def build_jobs_recursive(job, prop_index=0):
     jobs = []
 
     if prop_index >= len(props):
-        job['index'] = index_template.format(job=job_id)
-        job['out_file'] = out_file_template.format(index=job['index'],
-                                                   job=job_id)
+        job['index'] = expand_vars(job, job['index'])
+        job['out_file'] = expand_vars(job, job['out_file'])
         job_id += 1
         return [job]
 
