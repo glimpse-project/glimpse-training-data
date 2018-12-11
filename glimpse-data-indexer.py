@@ -44,11 +44,11 @@ parser = argparse.ArgumentParser(
         <data> directory looking for frames. --full can be used to override
         which index is loaded here.
 
-        Then if you need to exclude files from the new index files you can pass
-        options like -e <name1> -e <name2> and the frames listed in
-        data/index.<name1> and data/index.<name2> will be loaded as blacklists
-        of frames to not sample.
-        
+        Secondly the full index is filtered according to any white/blacklists
+        for tags (via --tags-blacklist and --tags-whitelist); to optionally
+        remove flipped frames (via --no-flipped) or exclude files listed in
+        another index (via --exclude).
+
         Finally for each -i <name> <N> argument sequence given it will create a
         data/index.<name> file with <N> randomly sampled frames taken from the
         full index.
@@ -72,20 +72,44 @@ parser = argparse.ArgumentParser(
         the sorting of the index internally.
         """))
 parser.add_argument("data", nargs=1, help="Data Directory")
-parser.add_argument("-v", "--verbose", action="store_true", help="Display verbose debug information")
+parser.add_argument("-v", "--verbose", action="store_true",
+                    help="Display verbose debug information")
 parser.add_argument("-s", "--seed", help="Seed for random sampling")
-parser.add_argument("-f", "--full", nargs=1, default=['full'], help="An alternative index.<FULL> extension for the full index (default 'full')")
+parser.add_argument("-f", "--full", nargs=1, default=['full'],
+                    help="An alternative index.<FULL> extension for the full "
+                         "index (default 'full')")
 
 # Filters...
-parser.add_argument("--body", action="append", nargs=1, metavar=('BODY_NAME'), help="Only consider frames including specific body models")
-parser.add_argument("--bvh", action="append", nargs=1, metavar=('BVH_NAME'), help="Only consider frames part of specific mocap sequences")
-parser.add_argument("-e", "--exclude", action="append", nargs=1, metavar=('NAME'), help="Load index.<NAME> frames to be excluded from sampling")
+parser.add_argument('--no-flipped',
+                    help="Don't consider flipped frames")
+parser.add_argument('--only-flipped',
+                    help="Only consider flipped frames")
+parser.add_argument('--tags-blacklist', default='none',
+                    help="Don't consider frames with any of these tags")
+# XXX: Do we have consistent whitelist semantics? Should we only consider
+# frames matching _all_ whitelist tags or consider frames that match _at least
+# one_ whitelist tag?
+parser.add_argument('--tags-whitelist', default='all',
+                    help="Only consider frames with at least one of these tags")
+parser.add_argument("--body", action="append", nargs=1, metavar=('BODY_NAME'),
+                    help="Only consider frames including specific body models")
+parser.add_argument("--bvh", action="append", nargs=1, metavar=('BVH_NAME'),
+                    help="Only consider frames part of specific mocap sequences")
+parser.add_argument("-e", "--exclude", action="append", nargs=1, metavar=('NAME'),
+                    help="Load index.<NAME> frames to be excluded from sampling")
 
 # Sampling methods...
-parser.add_argument("-w", "--without-replacement", action="store_true", help="Sample each index without replacement (use -e if you need to avoid replacement between index files)")
-parser.add_argument("-a", "--all", action="store_true", help="Simply keep everything (in-order) after applying filters and exclusions")
+parser.add_argument("-w", "--without-replacement", action="store_true",
+                    help="Sample each index without replacement (use -e if you "
+                         "need to avoid replacement between index files)")
+parser.add_argument("-a", "--all", action="store_true",
+                    help="Simply keep everything (in-order) after applying "
+                         "filters and exclusions")
 
-parser.add_argument("-i", "--index", action="append", nargs=2, metavar=('NAME','N'), help="Create an index.<NAME> file with N frames")
+parser.add_argument("-i", "--index", action="append", nargs=2, metavar=('NAME','N'),
+                    help="Create an index.<NAME> file with N frames")
+
+
 
 args = parser.parse_args()
 
@@ -119,25 +143,60 @@ except FileNotFoundError as e:
 n_frames = len(full_index)
 print("index.%s: %u frames\n" % (args.full[0], n_frames))
 
+full_index_modified = False
 
-# 2. Apply filters
-if args.body or args.bvh:
+
+# 2. Apply filters that depend on parsing frame's .json meta data...
+if (args.body or
+        args.bvh or
+        args.tags_whitelist or
+        args.tags_blacklist or
+        args.no_flipped or
+        args.only_flipped):
+
+    if args.tags_blacklist:
+        tags_blacklist = set(args.tags_blacklist.split(","))
+    else:
+        tags_blacklist = set()
+    if args.tags_whitelist:
+        tags_whitelist = set(args.tags_whitelist.split(","))
+    else:
+        tags_whitelist = set()
+
+    full_index_modified = True
     filtered_index = []
     for frame in full_index:
+        if args.no_flipped and frame.endwith('flipped'):
+            continue
+
+        if args.only_flipped and not frame.endwith('flipped'):
+            continue
+
         keep = True
         with open(frame + ".json", 'r') as fp:
             meta = json.load(fp)
             if args.bvh and meta['bvh'] not in args.bvh:
                 keep = False
+                break
             if args.body and meta['body'] not in args.body:
+                break
                 keep = False
+            bvh_tags = set(meta.get('tags', {}))
+            if not tags_whitelist & bvh_tags:
+                keep = False
+                break
+            if tags_blacklist & bvh_tags:
+                keep = False
+                break
+
         if keep:
             filtered_index.append(frame)
     full_index = filtered_index
 
 
-# 3. Apply exclusions
+# 3. Apply --exclude filters
 if args.exclude:
+    full_index_modified = True
     exclusions = []
     for (name,) in args.exclude:
         with open(os.path.join(data_dir, 'index.%s' % name), 'r') as fp:
@@ -150,8 +209,10 @@ if args.exclude:
     difference = full_set.difference(exclusion_set)
     full_index = list(difference)
 
+
+if full_index_modified:
     n_frames = len(full_index)
-    print("\n%u frames left after applying exclusions" % n_frames)
+    print("\n%u frames left after applying filters" % n_frames)
     print("sorting...")
     full_index.sort()
 
