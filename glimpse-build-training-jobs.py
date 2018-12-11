@@ -74,8 +74,7 @@ def parse_range(string):
 
 parser = argparse.ArgumentParser(
     description='Generate job files for train_rdt',
-    epilog='Example usage: %(prog)s --param-set n_thresholds,100 '
-           '--param-range uv_range,0.4,0.9,10')
+    epilog='Example usage: %(prog)s --template training-job-templates/iphone-x-training.json --param-list index,tree0,tree1,tree2')
 
 parser.add_argument('-t', '--template',
                     help='A template job description with default values')
