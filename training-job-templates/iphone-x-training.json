@@ -1,0 +1,8 @@
+{
+  "index": "tree-{job}",
+  "uv_range": 0.65,
+  "out_file": "iphone-x-{date}-{index}.json",
+  "threshold_power": 2,
+  "uvt_histograms_mem": 8000000,
+  "threshold_range": 0.68
+}
