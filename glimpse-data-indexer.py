@@ -22,6 +22,7 @@
 #
 
 import os
+import sys
 import argparse
 import textwrap
 import random
@@ -158,7 +159,7 @@ if (args.body or
         tags_blacklist = set(args.tags_blacklist.split(","))
     else:
         tags_blacklist = set()
-    if args.tags_whitelist:
+    if args.tags_whitelist and args.tags_whitelist != 'all':
         tags_whitelist = set(args.tags_whitelist.split(","))
     else:
         tags_whitelist = set()
@@ -166,32 +167,45 @@ if (args.body or
     full_index_modified = True
     filtered_index = []
     for frame in full_index:
+        frame = frame.strip()
+
         if args.no_flipped and frame.endswith('flipped'):
             continue
 
         if args.only_flipped and not frame.endswith('flipped'):
             continue
 
+        meta_filename = os.path.join(data_dir, 'labels', frame[1:] + ".json")
         keep = True
-        with open(frame + ".json", 'r') as fp:
+        with open(meta_filename, 'r') as fp:
             meta = json.load(fp)
-            if args.bvh and meta['bvh'] not in args.bvh:
-                keep = False
-                break
-            if args.body and meta['body'] not in args.body:
-                break
-                keep = False
-            bvh_tags = set(meta.get('tags', {}))
-            if not tags_whitelist & bvh_tags:
-                keep = False
-                break
-            if tags_blacklist & bvh_tags:
-                keep = False
-                break
+
+            # We add a while loop here just for the sake of being able
+            # to break from the block early if any of the filters
+            # match this frame...
+            while True:
+                if args.bvh and meta['bvh'] not in args.bvh:
+                    keep = False
+                    break
+                if args.body and meta['body'] not in args.body:
+                    keep = False
+                    break
+                bvh_tags = set(meta.get('tags', {}))
+                if tags_whitelist and not tags_whitelist & bvh_tags:
+                    keep = False
+                    break
+                if tags_blacklist & bvh_tags:
+                    keep = False
+                    break
+                break  # We don't actually want to loop
 
         if keep:
             filtered_index.append(frame)
     full_index = filtered_index
+
+
+if not len(full_index):
+    sys.exit("No frames left after filtering")
 
 
 # 3. Apply --exclude filters
@@ -215,6 +229,10 @@ if full_index_modified:
     print("\n%u frames left after applying filters" % n_frames)
     print("sorting...")
     full_index.sort()
+
+
+if not len(full_index):
+    sys.exit("No frames left after filtering")
 
 
 # 4. Sample index files
