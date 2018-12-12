@@ -51,7 +51,7 @@ glimpse-generator.py \
     render \
     --dest ./renders \
     --name "test-render" \
-    --config render-configs/iphone-x-training.json \
+    --config ./render-configs/iphone-x-training.json \
     --start 20 \
     --end 25
 ```
@@ -61,10 +61,10 @@ wouldn't pass these for a full training run_
 Pre-process images:
 ```
 image-pre-processor \
-    /path/to/glimpse-training-data/renders/test-render \
-    /path/to/glimpse-training-data/pre-processed/test-render \
-    /path/to/glimpse-training-data/label-maps/2018-11-render-to-2018-08-rdt-map.json \
-    --config /path/to/glimpse-training-data/pre-processor-configs/iphone-x-config.json
+    ./renders/test-render \
+    ./pre-processed/test-render \
+    ./label-maps/2018-11-render-to-2018-08-rdt-map.json \
+    --config ./pre-processor-configs/iphone-x-config.json
 ```
 
 Create index file for a test set
@@ -72,7 +72,7 @@ Create index file for a test set
 ./glimpse-data-indexer.py \
     --without-replacement \
     -i test 20000 \
-    /path/to/glimpse-training-data/pre-processed/test-render
+    ./pre-processed/test-render
 ```
 
 Create index file for each tree to train (excluding test set images)
@@ -82,34 +82,46 @@ Create index file for each tree to train (excluding test set images)
     -i tree0 300000 \
     -i tree1 300000 \
     -i tree2 300000 \
-    /path/to/glimpse-training-data/pre-processed/test-render
+    ./pre-processed/test-render
 ```
 
 Create an index for joint parameter training:
 ```
-./glimpse-data-indexer.py -i joint-param-training 10000 /path/to/glimpse-training-data/pre-processed/test-render
+./glimpse-data-indexer.py \
+    -i joint-param-training 10000 \
+    ./pre-processed/test-render
 ```
 
-Train each decision tree:
+Build job descriptions for training:
 ```
-train_rdt /path/to/glimpse-training-data/pre-processed/test-render tree0 tree0.json
-train_rdt /path/to/glimpse-training-data/pre-processed/test-render tree1 tree1.json
-train_rdt /path/to/glimpse-training-data/pre-processed/test-render tree2 tree2.json
+./glimpse-build-training-jobs.py \
+    --template training-job-templates/iphone-x-training.json \
+    --param-list index,tree0,tree1,tree2 > training-jobs.json
+```
+
+Run the training jobs:
+```
+train_rdt --queue training-jobs.json
 ```
 
 Train joint inference parameters:
 ```
-train_joint_params /path/to/glimpse-training-data/pre-processed/test-render \
-                   joint-param-training \
-                   /path/to/glimpse-training-data/joint-maps/2018-08-joint-map.json \
-                   joint-params.json -f -- tree0.json tree1.json tree2.json
+train_joint_params \
+    ./pre-processed/test-render \
+    joint-param-training \
+    ./joint-maps/2018-08-joint-map.json \
+    joint-params.json --fast \
+    -- \
+    iphone-x-YYYY-MM-DD-tree0.json \
+    iphone-x-YYYY-MM-DD-tree1.json \
+    iphone-x-YYYY-MM-DD-tree2.json
 ```
 
 Create binary-format decision trees for use at runtime:
 ```
-json-to-rdt tree0.json tree0.rdt
-json-to-rdt tree1.json tree1.rdt
-json-to-rdt tree2.json tree2.rdt
+json-to-rdt iphone-x-YYYY-MM-DD-tree0.json tree0.rdt
+json-to-rdt iphone-x-YYYY-MM-DD-tree1.json tree1.rdt
+json-to-rdt iphone-x-YYYY-MM-DD-tree2.json tree2.rdt
 ```
 
 # Rendering synthetic test recordings TL;DR
@@ -122,18 +134,17 @@ and fixed choice of body mesh and clothing...
     render \
     --dest ./renders \
     --name test-recording \
-    --config render-configs/iphone-x-test-recording.json \
+    --config ./render-configs/iphone-x-test-recording.json \
     --name-match 02_05
 ```
 
 Then run the pre-processor to apply camera sensor noise:
-
 ```
 image-pre-processor \
     ./renders/test-recording \
     ./pre-processed/test-recording \
     ./label-maps/2018-11-render-to-2018-08-rdt-map.json \
-    --config /Users/bob/src/glimpse/glimpse-training-data/pre-processor-configs/iphone-x-synthetic-renders-config.json
+    --config ./pre-processor-configs/iphone-x-synthetic-renders-config.json
 ```
 
 _Note: double check you're using the latest 20xx-xx-render-20xx-xx-rdt-map.json_
@@ -141,16 +152,13 @@ _Note: the pre-processor config is different to the one used for processing
 training data considering that we're not typically rendering at the same
 resolution here and we don't want to create flipped frames_
 
-Remove the `index.full` created by the image-pre-processor since it's not
-sorted, and then run `glimpse-data-indexer.py`:
-
+Build an index of the frames that will be converted to a recording:
 ```
 rm ./pre-processed/test-recording/index.full
 ./glimpse-data-indexer.py ./pre-processed/test-recording
 ```
 
 Create a Glimpse Viewer recording with `index-to-recording`:
-
 ```
 index-to-recording \
     ./pre-processed/test-recording \
@@ -295,7 +303,7 @@ A small number of images can be rendered as follows:
     render \
     --dest ./renders \
     --name "test-render" \
-    --config render-configs/iphone-x-training.json \
+    --config ./render-configs/iphone-x-training.json \
     --start 20 \
     --end 25
 ```
@@ -334,10 +342,10 @@ can be processed with `image-pre-processor` found in glimpse build folder
 
 ```
 image-pre-processor \
-    /path/to/glimpse-training-data/renders/test-render \
-    /path/to/glimpse-training-data/pre-processed/test-render \
-    /path/to/glimpse-training-data/label-maps/2018-11-render-to-2018-08-rdt-map.json \
-    --config /path/to/glimpse-training-data/pre-processor-configs/iphone-x-config.json
+    ./renders/test-render \
+    ./pre-processed/test-render \
+    ./label-maps/2018-11-render-to-2018-08-rdt-map.json \
+    --config ./pre-processor-configs/iphone-x-config.json
 ```
 
 
@@ -357,7 +365,7 @@ could run:
 glimpse-data-indexer.py \
     --without-replacement \
     -i test 10000 \
-    /path/to/glimpse-training-data/pre-processed/test-render
+    ./pre-processed/test-render
 ```
 (*Note: this will also automatically create an `index.full` file*)
 
@@ -369,31 +377,52 @@ the test set images):
     -i tree0 100000 \
     -i tree1 100000 \
     -i tree2 100000 \
-    /path/to/glimpse-training-data/pre-processed/test-render
+    ./pre-processed/test-render
 ```
 *Note: there may be overlapping frames listed in tree0, tree1 and tree2 but
 none of them will contain test-set frames. See --help for details.*
 
 Finally create an index for joint parameter training:
 ```
-glimpse-data-indexer.py -i joint-param-training 10000 /path/to/glimpse-training-data/pre-processed/test-render
+glimpse-data-indexer.py \
+    -i joint-param-training 10000 \
+    ./pre-processed/test-render
 ```
+
+Note: glimpse-data-indexer.py supports a number of filtering options that also
+make it possible to exclude frames that are associated with particular tags
+or e.g. ignore flipped frames. See `./glimpse-data-indexer.py --help` for more
+details.
 
 # Training decision trees
 
-Run the tool `train_rdt` to train a tree. Running it with no parameters, or
-with the `-h/--help` parameter will print usage details, with details about the
-default parameters.
+`train_rdt` is the tool which handles training our decision trees based on a
+set of indexed training data. The tool can be configured and run directly with
+command line arguments (See `train_rdt --help`) but it's recommended build a
+.json description of the training work based on a pre-existing job template
+under `./training-job-templates`
 
-For example, if you have index.tree0, index.tree1 and index.tree2 files at the
-top of your training data you can train three decision tree like:
-
+To describe three jobs to train three trees (assuming we have three
+index files index.tree0, index.tree1 and index.tree2) run:
 ```
-train_rdt /path/to/glimpse-training-data/pre-processed/test-render tree0 tree0.json
-train_rdt /path/to/glimpse-training-data/pre-processed/test-render tree1 tree1.json
-train_rdt /path/to/glimpse-training-data/pre-processed/test-render tree2 tree2.json
+./glimpse-build-training-jobs.py \
+    --template ./training-job-templates/iphone-x-training.json \
+    --param-list index,tree0,tree1,tree2 > training-jobs.json
 ```
 
+Constant properties for all jobs can be set (or overriden) with
+`--param-set <name>,<value>`.  A list of alternative property values can be set
+with `--param-list <name>,<value0>,<value1>...` which will result in separate
+jobs for each value. To help optimize hyperparameters it's also possible
+to build jobs that test many values over a range, via `--param-range`.
+
+See the output of `train_rdt --help` for more details on what properties can
+be configured within a job desciption.
+
+Now the queue of training jobs can be run:
+```
+train_rdt --queue training-jobs.json
+```
 
 # Creating a joint map
 
