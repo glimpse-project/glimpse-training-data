@@ -172,10 +172,10 @@ if (args.bvh or
 
 # Apply (slower) filters that depend on parsing frame's .json meta data...
 if (args.body or
-        args.tags_whitelist or
-        args.tags_blacklist):
+        (args.tags_whitelist and args.tags_whitelist != 'all') or
+        (args.tags_blacklist and args.tags_blacklist != 'none')):
 
-    if args.tags_blacklist:
+    if args.tags_blacklist and args.tags_blacklist != 'none':
         tags_blacklist = set(args.tags_blacklist.split(","))
     else:
         tags_blacklist = set()
