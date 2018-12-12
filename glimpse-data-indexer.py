@@ -166,10 +166,10 @@ if (args.body or
     full_index_modified = True
     filtered_index = []
     for frame in full_index:
-        if args.no_flipped and frame.endwith('flipped'):
+        if args.no_flipped and frame.endswith('flipped'):
             continue
 
-        if args.only_flipped and not frame.endwith('flipped'):
+        if args.only_flipped and not frame.endswith('flipped'):
             continue
 
         keep = True
