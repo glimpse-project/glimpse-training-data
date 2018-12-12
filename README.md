@@ -70,6 +70,7 @@ image-pre-processor \
 Create index file for a test set
 ```
 ./glimpse-data-indexer.py \
+    --without-replacement \
     -i test 20000 \
     /path/to/glimpse-training-data/pre-processed/test-render
 ```
@@ -350,9 +351,13 @@ directory and can then split that into multiple sub sets with no overlap. For
 example you could index three sets of 300k images out of a larger set of 1
 million images for training three separate decision trees.
 
-For example to create a 'test' index of 10000 images you could run:
+For example to create a 'test' index of 10000 images (without duplicates) you
+could run:
 ```
-glimpse-data-indexer.py -i test 10000 /path/to/glimpse-training-data/pre-processed/test-render
+glimpse-data-indexer.py \
+    --without-replacement \
+    -i test 10000 \
+    /path/to/glimpse-training-data/pre-processed/test-render
 ```
 (*Note: this will also automatically create an `index.full` file*)
 
