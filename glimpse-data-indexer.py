@@ -147,13 +147,33 @@ print("index.%s: %u frames\n" % (args.full[0], n_frames))
 full_index_modified = False
 
 
-# 2. Apply filters that depend on parsing frame's .json meta data...
-if (args.body or
-        args.bvh or
-        args.tags_whitelist or
-        args.tags_blacklist or
+# Apply filters that don't depend on parsing frame's .json meta data...
+if (args.bvh or
         args.no_flipped or
         args.only_flipped):
+
+    full_index_modified = True
+    filtered_index = []
+    for frame in full_index:
+        (bvh_name, section, frame_name) = frame.strip()[1:].split('/')
+
+        if args.no_flipped and frame_name.endswith('flipped'):
+            continue
+
+        if args.only_flipped and not frame_name.endswith('flipped'):
+            continue
+
+        if args.bvh and bvh_name not in args.bvh:
+            continue
+
+        filtered_index.append(frame)
+    full_index = filtered_index
+
+
+# Apply (slower) filters that depend on parsing frame's .json meta data...
+if (args.body or
+        args.tags_whitelist or
+        args.tags_blacklist):
 
     if args.tags_blacklist:
         tags_blacklist = set(args.tags_blacklist.split(","))
@@ -169,12 +189,6 @@ if (args.body or
     for frame in full_index:
         frame = frame.strip()
 
-        if args.no_flipped and frame.endswith('flipped'):
-            continue
-
-        if args.only_flipped and not frame.endswith('flipped'):
-            continue
-
         meta_filename = os.path.join(data_dir, 'labels', frame[1:] + ".json")
         keep = True
         with open(meta_filename, 'r') as fp:
@@ -184,9 +198,6 @@ if (args.body or
             # to break from the block early if any of the filters
             # match this frame...
             while True:
-                if args.bvh and meta['bvh'] not in args.bvh:
-                    keep = False
-                    break
                 if args.body and meta['body'] not in args.body:
                     keep = False
                     break
@@ -204,11 +215,7 @@ if (args.body or
     full_index = filtered_index
 
 
-if not len(full_index):
-    sys.exit("No frames left after filtering")
-
-
-# 3. Apply --exclude filters
+# Apply --exclude filters
 if args.exclude:
     full_index_modified = True
     exclusions = []
@@ -224,6 +231,10 @@ if args.exclude:
     full_index = list(difference)
 
 
+if not len(full_index):
+    sys.exit("No frames left after filtering")
+
+
 if full_index_modified:
     n_frames = len(full_index)
     print("\n%u frames left after applying filters" % n_frames)
@@ -231,11 +242,7 @@ if full_index_modified:
     full_index.sort()
 
 
-if not len(full_index):
-    sys.exit("No frames left after filtering")
-
-
-# 4. Sample index files
+# Sample index files
 if args.index:
     names = {}
 
