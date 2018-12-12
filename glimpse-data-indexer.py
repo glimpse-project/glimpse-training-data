@@ -80,9 +80,9 @@ parser.add_argument("-f", "--full", nargs=1, default=['full'],
                          "index (default 'full')")
 
 # Filters...
-parser.add_argument('--no-flipped',
+parser.add_argument('--no-flipped', action="store_true",
                     help="Don't consider flipped frames")
-parser.add_argument('--only-flipped',
+parser.add_argument('--only-flipped', action="store_true",
                     help="Only consider flipped frames")
 parser.add_argument('--tags-blacklist', default='none',
                     help="Don't consider frames with any of these tags")
