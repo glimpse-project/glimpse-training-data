@@ -42,33 +42,29 @@ Pre-load mocap data:
     --start 20 \
     --end 25
 ```
+_Note: the limited `--start` and `--end` range is just for a quick test; you
+wouldn't pass these for a full training run_
+
 Render training data:
 ```
 glimpse-generator.py \
     render \
     --dest ./renders \
-    --name "test-render"
+    --name "test-render" \
+    --config render-configs/iphone-x-training.json \
     --start 20 \
-    --end 25 \
-    --width 320 \
-    --height 240  \
-    --vertical-fov 43.921572 \
-    --min-camera-height 1.1 \
-    --max-camera-height 1.4 \
-    --min-camera-distance 2 \
-    --max-camera-distance 2.5 \
-    --min-camera-angle -30 \
-    --max-camera-angle 0
+    --end 25
 ```
-Note: `--min-camera-angle` and `--max-camera-angle` accept values within range [-180, 180].
+_Note: the limited `--start` and `--end` range is just for a quick test; you
+wouldn't pass these for a full training run_
 
 Pre-process images:
 ```
 image-pre-processor \
     /path/to/glimpse-training-data/renders/test-render \
     /path/to/glimpse-training-data/pre-processed/test-render \
-    /path/to/glimpse-training-data/label-maps/2018-06-render-to-2018-08-rdt-map.json \
-    -c /path/to/glimpse-training-data/pre-processor-configs/iphone-x-config.json
+    /path/to/glimpse-training-data/label-maps/2018-11-render-to-2018-08-rdt-map.json \
+    --config /path/to/glimpse-training-data/pre-processor-configs/iphone-x-config.json
 ```
 
 Create index file for a test set
@@ -125,17 +121,8 @@ and fixed choice of body mesh and clothing...
     render \
     --dest ./renders \
     --name test-recording \
-    --start 20 \
-    --end 21 \
-    --width 640 \
-    --height 480  \
-    --fixed-camera \
-    --min-camera-distance 3 \
-    --min-camera-height 1.1 \
-    --min-camera-angle -30 \
-    --fixed-bodies Man0 \
-    --fixed-clothes "m_trousers_01" \
-    --added-background
+    --config render-configs/iphone-x-test-recording.json \
+    --name-match 02_05
 ```
 
 Then run the pre-processor to apply camera sensor noise:
@@ -145,7 +132,7 @@ image-pre-processor \
     ./renders/test-recording \
     ./pre-processed/test-recording \
     ./label-maps/2018-11-render-to-2018-08-rdt-map.json \
-    -c /Users/bob/src/glimpse/glimpse-training-data/pre-processor-configs/iphone-x-synthetic-renders-config.json
+    --config /Users/bob/src/glimpse/glimpse-training-data/pre-processor-configs/iphone-x-synthetic-renders-config.json
 ```
 
 _Note: double check you're using the latest 20xx-xx-render-20xx-xx-rdt-map.json_
@@ -273,6 +260,8 @@ The units used for specifying what to pre-load are the sequential indices for
 mocap files tracked within `mocap/index.json`, whereby it's possible to
 pre-load a subset of the data by specifying a `--start` and `--end` index.
 *(Blacklisted files within the given range will be automatically skipped over)*
+If no `--start` and `--end` range is given then the default behaviour will be to
+preload all mocap sequences.
 
 A small number of motion capture files can be pre-loaded as follows:
 
@@ -282,15 +271,21 @@ A small number of motion capture files can be pre-loaded as follows:
     --start 20 \
     --end 25
 ```
+_Note: the limited `--start` and `--end` range is just for a quick test; you
+wouldn't pass these for a full training run_
 
 # Render Training Images
 
 *Note: before rendering you must pre-load some motion capture data as described
 above*
 
-The units used for specifying what to render are the sequential indices for
+The units often used for limiting what to render are the sequential indices for
 mocap files tracked within `mocap/index.json`, the same as used for pre-loading
-data.
+data. If no `--start` and `--end` range is given then the default behaviour will be to
+preload all mocap sequences. Alternatively it's also possible to select what
+to render using `--name-match` and optionally filter out sequences e.g. by tag
+using `--tags-blacklist` or `--tags-whitelist`
+
 
 A small number of images can be rendered as follows:
 
@@ -299,19 +294,15 @@ A small number of images can be rendered as follows:
     render \
     --dest ./renders \
     --name "test-render" \
+    --config render-configs/iphone-x-training.json \
     --start 20 \
-    --end 25 \
-    --width 320 \
-    --height 240  \
-    --vertical-fov 43.921572 \
-    --min-camera-height 1.1 \
-    --max-camera-height 1.4 \
-    --min-camera-distance 2 \
-    --max-camera-distance 2.5 \
-    --min-camera-angle -30 \
-    --max-camera-angle 0
+    --end 25
 ```
-Note: `--min-camera-angle` and `--max-camera-angle` accept values within range [-180, 180].
+Run `./glimpse-generator.py render --help` for more details E.g. about filtering
+options.
+
+See [](render-configs/README.md) for more info on controlling the behaviour of
+rendering.
 
 # Pre-process rendered images
 
@@ -335,16 +326,17 @@ they are. It's also possible we don't want to learn about all the rendered
 labels so the pre-processor accepts a "label map" configuration (found under
 the `label-maps/` directory). (See `label-maps/README.md` for more details)
 
-If we have rendered data via `glimpse-cli.py` under
+If we have rendered data via `glimpse-generator.py render` under
 `/path/to/glimpse-training-data/renders/test-render` then these images
-can be processed with `image-pre-processor` found in glimpse build folder (e.g. `build-release`) as follows:
+can be processed with `image-pre-processor` found in glimpse build folder
+(e.g. `build-release`) as follows:
 
 ```
 image-pre-processor \
     /path/to/glimpse-training-data/renders/test-render \
     /path/to/glimpse-training-data/pre-processed/test-render \
-    /path/to/glimpse-training-data/label-maps/2018-06-render-to-2018-08-rdt-map.json \
-    -c /path/to/glimpse-training-data/pre-processor-configs/iphone-x-config.json
+    /path/to/glimpse-training-data/label-maps/2018-11-render-to-2018-08-rdt-map.json \
+    --config /path/to/glimpse-training-data/pre-processor-configs/iphone-x-config.json
 ```
 
 
@@ -451,17 +443,21 @@ joint parameters from a decision forest of three trees named `tree0.json`,
 train_joint_params /path/to/glimpse-training-data/pre-processed/test-render \
                    joint-param-training \
                    /path/to/glimpse-training-data/joint-maps/2018-08-joint-map.json \
-                   joint-params.json -f -- tree0.json tree1.json tree2.json
+                   joint-params.json --fast -- tree0.json tree1.json tree2.json
 ```
 
 _Note: the YEAR-MONTH prefix for the chosen joint-map should typically match
 the -to-YEAR-MONTH-rdt-map.json suffix of the label map used when running
 the pre-processor._
 
-The `-f` option is shorthand for `--fast` which means the tool will train with
-the assumption that `infer_joints_fast()` is going to be used at runtime
-instead of using mean shift (slow) and in this case won't output bandwidth
-parameters.
+The `-f,--fast` option tells the tool to train with the assumption that
+`_infer_fast()` is going to be used at runtime instead of using mean shift
+(slow) and in this case won't output bandwidth parameters.
+
+*Note: also beware that the thresholds derived by this tool for clustering
+aren't re-usable between the mean shity `_infer()` and `_infer_fast()`, so
+it's not recommended to run without `--fast` and use the same config for
+comparing the fast/slow inference paths*
 
 
 # Convert .json trees to .rdt for runtime usage

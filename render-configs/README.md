@@ -73,3 +73,7 @@ _(Note: only one mode of "camera" would be included in a real config)_
     }
 }
 ```
+
+
+Note: `horizontal_rotation`, `min_horizontal_rotation`
+and `max_horizontal_rotation` accept values within the range [-180, 180].
