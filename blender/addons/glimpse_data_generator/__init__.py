@@ -754,11 +754,12 @@ class GeneratorOperator(bpy.types.Operator):
                   bpy.context.scene.GlimpseBvhTagsSkip)
 
         tags_skipped = {}
-        if bpy.context.scene.GlimpseBvhTagsSkip is not '':
+        if (bpy.context.scene.GlimpseBvhTagsSkip and
+                bpy.context.scene.GlimpseBvhTagsSkip is not 'none'):
             for skip_tag in bpy.context.scene.GlimpseBvhTagsSkip.split(","):
                 tag_data = skip_tag.split("=")
                 tags_skipped[tag_data[0]] = tag_data[1]
-        
+
         if bpy.context.scene.GlimpseClothesWhitelist != 'all':
             clothing_sets = copy.deepcopy(default_clothing_sets)
 

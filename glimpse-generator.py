@@ -466,6 +466,8 @@ elif cli_args.subcommand == 'render':
                             blender_exit("Skip percentage for '%s' tag out of range [0,100]" % key)
                         tag_skip_strings += ["%s=%d" % (key, val)]
                     bpy.context.scene.GlimpseBvhTagsSkip = ",".join(tag_skip_strings)
+                    if bpy.context.scene.GlimpseBvhTagsSkip == "":
+                        bpy.context.scene.GlimpseBvhTagsSkip = 'none'
 
             if 'camera' not in config:
                 blender_exit('config must include "camera" description')
