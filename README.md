@@ -96,7 +96,7 @@ Build job descriptions for training:
 ```
 ./glimpse-build-training-jobs.py \
     --template training-job-templates/iphone-x-training.json \
-    --param-list index,tree0,tree1,tree2 > training-jobs.json
+    --param-list index_name,tree0,tree1,tree2 > training-jobs.json
 ```
 
 Run the training jobs:
@@ -407,7 +407,7 @@ index files index.tree0, index.tree1 and index.tree2) run:
 ```
 ./glimpse-build-training-jobs.py \
     --template ./training-job-templates/iphone-x-training.json \
-    --param-list index,tree0,tree1,tree2 > training-jobs.json
+    --param-list index_name,tree0,tree1,tree2 > training-jobs.json
 ```
 
 Constant properties for all jobs can be set (or overriden) with

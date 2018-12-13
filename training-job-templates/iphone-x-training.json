@@ -1,5 +1,5 @@
 {
-  "index": "tree-{job}",
+  "index_name": "tree-{job}",
   "uv_range": 0.65,
   "out_file": "iphone-x-{date}-{index}.json",
   "threshold_power": 2,

@@ -74,7 +74,7 @@ def parse_range(string):
 
 parser = argparse.ArgumentParser(
     description='Generate job files for train_rdt',
-    epilog='Example usage: %(prog)s --template training-job-templates/iphone-x-training.json --param-list index,tree0,tree1,tree2')
+    epilog='Example usage: %(prog)s --template training-job-templates/iphone-x-training.json --param-list index_name,tree0,tree1,tree2')
 
 parser.add_argument('-t', '--template',
                     help='A template job description with default values')
@@ -108,7 +108,7 @@ date_str = "%04u-%02u-%02u" % (dt.year, dt.month, dt.day)
 def expand_vars(job, value):
     return value.format(
         job=job_id,
-        index=job['index'],
+        index=job['index_name'],
         date=date_str)
 
 
@@ -117,7 +117,7 @@ def build_jobs_recursive(job, prop_index=0):
     jobs = []
 
     if prop_index >= len(props):
-        job['index'] = expand_vars(job, job['index'])
+        job['index_name'] = expand_vars(job, job['index_name'])
         job['out_file'] = expand_vars(job, job['out_file'])
         job_id += 1
         return [job]
