@@ -23,26 +23,33 @@
 
 import os
 import sys
-import ntpath
 import argparse
 import json
 import random
 import shutil
-import math
 import subprocess
 import datetime
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument('--source', default=os.path.join(os.getcwd(), 'pre-processed'), help='Directory with rendered frames to assemble video from')
-parser.add_argument('--dest', default=os.path.join(os.getcwd(), 'films'), help='Directory where the output video will be stored')
-parser.add_argument("--flipped", action="store_true", help='When enabled, the video will be assembled only from flipped images')
-parser.add_argument("--non-flipped", action="store_true", help='When enabled, the video will be assembled only from non flipped images')
-parser.add_argument("--fps", default="1", help='Desired framerate of the video being assembled defined in fps (default 1)')
-parser.add_argument("--skip-percentage", default="0", type=int, help='Exclude percentage of frames from assembled video')
-parser.add_argument("--resolution", default="640x480", help='The resolution of the output video (default 640x480)')
-parser.add_argument("--fontsize", default="12", help='The font size of the captions (needs to be between 10 and 16, default 12)')
-parser.add_argument("--video-length", default="30", type=int, help='The treshold defining the maximum video length (specified in minutes - max 180 - default 30)') 
+parser.add_argument('--source', default=os.path.join(os.getcwd(), 'pre-processed'),
+                    help='Directory with rendered frames to assemble video from')
+parser.add_argument('--dest', default=os.path.join(os.getcwd(), 'films'),
+                    help='Directory where the output video will be stored')
+parser.add_argument("--flipped", action="store_true",
+                    help='When enabled, the video will be assembled only from flipped images')
+parser.add_argument("--non-flipped", action="store_true",
+                    help='When enabled, the video will be assembled only from non flipped images')
+parser.add_argument("--fps", default="1",
+                    help='Desired framerate of the video being assembled defined in fps (default 1)')
+parser.add_argument("--skip-percentage", default="0", type=int,
+                    help='Exclude percentage of frames from assembled video')
+parser.add_argument("--resolution", default="640x480",
+                    help='The resolution of the output video (default 640x480)')
+parser.add_argument("--fontsize", default="12",
+                    help='The font size of the captions (needs to be between 10 and 16, default 12)')
+parser.add_argument("--video-length", default="30", type=int,
+                    help='The treshold defining the maximum video length (specified in minutes - max 180 - default 30)')
 
 args = parser.parse_args()
 
@@ -69,6 +76,7 @@ dt = datetime.datetime.today()
 date_str = "%04u-%02u-%02u-%02u-%02u-%02u" % (dt.year, dt.month, dt.day,
                                               dt.hour, dt.minute, dt.second)
 
+
 def getTimeCode(time):
     hrs = int(time / MILLIS_HRS)
     time = time - (hrs * MILLIS_HRS)
@@ -77,8 +85,9 @@ def getTimeCode(time):
     secs = int(time / 1000)
     time = time - (secs * 1000)
     ms = time
-    timecode = ("%02d:%02d:%02d,%03d" % (hrs,mins,secs,ms)) 
+    timecode = ("%02d:%02d:%02d,%03d" % (hrs, mins, secs, ms))
     return timecode
+
 
 print("Assembling video...")
 i = 0
@@ -89,8 +98,8 @@ for dirName, subdirList, fileList in os.walk(args.source, topdown=True):
     if 'labels' in dirPathList and dirPathList[len(dirPathList)-1] != 'labels':
         for fname in fileList:
             if fname.endswith('.png'):
-            
-                if args.flipped and "-flipped" not in fname:  
+
+                if args.flipped and "-flipped" not in fname:
                     continue
 
                 if args.non_flipped and "-flipped" in fname:
@@ -99,11 +108,11 @@ for dirName, subdirList, fileList in os.walk(args.source, topdown=True):
                 if random.randrange(0, 100) < args.skip_percentage:
                     skipped_frames.append(str(i) + '_' + fname)
                     continue
-                
+
                 if (1 / int(args.fps) * 1000) * i > MILLIS_VIDEO_LENGTH:
                     break
-                
-                i += 1                                 
+
+                i += 1
                 filename = "%04d_%s" % (i, fname)
                 shutil.copyfile(dirName + '/' + fname, args.dest + '/' + filename)
         else:
@@ -111,7 +120,7 @@ for dirName, subdirList, fileList in os.walk(args.source, topdown=True):
         break
 
 print("Assembling captions...")
-subtitles = open(args.dest + "/" + date_str + "-subtitles.srt","w")
+subtitles = open(args.dest + "/" + date_str + "-subtitles.srt", "w")
 for dirName, subdirList, fileList in os.walk(args.source, topdown=True):
     dirPath = os.path.normpath(dirName)
     dirPathList = dirPath.split(os.sep)
@@ -121,7 +130,7 @@ for dirName, subdirList, fileList in os.walk(args.source, topdown=True):
             i = 0
             for index_file in index_full:
                 index_file = index_file.rstrip('\n')
-                
+
                 if args.flipped and "-flipped" not in index_file:
                     continue
 
@@ -130,44 +139,41 @@ for dirName, subdirList, fileList in os.walk(args.source, topdown=True):
 
                 image_file = index_file.split('/')
                 if str(i) + '_' + image_file[len(image_file)-1] + '.png' in skipped_frames:
-                    continue 
-                
+                    continue
+
                 if (1 / int(args.fps) * 1000) * i > MILLIS_VIDEO_LENGTH:
                     break
 
                 time = (1 / int(args.fps) * 1000) * i
                 timecode_from = getTimeCode(time)
                 timecode_to = getTimeCode(time + 1 / int(args.fps) * 1000)
-                with open(dirName  + '/labels' + index_file + '.json') as fp:
+                with open(dirName + '/labels' + index_file + '.json') as fp:
                     bvh_index = json.load(fp)
                     subtitles.write(str(i) + "\n")
                     subtitles.write(timecode_from + " --> " + timecode_to + "\n")
-                    subtitles.write("File: " + index_file + ".png\n" + 
+                    subtitles.write("File: " + index_file + ".png\n" +
                                     "Bvh: " + str(bvh_index['bvh']) + "\n" +
                                     "Frame: " + str(bvh_index['frame']) + "\n")
                 subtitles.write("\n")
-                i += 1                                            
-            subtitles.close() 
+                i += 1
             break
 
-#called at the end to assemble video   
-subprocess.call('ffmpeg' 
-                ' -framerate ' + args.fps + 
-                ' -pattern_type glob -i "' + args.dest + '/*.png"' 
-                ' -vf subtitles=' + args.dest + 
+subtitles.close()
+
+subprocess.call('ffmpeg'
+                ' -framerate ' + args.fps +
+                ' -pattern_type glob -i "' + args.dest + '/*.png"'
+                ' -vf subtitles=' + args.dest +
                 '/' + date_str + '-subtitles.srt'
                 ':force_style=\'Fontsize=' + args.fontsize + '\''
-                ' -s ' + args.resolution + ' -pix_fmt yuv420p ' + 
+                ' -s ' + args.resolution + ' -pix_fmt yuv420p ' +
                 args.dest + '/' + date_str + '-review.mp4',
                 shell=True)
 
 print("Cleaning up...")
-dest_list = os.listdir( args.dest )
+dest_list = os.listdir(args.dest)
 for item in dest_list:
     if item.endswith(".png"):
-        os.remove( os.path.join( args.dest, item ) )
+        os.remove(os.path.join(args.dest, item))
 
 print("Done")
-
-
-

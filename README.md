@@ -315,7 +315,7 @@ rendering.
 
 # Pre-process rendered images
 
-At this point it's assumed that you've used `glimpse-cli.py` to render some
+At this point it's assumed that you've used `glimpse-generator.py` to render some
 training images, as described above.
 
 Before starting training we process the images rendered by Blender so we can
@@ -347,7 +347,29 @@ image-pre-processor \
     ./label-maps/2018-11-render-to-2018-08-rdt-map.json \
     --config ./pre-processor-configs/iphone-x-config.json
 ```
+# Assemble a video out of rendered images (optional)
 
+It is possible to optionally assemble a video out of rendered images given that 
+you've used `glimpse-generator.py` as described above. 
+
+The video assembler will additionally create a subtitles file in `.srt` format 
+containing captions for all used image frames. Captions are used to easily 
+identify the locations of individual image frames and bvh files that they came 
+from. 
+
+If we have rendered images via `glimpse-generator.py render` and processed them
+with `image-pre-processor` found in glimpse build folder (e.g. `build-release`) 
+so that they can be found under 
+`/path/to/glimpse-training-data/pre-processed/test-render` then we can assemble 
+a video as follows:
+
+```
+./glimpse-video-assembler.py \
+    --source /path/to/glimpse-training-data/pre-processed/test-render
+
+```
+The video and subtitles files will appear in lazily created 
+`/path/to/glimpse-training-data/films` directory.
 
 # Index frames to train with
 
