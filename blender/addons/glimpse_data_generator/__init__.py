@@ -755,7 +755,7 @@ class GeneratorOperator(bpy.types.Operator):
 
         tags_skipped = {}
         if (bpy.context.scene.GlimpseBvhTagsSkip and
-                bpy.context.scene.GlimpseBvhTagsSkip is not 'none'):
+                bpy.context.scene.GlimpseBvhTagsSkip != 'none'):
             for skip_tag in bpy.context.scene.GlimpseBvhTagsSkip.split(","):
                 tag_data = skip_tag.split("=")
                 tags_skipped[tag_data[0]] = tag_data[1]
