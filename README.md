@@ -166,6 +166,50 @@ index-to-recording \
     --fps 30
 ```
 
+# Optimizing `uvt_histograms_mem`
+
+Tuning `uvt_histograms_mem` can make a big difference to the total runtime of
+training by maximizing cache utilization within the performance critical inner
+loop that calculates histograms for candiate uv threshold combinations.
+
+This assumes you have an older fully trained tree with 20 levels at
+`../glimpse-assets/tree0.json` and the corresponding pre-processed images under
+`./pre-processed/old`.
+
+The idea is to first cut the tree down to 15 levels and then profile the
+training performance at this depth, using different values for
+uvt_histograms_mem, and n_threads (which should be more representative than
+profiling the very early levels).
+
+Create a modest sized index:
+```
+./glimpse-data-indexer.py -i profile 100000 ./pre-processed/old
+```
+
+Create and run a job for clipping a tree like:
+```
+./glimpse-build-training-jobs.py \
+    --template training-job-templates/iphone-x-training.json \
+    -s reload,../glimpse-assets/tree0.json \
+    -s out_file,tree-depth-15.json \
+    -s max_depth,15 \
+    -s index_name,profile > clip-tree-job.json
+train_rdt --log-stderr --queue ./clip-tree-job.json -d pre-processed/old
+```
+
+Build a list of jobs to try out different uvt_histograms_mem sizes and n_threads
+values:
+```
+./glimpse-build-training-jobs.py \
+    --template training-job-templates/iphone-x-training.json \
+    -s reload,./tree-depth-15.json \
+    -s out_file,profile-tree-{job}.json \
+    -s index_name,profile \
+    -s max_nodes,500 \
+    -l uvt_histograms_mem,4000000,8000000,16000000 \
+    -l n_threads,8,16,30,31,32> profile-jobs.json
+train_rdt --log profile.log --queue ./profile-jobs.json --profile -d pre-processed/old
+```
 
 # About the CMU Motion captures
 
