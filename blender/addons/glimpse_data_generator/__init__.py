@@ -715,7 +715,7 @@ class GeneratorOperator(bpy.types.Operator):
         camera_meta = {}
         camera_meta['width'] = bpy.context.scene.render.resolution_x
         camera_meta['height'] = bpy.context.scene.render.resolution_y
-        camera_meta['vertical_fov'] = math.degrees(bpy.data.cameras['Camera'].angle)
+        camera_meta['vertical_fov'] = math.degrees(vfov)
         is_camera_fixed = bpy.context.scene.GlimpseFixedCamera
         is_camera_debug = bpy.context.scene.GlimpseDebugCamera
         camera_meta['is_camera_fixed'] = is_camera_fixed
