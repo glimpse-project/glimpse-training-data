@@ -323,10 +323,10 @@ You can get some help with running glimpse-generator.py by running like:
 ./glimpse-generator.py --help
 ```
 
-Here it's good to understand that `mocap/index.json` is an index of all the
-different `.bvh` mocap files under the `mocap/` directory. The file lets us
-blacklist certain files, tag files for filtering or specify overrides for
-how they should be handled when rendering.
+Here it's good to understand that `mocap/index-cpu.json` is an index of all the
+different CMU `.bvh` mocap files under the `mocap/` directory. The file lets us
+blacklist certain files, tag files for filtering or specify overrides for how
+they should be handled when rendering.
 
 Before the `glimpse_data_generator` addon can be used to render, it requires
 there to be some number of pre-loaded motion capture animations. We pre-load

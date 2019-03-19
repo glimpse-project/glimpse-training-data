@@ -128,9 +128,9 @@ with open('cmu-mocap-index.csv', 'r') as fp:
 
         if blacklist_note:
             print("# %s: Desc: %-60s Subject: %-58s BLACKLIST - %s" % (name, '"' + desc + '"', '"' + subject[8:] + '"', blacklist_note))
-            print('../glimpse-mocap-indexer.py -m %s --with-tag auto_tag --blacklist ./index.json' % (name))
+            print('../glimpse-mocap-indexer.py -m %s --with-tag auto_tag --blacklist ./index-cmu.json' % (name))
         else:
             print("# %s: Desc: %-60s Words: %-60s Subject: %-50s Tags: %s" % (name, '"' + desc + '"', desc_words, '"' + subject[8:] + '"', ', '.join(tags)))
             if len(tags):
-                print('../glimpse-mocap-indexer.py -m %s --with-tag auto_tag --unblacklist --clear-tags -t auto_tag -t cmu -t %s ./index.json' % (name, ' -t '.join(tags)))
+                print('../glimpse-mocap-indexer.py -m %s --with-tag auto_tag --unblacklist --clear-tags -t auto_tag -t cmu -t %s ./index-cmu.json' % (name, ' -t '.join(tags)))
 
