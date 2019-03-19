@@ -631,9 +631,10 @@ class GeneratorPurgeActionsOperator(bpy.types.Operator):
 
             action_name = 'Base%s' % bvh_name
             if action_name in bpy.data.actions:
-                action = bpy.data.actions[action_name]
-                action.use_fake_user = False
                 print(" %d> Purging %s" % (i, bvh_name))
+                if not bpy.context.scene.GlimpseDryRun:
+                    action = bpy.data.actions[action_name]
+                    action.use_fake_user = False
 
         return {'FINISHED'}
 
