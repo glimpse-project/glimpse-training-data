@@ -235,6 +235,19 @@ with open(args.index_filename, 'r+') as fp:
                 sys.exit("ERROR: %s has duplicate entries for name: '%s'" % (args.index_filename, entry['name']))
             name_map[entry['name']] = entry
 
+        # Normalize how we blacklist entries:
+        blacklisted=False
+        if 'blacklist' in entry:
+            blacklisted = entry['blacklist']
+            del entry['blacklist']
+        if 'tags' in entry and 'blacklist' in entry['tags']:
+            blacklisted = True
+
+        if blacklisted:
+            if 'tags' not in entry:
+                entry['tags'] = {}
+            entry['tags']['blacklist'] = True
+
     # All filtering options (--start, --end, --name-match, --with[out]-tag etc)
     # are ignored when adding new entries and instead it's as if all the new
     # entries were selected for any edit operations...
@@ -264,8 +277,6 @@ with open(args.index_filename, 'r+') as fp:
             entry = index[i]
 
             blacklisted=False
-            if 'blacklist' in entry:
-                blacklisted = entry['blacklist']
             if 'tags' in entry and 'blacklist' in entry['tags']:
                 blacklisted = True
 
@@ -325,4 +336,60 @@ with open(args.index_filename, 'r+') as fp:
         fp.seek(0)
         fp.truncate(0)
         json.dump(index, fp, indent=4, sort_keys=True)
+
+
+hbars = [u"\u0020", u"\u258f", u"\u258e", u"\u258d", u"\u258b", u"\u258a", u"\u2589"]
+max_bar_width = 10
+
+
+# outputs the percentage bar (made from hbars) calculated from provided values
+def get_percentage_bar(value, max_entries):
+    bar_len = int(max_bar_width * 6 * value / max_entries)
+    bar_output = ""
+    for i in range(0, max_bar_width):
+        if bar_len > 6:
+            bar_output += hbars[6]
+            bar_len -= 6
+        else:
+            bar_output += hbars[bar_len]
+            bar_len = 0
+    return bar_output
+
+
+print("")
+print("Summary of index contents:")
+
+with open(args.index_filename, 'r+') as fp:
+    index = json.load(fp)
+
+    print("")
+    full_len = len(index)
+    n_blacklisted = len([x for x in index if 'tags' in x and 'blacklist' in x['tags']])
+    print("%d non-blacklisted entries" % (full_len - n_blacklisted))
+    print("%d blacklisted entries" % n_blacklisted)
+
+    tag_count = {}
+    for e in index:
+        if 'tags' in e:
+            if 'blacklist' in e['tags']:
+                continue
+            for tag in e['tags']:
+                tag_count[tag] = tag_count.get(tag, 0) + 1
+
+    print("")
+    print("Index tags (ignoring blacklisted entries):")
+    print("")
+    print('  {:<15s}{:<10s}{:<8s}|{:<10s}|'.format("TAG NAME", "COUNT", "PERCENT", " "))
+    print('-' * 80)
+    for (key, val) in sorted(tag_count.items(),
+                             key=lambda kv: (-kv[1], kv[0])):
+        count = tag_count[key]
+        percentage = count / full_len * 100
+        bar = get_percentage_bar(count, full_len)
+        print('  {:<15s}{:<10d}{:<8.2f}|{:<10s}|'.format(key, count, percentage, bar))
+
+
+
+
+
 
