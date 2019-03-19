@@ -266,7 +266,7 @@ with open(args.index_filename, 'r+') as fp:
             blacklisted=False
             if 'blacklist' in entry:
                 blacklisted = entry['blacklist']
-            if 'blacklist' in entry['tags']:
+            if 'tags' in entry and 'blacklist' in entry['tags']:
                 blacklisted = True
 
             if args.blacklisted and not blacklisted:
