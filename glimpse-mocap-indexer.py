@@ -31,7 +31,7 @@ import ntpath
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument("-a", "--add", action='append', help="Add BVH file - implicitly selected for applying any edit options given too")
+parser.add_argument("-a", "--add", action='append', help="Add BVH file, or merge another index - implicitly selected for applying any edit options given too")
 parser.add_argument("-r", "--remove", action='append', help="Remove BVH file")
 
 # Select entries to view/edit (overridden when adding new entries)
@@ -207,70 +207,85 @@ def normalize_path(bvh_path):
     return rel_path
 
 
-if os.path.exists(args.index_filename):
-    with open(args.index_filename, 'r+') as fp:
-        index = json.load(fp)
+def append_index_entries(entries, full_index):
+    # Add all filenames and names to dictionaries so we can ensure we don't
+    # index any duplicates...
+    for entry in entries:
+        if 'file' in entry:
+            if entry['file'] in filename_map:
+                sys.exit("ERROR: %s has duplicate entries for %s" % (args.index_filename, entry['file']))
+            filename_map[entry['file']] = entry
+        if 'name' in entry:
+            if entry['name'] in name_map:
+                sys.exit("ERROR: %s has duplicate entries for name: '%s'" % (args.index_filename, entry['name']))
+            name_map[entry['name']] = entry
 
-        print("Opened %s with %d entries" % (args.index_filename, len(index)))
+        # Normalize how we blacklist entries:
+        blacklisted=False
+        if 'blacklist' in entry:
+            blacklisted = entry['blacklist']
+            del entry['blacklist']
+        if 'tags' in entry and 'blacklist' in entry['tags']:
+            blacklisted = True
+
+        if blacklisted:
+            if 'tags' not in entry:
+                entry['tags'] = {}
+            entry['tags']['blacklist'] = True
+        
+        full_index.append(entry)
+
+
+index = []
+if os.path.exists(args.index_filename):
+    with open(args.index_filename, 'r') as fp:
+        entries = json.load(fp)
+
+        print("Opened %s with %d entries" % (args.index_filename, len(entries)))
 
         if args.remove:
             for bvh_path in args.remove:
                 rel_path = normalize_path(bvh_path)
-                before_len = len(index)
-                index = [ entry for entry in index if entry['file'] != rel_path ]
-                if len(index) < before_len:
+                before_len = len(entries)
+                entries = [ entry for entry in entries if entry['file'] != rel_path ]
+                if len(entries) < before_len:
                     if print_changes:
                         print("Remove %s from index" % bvh_path)
                 else:
                     print("WARNING: no entry for %s found for removal" % bvh_path)
 
-        # Add all filenames and names to dictionaries so we can ensure we don't
-        # index any duplicates...
-        for entry in index:
-            if 'file' in entry:
-                if entry['file'] in filename_map:
-                    sys.exit("ERROR: %s has duplicate entries for %s" % (args.index_filename, entry['file']))
-                filename_map[entry['file']] = entry
-            if 'name' in entry:
-                if entry['name'] in name_map:
-                    sys.exit("ERROR: %s has duplicate entries for name: '%s'" % (args.index_filename, entry['name']))
-                name_map[entry['name']] = entry
-
-            # Normalize how we blacklist entries:
-            blacklisted=False
-            if 'blacklist' in entry:
-                blacklisted = entry['blacklist']
-                del entry['blacklist']
-            if 'tags' in entry and 'blacklist' in entry['tags']:
-                blacklisted = True
-
-            if blacklisted:
-                if 'tags' not in entry:
-                    entry['tags'] = {}
-                entry['tags']['blacklist'] = True
-else:
-    index = []
+        append_index_entries(entries, index)
 
 # All filtering options (--start, --end, --name-match, --with[out]-tag etc)
 # are ignored when adding new entries and instead it's as if all the new
 # entries were selected for any edit operations...
 if args.add:
     i = len(index)
-    for bvh_path in args.add:
-        rel_path = normalize_path(bvh_path)
+    for path in args.add:
+        if path.endswith(".json"):
+            with open(path, 'r') as fp:
+                entries = json.load(fp)
+                if print_changes:
+                    print("Merge %d entries from %s" % (len(entries), path))
+                append_index_entries(entries, index)
+                for entry in entries:
+                    process_entry(entry, i)
+                    i+=1
+        else:
+            rel_path = normalize_path(path)
 
-        if rel_path in filename_map:
-            print('WARNING: Not re-adding %s to index' % rel_path)
-            continue
+            if rel_path in filename_map:
+                print('WARNING: Not re-adding %s to index' % rel_path)
+                continue
 
-        new_entry = { 'file': rel_path }
-        filename_map[rel_path] = new_entry
+            new_entry = { 'file': rel_path }
+            filename_map[rel_path] = new_entry
 
-        index.append(new_entry)
-        if print_changes:
-            print("Add %s to index" % rel_path)
-        process_entry(new_entry, i)
-        i+=1
+            index.append(new_entry)
+            if print_changes:
+                print("Add %s to index" % rel_path)
+            process_entry(new_entry, i)
+            i+=1
 else:
     end = args.end
     if end == 0:
