@@ -571,13 +571,14 @@ class GeneratorPreLoadOperator(bpy.types.Operator):
             else:
                 print(" %d> %s: Loading" % (i, bvh_name))
 
-                # Note we always load the mocap animations with the base the
-                # base mesh, and then associate the animation_data.action with
-                # all the other armatures we have
-                base_pose_obj = bpy.data.objects['BasePoseObject']
-                bpy.context.scene.objects.active = base_pose_obj
+                if not bpy.context.scene.GlimpseDryRun:
+                    # Note we always load the mocap animations with the base the
+                    # base mesh, and then associate the animation_data.action with
+                    # all the other armatures we have
+                    base_pose_obj = bpy.data.objects['BasePoseObject']
+                    bpy.context.scene.objects.active = base_pose_obj
 
-                load_bvh_file(bvh_state)
+                    load_bvh_file(bvh_state)
 
         return {'FINISHED'}
 

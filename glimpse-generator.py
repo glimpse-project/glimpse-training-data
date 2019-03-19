@@ -390,12 +390,14 @@ if cli_args.subcommand == 'info':
     bpy.ops.glimpse.generator_info()
     blender_exit()
 elif cli_args.subcommand == 'preload':
+    bpy.context.scene.GlimpseDryRun = cli_args.dry_run
     bpy.ops.glimpse.generator_preload()
     if not cli_args.dry_run:
         print("Saving to %s" % bpy.context.blend_data.filepath)
         bpy.ops.wm.save_as_mainfile(filepath=bpy.context.blend_data.filepath)
     blender_exit()
 elif cli_args.subcommand == 'link':
+    bpy.context.scene.GlimpseDryRun = cli_args.dry_run
     bpy.context.scene.GlimpseMocapLibrary = cli_args.mocap_library
     bpy.ops.glimpse.generator_link()
     if not cli_args.dry_run:
@@ -403,6 +405,7 @@ elif cli_args.subcommand == 'link':
         bpy.ops.wm.save_as_mainfile(filepath=bpy.context.blend_data.filepath)
     blender_exit()
 elif cli_args.subcommand == 'purge':
+    bpy.context.scene.GlimpseDryRun = cli_args.dry_run
     bpy.ops.glimpse.purge_mocap_actions()
     if not cli_args.dry_run:
         print("Saving to %s" % bpy.context.blend_data.filepath)
@@ -410,10 +413,9 @@ elif cli_args.subcommand == 'purge':
     blender_exit()
 elif cli_args.subcommand == 'render':
 
+    bpy.context.scene.GlimpseDryRun = cli_args.dry_run
     bpy.context.scene.GlimpseDataRoot = cli_args.dest
     print("DataRoot: " + cli_args.dest)
-
-    bpy.context.scene.GlimpseDryRun = cli_args.dry_run
 
     bpy.context.scene.GlimpseMinCameraDistanceMM = bpy.context.scene.GlimpseMinCameraDistanceMM
 
