@@ -207,134 +207,136 @@ def normalize_path(bvh_path):
     return rel_path
 
 
-with open(args.index_filename, 'r+') as fp:
-    index = json.load(fp)
+if os.path.exists(args.index_filename):
+    with open(args.index_filename, 'r+') as fp:
+        index = json.load(fp)
 
-    print("Opened %s with %d entries" % (args.index_filename, len(index)))
+        print("Opened %s with %d entries" % (args.index_filename, len(index)))
 
-    if args.remove:
-        for bvh_path in args.remove:
-            rel_path = normalize_path(bvh_path)
-            before_len = len(index)
-            index = [ entry for entry in index if entry['file'] != rel_path ]
-            if len(index) < before_len:
-                if print_changes:
-                    print("Remove %s from index" % bvh_path)
-            else:
-                print("WARNING: no entry for %s found for removal" % bvh_path)
+        if args.remove:
+            for bvh_path in args.remove:
+                rel_path = normalize_path(bvh_path)
+                before_len = len(index)
+                index = [ entry for entry in index if entry['file'] != rel_path ]
+                if len(index) < before_len:
+                    if print_changes:
+                        print("Remove %s from index" % bvh_path)
+                else:
+                    print("WARNING: no entry for %s found for removal" % bvh_path)
 
-    # Add all filenames and names to dictionaries so we can ensure we don't
-    # index any duplicates...
-    for entry in index:
-        if 'file' in entry:
-            if entry['file'] in filename_map:
-                sys.exit("ERROR: %s has duplicate entries for %s" % (args.index_filename, entry['file']))
-            filename_map[entry['file']] = entry
-        if 'name' in entry:
-            if entry['name'] in name_map:
-                sys.exit("ERROR: %s has duplicate entries for name: '%s'" % (args.index_filename, entry['name']))
-            name_map[entry['name']] = entry
+        # Add all filenames and names to dictionaries so we can ensure we don't
+        # index any duplicates...
+        for entry in index:
+            if 'file' in entry:
+                if entry['file'] in filename_map:
+                    sys.exit("ERROR: %s has duplicate entries for %s" % (args.index_filename, entry['file']))
+                filename_map[entry['file']] = entry
+            if 'name' in entry:
+                if entry['name'] in name_map:
+                    sys.exit("ERROR: %s has duplicate entries for name: '%s'" % (args.index_filename, entry['name']))
+                name_map[entry['name']] = entry
 
-        # Normalize how we blacklist entries:
-        blacklisted=False
-        if 'blacklist' in entry:
-            blacklisted = entry['blacklist']
-            del entry['blacklist']
-        if 'tags' in entry and 'blacklist' in entry['tags']:
-            blacklisted = True
-
-        if blacklisted:
-            if 'tags' not in entry:
-                entry['tags'] = {}
-            entry['tags']['blacklist'] = True
-
-    # All filtering options (--start, --end, --name-match, --with[out]-tag etc)
-    # are ignored when adding new entries and instead it's as if all the new
-    # entries were selected for any edit operations...
-    if args.add:
-        i = len(index)
-        for bvh_path in args.add:
-            rel_path = normalize_path(bvh_path)
-
-            if rel_path in filename_map:
-                print('WARNING: Not re-adding %s to index' % rel_path)
-                continue
-
-            new_entry = { 'file': rel_path }
-            filename_map[rel_path] = new_entry
-
-            index.append(new_entry)
-            if print_changes:
-                print("Add %s to index" % rel_path)
-            process_entry(new_entry, i)
-            i+=1
-    else:
-        end = args.end
-        if end == 0:
-            end = len(index)
-
-        for i in range(args.start, end):
-            entry = index[i]
-
+            # Normalize how we blacklist entries:
             blacklisted=False
+            if 'blacklist' in entry:
+                blacklisted = entry['blacklist']
+                del entry['blacklist']
             if 'tags' in entry and 'blacklist' in entry['tags']:
                 blacklisted = True
 
-            if args.blacklisted and not blacklisted:
+            if blacklisted:
+                if 'tags' not in entry:
+                    entry['tags'] = {}
+                entry['tags']['blacklist'] = True
+else:
+    index = []
+
+# All filtering options (--start, --end, --name-match, --with[out]-tag etc)
+# are ignored when adding new entries and instead it's as if all the new
+# entries were selected for any edit operations...
+if args.add:
+    i = len(index)
+    for bvh_path in args.add:
+        rel_path = normalize_path(bvh_path)
+
+        if rel_path in filename_map:
+            print('WARNING: Not re-adding %s to index' % rel_path)
+            continue
+
+        new_entry = { 'file': rel_path }
+        filename_map[rel_path] = new_entry
+
+        index.append(new_entry)
+        if print_changes:
+            print("Add %s to index" % rel_path)
+        process_entry(new_entry, i)
+        i+=1
+else:
+    end = args.end
+    if end == 0:
+        end = len(index)
+
+    for i in range(args.start, end):
+        entry = index[i]
+
+        blacklisted=False
+        if 'tags' in entry and 'blacklist' in entry['tags']:
+            blacklisted = True
+
+        if args.blacklisted and not blacklisted:
+            continue
+
+        if args.non_blacklisted and blacklisted:
+            continue
+
+        tags_whitelist = args.with_tag
+        if tags_whitelist:
+            matched_whitelist=False
+            if 'tags' in entry:
+                for tag in tags_whitelist:
+                    if tag in entry['tags']:
+                        matched_whitelist=True
+                        break
+            if not matched_whitelist:
                 continue
 
-            if args.non_blacklisted and blacklisted:
+        tags_blacklist = args.without_tag
+        if tags_blacklist:
+            matched_blacklist=False
+            if 'tags' in entry:
+                for tag in tags_blacklist:
+                    if tag in entry['tags']:
+                        matched_blacklist=True
+                        break
+            if matched_blacklist:
                 continue
 
-            tags_whitelist = args.with_tag
-            if tags_whitelist:
-                matched_whitelist=False
-                if 'tags' in entry:
-                    for tag in tags_whitelist:
-                        if tag in entry['tags']:
-                            matched_whitelist=True
-                            break
-                if not matched_whitelist:
-                    continue
+        if args.name_match:
+            if 'name' not in entry:
+                continue
+            matched_name=False
+            for match in args.name_match:
+                if fnmatch.fnmatch(entry['name'], match):
+                    matched_name = True
+                    break
+            if not matched_name:
+                continue
 
-            tags_blacklist = args.without_tag
-            if tags_blacklist:
-                matched_blacklist=False
-                if 'tags' in entry:
-                    for tag in tags_blacklist:
-                        if tag in entry['tags']:
-                            matched_blacklist=True
-                            break
-                if matched_blacklist:
-                    continue
+        if args.file_match:
+            matched_filename=False
+            for match in args.file_match:
+                norm_match = normalize_path(match)
+                if fnmatch.fnmatch(entry['file'], norm_match):
+                    matched_filename = True
+                    break
+            if not matched_filename:
+                continue
 
-            if args.name_match:
-                if 'name' not in entry:
-                    continue
-                matched_name=False
-                for match in args.name_match:
-                    if fnmatch.fnmatch(entry['name'], match):
-                        matched_name = True
-                        break
-                if not matched_name:
-                    continue
+        process_entry(entry, args.start + i)
+        i+=1
 
-            if args.file_match:
-                matched_filename=False
-                for match in args.file_match:
-                    norm_match = normalize_path(match)
-                    if fnmatch.fnmatch(entry['file'], norm_match):
-                        matched_filename = True
-                        break
-                if not matched_filename:
-                    continue
-
-            process_entry(entry, args.start + i)
-            i+=1
-
-    if not args.dry_run:
-        fp.seek(0)
-        fp.truncate(0)
+if not args.dry_run:
+    with open(args.index_filename, 'w') as fp:
         json.dump(index, fp, indent=4, sort_keys=True)
 
 
