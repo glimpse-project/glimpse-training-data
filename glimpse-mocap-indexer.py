@@ -195,10 +195,13 @@ def process_entry(entry, i):
                 print("  > tags: %s" % ','.join(entry['tags']))
 
 
-def normalize_path(path):
+def normalize_path(bvh_path):
+    index_dir = os.path.dirname(args.index_filename)
+    abs_bvh_path = os.path.abspath(bvh_path)
+    abs_index_dir = os.path.abspath(index_dir)
     # no matter what OS we're using we want consistent filename
     # indexing conventions...
-    rel_path = os.path.relpath(bvh_path, os.getcwd())
+    rel_path = os.path.relpath(abs_bvh_path, abs_index_dir)
     rel_path = ntpath.normpath(rel_path)
     rel_path = ntpath.normcase(rel_path)
     return rel_path
