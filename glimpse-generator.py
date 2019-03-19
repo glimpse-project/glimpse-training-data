@@ -379,6 +379,8 @@ bpy.context.scene.GlimpseBvhTagsBlacklist = cli_args.tags_blacklist
 
 if cli_args.name_match:
     bpy.context.scene.GlimpseBvhNamePatterns = ','.join(cli_args.name_match)
+else:
+    bpy.context.scene.GlimpseBvhNamePatterns = ''
 
 
 mocaps_dir = os.path.join(cli_args.training_data, 'mocap')
