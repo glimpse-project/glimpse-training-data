@@ -1443,6 +1443,9 @@ def load_bvh_file(bvh_state):
     bpy.context.scene.McpEndFrame = 1000
     bpy.ops.mcp.load_and_retarget(filepath=bpy.path.abspath(os.path.join(bpy.context.scene.GlimpseBvhRoot, ntpath_to_os(bvh_state['file']))))
 
+    if bpy.context.object.animation_data:
+        bpy.context.object.animation_data.action.name = "Base" + bvh_state['name']
+
     if 'end' not in bvh_state:
         if bpy.context.object.animation_data:
             frame_end = bpy.context.object.animation_data.action.frame_range[1]
